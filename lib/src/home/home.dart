@@ -28,6 +28,7 @@ import '../core/providers/call_provider.dart';
 import '../core/providers/contact_provider.dart';
 String callTo = "";
 bool ispublicbroadcast=false;
+String broadcasttype=""; 
 bool isDDialer=false;
 String pressDuration = "";
 bool remoteVideoFlag = true;
@@ -633,7 +634,7 @@ if(to!=null){
         groupRefIDS.add(element.ref_id.toString());
     });
 }
-print("this is signaling client start callllllll");
+print("this is signaling client start callllllll $broadcasttype..... $sessionType");
     signalingClient.startCallonetomany(
         from: _auth.getUser.ref_id,
         to:  groupRefIDS,
@@ -641,7 +642,8 @@ print("this is signaling client start callllllll");
         meidaType: mtype,
         callType: callType,
         sessionType: sessionType,
-        ispublicbroadcast: ispublicbroadcast
+        ispublicbroadcast: ispublicbroadcast,
+        broadcastype:broadcasttype
         );
     // if (_localStream != null) {
     //here
@@ -731,6 +733,7 @@ print("this is signaling client start callllllll");
     if (_groupListProvider.groupListStatus == ListStatus.Scussess)
       _groupListProvider.getGroupList(_auth.getUser.auth_token);
     else {
+      print("i am here in renderer list else");
       _contactProvider.getContacts(_auth.getUser.auth_token);
       _selectedContacts.clear();
     }

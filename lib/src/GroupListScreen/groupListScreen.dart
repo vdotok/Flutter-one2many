@@ -175,13 +175,23 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                       icon: SvgPicture.asset(
                                           'assets/videocallicon.svg'),
                                       onPressed: () {
-                                       
-                                        widget.startCall(
+                                       if(broadcasttype=="camera"){
+widget.startCall(
                                              element,
                                                     MediaType.video,
                                                     CAllType.one2many,
                                                     SessionType.call
                                             );
+                                       }
+                                       else{
+                                         widget.startCall(
+                                             element,
+                                                    MediaType.video,
+                                                    CAllType.one2many,
+                                                    SessionType.screen
+                                            );
+                                       }
+                                        
                                         setState(() {
                                         
                                           callTo = element.group_title;

@@ -173,6 +173,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               centerTitle: false,
               backgroundColor: chatRoomBackgroundColor,
               elevation: 0.0,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: chatRoomColor),
+                onPressed: () {
+                  groupProvider.handleGroupListState(ListStatus.SelectBroadCast);
+                },
+              ),
               title: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(

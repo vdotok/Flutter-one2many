@@ -134,3 +134,10 @@ class SessionType {
   static String call = "call";
   static String screen = "screen";
 }
+
+
+class BroadcastType {
+  static String cameraonly = "call";
+  static String screensharewithappaudio = "appaudioscreen";
+  static String screensharewithmicaudio = "micaudioscreen";
+}

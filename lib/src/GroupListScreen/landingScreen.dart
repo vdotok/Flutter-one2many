@@ -3,6 +3,7 @@ import 'package:flutter_onetomany/constant.dart';
 import 'package:flutter_onetomany/src/GroupListScreen/startbroadcastpopup.dart';
 import 'package:flutter_onetomany/src/core/models/GroupListModel.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
+import 'package:flutter_onetomany/src/home/home.dart';
 
 class LandingScreen extends StatefulWidget {
   GroupListProvider grouplistprovider;
@@ -17,6 +18,8 @@ class _LandingScreenState extends State<LandingScreen> {
   bool isAppAudiobuttonSelected = false;
   bool ismicAudiobuttonSelected = false;
   bool iscamerabuttonSelected = false;
+
+  Map<String, bool> broadcastObject;
   void _handleGenderChange(int value) {
     setState(() {
       broadcast = value;
@@ -58,6 +61,10 @@ class _LandingScreenState extends State<LandingScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             child: FlatButton(
               onPressed: () {
+                if(ismicAudiobuttonSelected)
+                {
+                  ismicAudiobuttonSelected=!ismicAudiobuttonSelected;
+                }
                 setState(() {
                   isAppAudiobuttonSelected = !isAppAudiobuttonSelected;
                 });
@@ -82,6 +89,9 @@ class _LandingScreenState extends State<LandingScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             child: FlatButton(
               onPressed: () {
+                if(isAppAudiobuttonSelected){
+                  isAppAudiobuttonSelected=!isAppAudiobuttonSelected;
+                }
                 setState(() {
                   ismicAudiobuttonSelected = !ismicAudiobuttonSelected;
                 });
@@ -138,38 +148,88 @@ class _LandingScreenState extends State<LandingScreen> {
                       ismicAudiobuttonSelected ||
                       iscamerabuttonSelected
                   ? () {
-                      // widget.grouplistprovider.handleGroupListState(ListStatus.Scussess);
+                      //case of public video call
                       if (!isAppAudiobuttonSelected &&
                           !ismicAudiobuttonSelected &&
                           iscamerabuttonSelected &&
                           broadcast == 0) {
+                        // broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": true, "micAudio": true ,};
                         print("i am here in public camera broadcast ");
+                        broadcasttype="camera";
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return StartBroadcastPopUp(
-                                  startCall: widget.startCall);
+                                  startCall: widget.startCall,
+                                 
+                                  );
                             });
-
-                        //  GroupListModel model;
-                        //   widget.startCall(
-                        //                              model,
-                        //                                       MediaType.video,
-                        //                                       CAllType.one2many,
-                        //                                       SessionType.call
-                        //                               );
-                      } else if (!isAppAudiobuttonSelected &&
+                      }
+                      //case of group video call
+                       else if (!isAppAudiobuttonSelected &&
                           !ismicAudiobuttonSelected &&
                           iscamerabuttonSelected &&
                           broadcast == 1) {
+                                broadcasttype="camera";
                         widget.grouplistprovider
                             .handleGroupListState(ListStatus.Scussess);
-                      } else if (isAppAudiobuttonSelected &&
+                      } 
+                      //case of app audio with public broadcast
+                      else if (isAppAudiobuttonSelected &&
                           !ismicAudiobuttonSelected &&
                           !iscamerabuttonSelected &&
                           broadcast == 0) {
+                                broadcasttype="appaudio";
+                     //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
+                        print("this is app audio with public broadcast");
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StartBroadcastPopUp(
+                                  startCall: widget.startCall,
+                                 // broadcastObject: broadcastObject,
+                                  );
+                            });
+                      } 
+                      //case of app audio with group broadcast
+                      else if (isAppAudiobuttonSelected &&
+                          !ismicAudiobuttonSelected &&
+                          !iscamerabuttonSelected &&
+                          broadcast == 1) {
+                             broadcasttype="appaudio";
+                             widget.grouplistprovider
+                            .handleGroupListState(ListStatus.Scussess);
                         print("this is screen share with internal audio");
-                      } else {
+                      } 
+                      //case of mic audio with public broadcast
+                      else if (!isAppAudiobuttonSelected &&
+                          ismicAudiobuttonSelected &&
+                          !iscamerabuttonSelected &&
+                          broadcast == 0) {
+                            broadcasttype="micaudio";
+                     //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
+                        print("this is mic audio with public broadcast");
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StartBroadcastPopUp(
+                                  startCall: widget.startCall,
+                                 // broadcastObject: broadcastObject,
+                                  );
+                            });
+                        print("this is screen share with internal audio");
+                      } 
+                      //case of mic audio with group broadcast
+                      else if (!isAppAudiobuttonSelected &&
+                          ismicAudiobuttonSelected &&
+                          !iscamerabuttonSelected &&
+                          broadcast == 1) {
+                             broadcasttype="micaudio";
+                             widget.grouplistprovider
+                            .handleGroupListState(ListStatus.Scussess);
+                        print("this is screen share with internal audio");
+                      } 
+                      else {
                         print("i am here in else");
                       }
                     }

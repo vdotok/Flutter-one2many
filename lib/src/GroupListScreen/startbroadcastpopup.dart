@@ -47,14 +47,36 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                     child: FlatButton(
                       color:Colors.green,
        onPressed:  (){
+
          ispublicbroadcast=true;
+//  showDialog(
+//                             context: context,
+//                             builder: (BuildContext context) {
+//                               return StartBroadcastPopUp(
+//                                   startCall: widget.startCall,
+//                                  // broadcastObject: broadcastObject,
+//                                   );
+                          //  });
            GroupListModel model;
-                widget.startCall(
+           if(broadcasttype=="camera"){
+             print(" iam here in pop up camera");
+             widget.startCall(
                                            model,
                                                     MediaType.video,
                                                     CAllType.one2many,
                                                     SessionType.call
                                             );
+           }
+           else{
+              print(" iam here in pop up screen");
+               widget.startCall(
+                                           model,
+                                                    MediaType.video,
+                                                    CAllType.one2many,
+                                                    SessionType.screen
+                                            );
+           }
+                
                                             Navigator.pop(context);
         
        },
