@@ -43,8 +43,9 @@ dependencies:
   vdotok_stream:
     path: ../flutter-sdk-streaming
   flutter_device_type: ^0.4.0
-  battery: ^2.0.3
+  # battery: ^2.0.3
   shared_preferences:
+  # get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onetomany/constant.dart';
+import 'package:flutter_onetomany/src/GroupListScreen/creatingurl.dart';
 import 'package:flutter_onetomany/src/core/models/GroupListModel.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
 import 'package:flutter_onetomany/src/home/home.dart';
@@ -49,14 +50,7 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
        onPressed:  (){
 
          ispublicbroadcast=true;
-//  showDialog(
-//                             context: context,
-//                             builder: (BuildContext context) {
-//                               return StartBroadcastPopUp(
-//                                   startCall: widget.startCall,
-//                                  // broadcastObject: broadcastObject,
-//                                   );
-                          //  });
+  Navigator.pop(context);
            GroupListModel model;
            if(broadcasttype=="camera"){
              print(" iam here in pop up camera");
@@ -76,8 +70,16 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                                                     SessionType.screen
                                             );
            }
-                
-                                            Navigator.pop(context);
+           
+                // showDialog(
+                //             context: context,
+                //             builder: (BuildContext context) {
+                //               return CreatingUrlPopUp(
+                //                   startCall: widget.startCall,
+                //                  // broadcastObject: broadcastObject,
+                //                   );
+                //            });
+                                        //   
         
        },
             child: Text('START BROADCAST', style: TextStyle(

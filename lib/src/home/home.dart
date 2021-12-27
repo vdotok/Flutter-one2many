@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_onetomany/noContactsScreen.dart';
 import 'package:flutter_onetomany/src/ContactListScreen/contactList.dart';
+import 'package:flutter_onetomany/src/GroupListScreen/creatingurl.dart';
 import 'package:flutter_onetomany/src/GroupListScreen/groupListScreen.dart';
 import 'package:flutter_onetomany/src/GroupListScreen/landingScreen.dart';
 import 'package:flutter_onetomany/src/common/customAppBar.dart';
@@ -42,6 +43,7 @@ RTCVideoRenderer remoteRenderer = new RTCVideoRenderer();
 MediaStream local;
 MediaStream remote;
 bool islogout = false;
+BuildContext popupcontext;
 GlobalKey forsmallView = new GlobalKey();
 GlobalKey forlargView = new GlobalKey();
 GlobalKey forDialView = new GlobalKey();
@@ -506,6 +508,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
      signalingClient.onReceiveUrlCallback=(url){
           print("this is url from signalˆng client $url");
           publicbroadcasturl=url;
+       //   Navigator.pop(popupcontext);
+       Navigator.pop(context);
           _callProvider.callStart();
      };
     signalingClient.onAudioVideoStateInfo = (audioFlag, videoFlag, refID) {
@@ -578,6 +582,40 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     // _isInForeground = state == AppLifecycleState.resumed;
   }
 
+
+
+
+//  showAlertDialog() {
+//     // flutter defined function
+//     showDialog(
+//       context: context,
+//       builder: (popupcontext) {
+//         // return object of type Dialog
+//         return AlertDialog(
+//           title: new Text("dgdfgfg"),
+//           content: new Text("vbdfgbfgbgb"),
+//           actions: <Widget>[
+//             // usually buttons at the bottom of the dialog
+//             new FlatButton(
+//               child: new Text("Close"),
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+
+
+
+
+
+
+
+
+
   _callcheck() {
     print("i am here in call chck function $count");
 
@@ -626,6 +664,21 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       switchSpeaker = mtype == MediaType.audio ? true : false;
     });
 List<String> groupRefIDS = [];
+
+
+
+if(to==null)
+{
+  Dialogs _dialog = new Dialogs();
+_dialog.loginLoading(context, "loading", "loading...");
+}
+
+
+
+
+
+
+
 
 if(to!=null){
   print("this is tooooo list $to");
@@ -721,6 +774,14 @@ print("this is signaling client start callllllll $broadcasttype..... $sessionTyp
         ));
     }
   }
+
+
+
+
+
+
+
+
  backHandler() {
     setState(() {
       print("here in back handler set state");
@@ -3087,3 +3148,63 @@ Container(
     );
   }
 }
+
+
+
+
+
+
+
+
+class Dialogs{
+  loginLoading(BuildContext context, String type, String description){
+    // var descriptionBody;
+
+    // if(type == "error"){
+    //   descriptionBody = CircleAvatar(
+    //     radius: 100.0,
+    //     maxRadius: 100.0,
+    //     child: new Icon(Icons.warning),
+    //     backgroundColor: Colors.redAccent,
+    //   );
+    // } else {
+    //   descriptionBody = new Center(
+    //     child: new CircularProgressIndicator(),
+    //   );
+    // }
+
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context){
+        return AlertDialog(
+         // title: descriptionBody,
+          content: SingleChildScrollView(
+            child: Container(
+                  height: 278,
+                  width: 319,
+                  child: 
+                  Center( 
+                    child:
+                      
+         Column(
+           children: [
+             SizedBox(height:80),
+              Text("Creating your URL..."),
+              SizedBox(height:30),
+             Padding(
+               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+               child: LinearProgressIndicator(),
+             ),
+            
+           ],
+         ),))
+          ),
+        );
+      }
+    );
+  }
+}
+
+
+

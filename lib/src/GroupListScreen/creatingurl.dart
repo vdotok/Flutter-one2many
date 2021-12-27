@@ -20,7 +20,6 @@ class _CreatingUrlPopUpState extends State<CreatingUrlPopUp> {
   void initState() {
    
   }
-
   @override
   Widget build(BuildContext context) {
     print("i am here startbroadcast popup");
@@ -43,7 +42,22 @@ class _CreatingUrlPopUpState extends State<CreatingUrlPopUp> {
                   height: 278,
                   width: 319,
                   child: 
-                  Center( child:Text("Creating your url")
+                  Center( 
+                    child:
+                      
+         Column(
+           children: [
+             SizedBox(height:80),
+              Text("Creating your URL..."),
+              SizedBox(height:30),
+             Padding(
+               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+               child: LinearProgressIndicator(),
+             ),
+            
+           ],
+         ),
+                    //Text("Creating your url")
       //               child: FlatButton(
       //                 color:Colors.green,
       //  onPressed:  (){
