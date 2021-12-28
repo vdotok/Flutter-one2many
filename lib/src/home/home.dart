@@ -49,6 +49,7 @@ GlobalKey forlargView = new GlobalKey();
 GlobalKey forDialView = new GlobalKey();
 bool groupnotmatched=false;
 
+    
   List _groupfilteredList = [];
   List<Contact> _selectedContacts = [];
   final _GroupListsearchController = new TextEditingController();
@@ -576,6 +577,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.detached:
         print("app in detached");
+        //signalingClient.appDetached();
         break;
     }
     // super.didChangeAppLifecycleState(state);
@@ -862,6 +864,8 @@ handleCreateGroup(ListStatus state) {
     // FlutterRingtonePlayer.stop();
     // Vibration.cancel();
     // sdpController.dispose();
+    print("i am here in disposeeeeeee ");
+    signalingClient.appDetached();
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
