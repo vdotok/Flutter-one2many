@@ -383,7 +383,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           _time = DateTime.now();
           _callTime = DateTime.now();
         } else {
-          _ticker.cancel();
+        //  if(_ticker!=null){
+     _ticker.cancel();
+       //   }
+     
           _time = _callTime;
           isTimer = false;
         }

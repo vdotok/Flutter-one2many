@@ -38,7 +38,7 @@ dependencies:
   path_provider: ^2.0.1
   provider: ^5.0.0
   flutter_svg:
-  data_connection_checker: ^0.3.4
+  # data_connection_checker: ^0.3.4
   #vdotok_stream: ^0.0.10
   vdotok_stream:
     path: ../flutter-sdk-streaming
