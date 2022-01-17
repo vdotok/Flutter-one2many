@@ -135,47 +135,10 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                     child: SvgPicture.asset('assets/User.svg'),
                                   ),
                                   Expanded(
-                                    child: Text(
-                                      "${element.group_title}",
-                                      style: TextStyle(
-                                        color: contactNameColor,
-                                        fontSize: 16,
-                                        fontFamily: primaryFontFamily,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: IconButton(
-                                      icon: SvgPicture.asset('assets/call.svg'),
-                                      onPressed: () {
-                                        widget.startCall(
-                                           [element.id],
-                                                    MediaType.audio,
-                                                    CAllType.one2one,
-                                                    SessionType.call
-                                            // element,
-                                            // MediaType.audio,
-                                            // CAllType.many2many,
-                                            // SessionType.call
-                                            );
-                                        setState(() {
-                                          callTo = element.group_title;
-                                          widget.mediatype = MediaType.audio;
-                                         
-                                        });
-                                        print("three dot icon pressed");
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(right: 5.9),
-                                
-                                    child: IconButton(
-                                      icon: SvgPicture.asset(
-                                          'assets/videocallicon.svg'),
-                                      onPressed: () {
-                                       if(broadcasttype=="camera"){
+                                    child: 
+                                    GestureDetector(
+                                      onTap: (){
+                                         if(broadcasttype=="camera"){
 widget.startCall(
                                              element,
                                                     MediaType.video,
@@ -202,9 +165,77 @@ widget.startCall(
                                         print("three dot icon pressed");
                                          print("this is call to in call dial $callTo");
                                       },
+                                                                          child: Text(
+                                        "${element.group_title}",
+                                        style: TextStyle(
+                                          color: contactNameColor,
+                                          fontSize: 16,
+                                          fontFamily: primaryFontFamily,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                  ,
+                                  ),
+                                  // Container(
+                                  //   child: IconButton(
+                                  //     icon: SvgPicture.asset('assets/call.svg'),
+                                  //     onPressed: () {
+                                  //       widget.startCall(
+                                  //          [element.id],
+                                  //                   MediaType.audio,
+                                  //                   CAllType.one2one,
+                                  //                   SessionType.call
+                                  //           // element,
+                                  //           // MediaType.audio,
+                                  //           // CAllType.many2many,
+                                  //           // SessionType.call
+                                  //           );
+                                  //       setState(() {
+                                  //         callTo = element.group_title;
+                                  //         widget.mediatype = MediaType.audio;
+                                         
+                                  //       });
+                                  //       print("three dot icon pressed");
+                                  //     },
+                                  //   ),
+                                  // ),
+//                                   Container(
+//                                     padding: EdgeInsets.only(right: 5.9),
+                                
+//                                     child: IconButton(
+//                                       icon: SvgPicture.asset(
+//                                           'assets/videocallicon.svg'),
+//                                       onPressed: () {
+//                                        if(broadcasttype=="camera"){
+// widget.startCall(
+//                                              element,
+//                                                     MediaType.video,
+//                                                     CAllType.one2many,
+//                                                     SessionType.call
+//                                             );
+//                                        }
+//                                        else{
+//                                          widget.startCall(
+//                                              element,
+//                                                     MediaType.video,
+//                                                     CAllType.one2many,
+//                                                     SessionType.screen
+//                                             );
+//                                        }
+                                        
+//                                         setState(() {
+                                        
+//                                           callTo = element.group_title;
+                                        
+//                                           widget.mediatype = MediaType.video;
+                                         
+//                                         });
+//                                         print("three dot icon pressed");
+//                                          print("this is call to in call dial $callTo");
+//                                       },
+//                                     ),
+//                                   )
+//                                   ,
                                      Consumer<GroupListProvider>(
        builder: (context, listProvider, child) {
                                         return    Container(
