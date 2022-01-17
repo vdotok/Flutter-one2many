@@ -364,7 +364,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         print("this is mc token in register ${registerRes["mcToken"]}");
       });
     };
-
+ 
     signalingClient.onLocalStream = (stream) {
       print("this is local stream id ${stream.id}");
       setState(() {
@@ -404,7 +404,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       } else {}
     };
     signalingClient.onReceiveCallFromUser =
-        (receivefrom, type, isonetone) async {
+        (receivefrom, type, isonetone,) async {
       print("incomming call from user");
       startRinging();
 
@@ -868,7 +868,7 @@ handleCreateGroup(ListStatus state) {
     // Vibration.cancel();
     // sdpController.dispose();
     print("i am here in disposeeeeeee ");
-    signalingClient.appDetached();
+    //signalingClient.appDetached();
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -1294,6 +1294,8 @@ handleCreateGroup(ListStatus state) {
                   print("this is pressed accept");
                   stopRinging();
                   signalingClient.createAnswer(incomingfrom);
+                  
+
                   // setState(() {
                   //   inCall = true;
                   // });
