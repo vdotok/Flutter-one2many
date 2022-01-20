@@ -61,18 +61,29 @@ class SampleHandler: RPBroadcastSampleHandler {
         screenState = try! JSONDecoder().decode(ScreenShareScreenState.self, from: data)
 
     }
-
+    func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
 
     func getScreenShareAppData(with message: String) {
-
-        guard let data = message.data(using: .utf8) else {return }
+        let completeData = convertToDictionary(text: message)
+        let projectID : String = completeData!["projectID"] as! String
+        let dataWithoutProjectID = completeData!["jsonWithoutProjectID"] as! String
+        guard let data = dataWithoutProjectID.data(using: .utf8) else {return }
         screenShareData = try? JSONDecoder().decode(ScreenShareAppData.self, from: data)
         guard screenShareData != nil else { return }
-        initSdk()
+        initSdk(projectID: projectID)
     }
 
 
-    func initSdk(){
+    func initSdk(projectID : String){
         guard let screenShareData = screenShareData else {return }
         request = RegisterRequest(type: "request",
                                       requestType: "register",
@@ -80,7 +91,7 @@ class SampleHandler: RPBroadcastSampleHandler {
                                       authorizationToken: screenShareData.authenticationToken,
                                       socketType: .screenShare,
                                       requestID: getRequestId(),
-                                      projectID: "176GK5IN")
+                                      projectID: projectID)
 
         vtokSdk = VTokSDK(url: screenShareData.url, registerRequest: request!, connectionDelegate: self, connectionType: .screenShare)
     }
