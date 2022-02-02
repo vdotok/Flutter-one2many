@@ -146,6 +146,22 @@ widget.startCall(
                                                     SessionType.call
                                             );
                                        }
+                                       else if(broadcasttype=="appaudioandcamera"  || broadcasttype=="micaudioandcamera"){
+                                          // broadcasttype="camera";
+                                         //  widget.startCall(
+                                            //  element,
+                                            //         MediaType.video,
+                                            //         CAllType.one2many,
+                                            //         SessionType.call
+                                            // );
+                                          //  broadcasttype="appaudio";
+                                            widget.startCall(
+                                             element,
+                                                    MediaType.video,
+                                                    CAllType.one2many,
+                                                    SessionType.screenandcall
+                                            );
+                                       }
                                        else{
                                          widget.startCall(
                                              element,

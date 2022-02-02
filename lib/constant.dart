@@ -133,6 +133,7 @@ class CAllType {
 class SessionType {
   static String call = "call";
   static String screen = "screen";
+  static String screenandcall = "screenandcall";
 }
 
 

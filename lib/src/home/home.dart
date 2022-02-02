@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_onetomany/noContactsScreen.dart';
 import 'package:flutter_onetomany/src/ContactListScreen/contactList.dart';
-import 'package:flutter_onetomany/src/GroupListScreen/creatingurl.dart';
 import 'package:flutter_onetomany/src/GroupListScreen/groupListScreen.dart';
 import 'package:flutter_onetomany/src/GroupListScreen/landingScreen.dart';
 import 'package:flutter_onetomany/src/common/customAppBar.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_onetomany/src/core/models/GroupModel.dart';
 import 'package:flutter_onetomany/src/core/models/contact.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
 import 'package:flutter_onetomany/src/home/CreateGroupPopUp.dart';
+import 'package:flutter_onetomany/src/home/remoteStream.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +40,7 @@ bool switchMute = true;
 bool switchSpeaker = true;
 RTCVideoRenderer localRenderer = new RTCVideoRenderer();
 RTCVideoRenderer remoteRenderer = new RTCVideoRenderer();
+ List<Map<String, dynamic>> rendererListWithRefID = [];
 MediaStream local;
 MediaStream remote;
 bool islogout = false;
@@ -365,18 +366,53 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       });
     };
  
-    signalingClient.onLocalStream = (stream) {
+    signalingClient.onLocalStream = (stream) async{
       print("this is local stream id ${stream.id}");
       setState(() {
         localRenderer.srcObject = stream;
         local = stream;
         print("this is local $local");
       });
+     
+      //   Map<String, dynamic> temp = {
+      //   "rtcVideoRenderer": new RTCVideoRenderer(),
+      //   "remoteVideoFlag": meidaType == MediaType.video ? 1 : 0,
+      //   "remoteAudioFlag": 1
+      // };
+      // await initRenderersRemote(temp["rtcVideoRenderer"]);
+      // setState(() {
+      //   temp["rtcVideoRenderer"].srcObject = stream;
+      //    rendererListWithRefID.add(temp);
+      // });
+      //  print("i am here in local stream list length ....${rendererListWithRefID.length}");
     };
     signalingClient.onRemoteStream = (stream, refid) async {
       print("this is home page on remote stream ${stream.id} $refid");
+       print("HI1 i am here in remote stream");
+        Map<String, dynamic> temp = {
+        "refID": refid,
+        "rtcVideoRenderer": new RTCVideoRenderer(),
+        "remoteVideoFlag": meidaType == MediaType.video ? 1 : 0,
+        "remoteAudioFlag": 1
+      };
+      await initRenderersRemote(temp["rtcVideoRenderer"]);
       setState(() {
-        remoteRenderer.srcObject = stream;
+        temp["rtcVideoRenderer"].srcObject = stream;
+          rendererListWithRefID.add(temp);
+      });
+      // Map<String, dynamic> temp = {
+      //   "refID": refid,
+      //   "rtcVideoRenderer": new RTCVideoRenderer(),
+      //   "remoteVideoFlag": meidaType == MediaType.video ? 1 : 0,
+      //   "remoteAudioFlag": 1
+      // };
+      //   await initRenderersRemote(temp["rtcVideoRenderer"]);
+      //     rendererListWithRefID.add(temp);
+         
+          print("this is renderer list length ${rendererListWithRefID.length}");
+      setState(() {
+         // temp["rtcVideoRenderer"].srcObject = stream;
+        //remoteRenderer.srcObject = stream;
         remote = stream;
         print("this is remote ${stream.id}");
         if (isTimer == false) {
@@ -393,6 +429,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         _updateTimer();
         _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
         onRemoteStream = true;
+          
         _callProvider.callStart();
       });
     };
@@ -437,7 +474,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         print("NOT NULL  $timeStatsdownloads");
         number = timeStatsdownloads;
       };
-      print("i am here setting call start status");
       if(!ispublicbroadcast){
    _callProvider.callStart();
       }
@@ -463,6 +499,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       //here
       // _callBloc.add(CallNewEvent());
       _callProvider.initial();
+      disposeAllRenderer();
       setState(() {
         inCall = false;
         iscallAcceptedbyuser = false;
@@ -701,7 +738,8 @@ print("this is signaling client start callllllll $broadcasttype..... $sessionTyp
         callType: callType,
         sessionType: sessionType,
         ispublicbroadcast: ispublicbroadcast,
-        broadcastype:broadcasttype
+        broadcastype:broadcasttype,
+authorizationToken:_auth.getUser.auth_token
         );
     // if (_localStream != null) {
     //here
@@ -727,6 +765,9 @@ print("this is signaling client start callllllll $broadcasttype..... $sessionTyp
     print("after initialixxation");
     await remoteRenderer.initialize();
   }
+  initRenderersRemote(RTCVideoRenderer rtcRenderer) async {
+    await rtcRenderer.initialize();
+  }
 
   startRinging() async {
     if (Platform.isAndroid) {
@@ -742,7 +783,24 @@ print("this is signaling client start callllllll $broadcasttype..... $sessionTyp
       asAlarm: false, // Android only - all APIs
     );
   }
-
+ disposeAllRenderer() async {
+   // for (int i = 0; i < rendererListWithRefID.length; i++) {
+       await rendererListWithRefID[0]["rtcVideoRenderer"].dispose();
+       await rendererListWithRefID[1]["rtcVideoRenderer"].dispose();
+       rendererListWithRefID.removeAt(1);
+       rendererListWithRefID.removeAt(0);
+        print("this is renderlist length    ${rendererListWithRefID.length}");
+       rendererListWithRefID=[];
+      
+    //   if (i == 0) {
+    //     rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
+    //   } else
+    //     await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
+    // }
+    // if (rendererListWithRefID.length > 1) {
+    //   rendererListWithRefID.removeRange(1, (rendererListWithRefID.length));
+   //  }
+  }
   stopRinging() {
     print("this is on rejected ");
     // startRinging();                                         \
@@ -946,6 +1004,7 @@ handleCreateGroup(ListStatus state) {
     if(_ticker!=null){
        _ticker.cancel();
     }
+    disposeAllRenderer();
     setState(() {
       ispublicbroadcast=false;
       isDDialer=false;
@@ -1168,11 +1227,12 @@ handleCreateGroup(ListStatus state) {
             ? Container()
             : meidaType == MediaType.video
                 ? Container(
-                    child: RTCVideoView(localRenderer,
-                        key: forlargView,
-                        mirror: false,
-                        objectFit:
-                            RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
+                  /////////////////////////////this is code comment for screen 
+                    // child: RTCVideoView(localRenderer,
+                    //     key: forlargView,
+                    //     mirror: false,
+                    //     objectFit:
+                    //         RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
                   )
                 : Container(
                     decoration: BoxDecoration(
@@ -1330,17 +1390,52 @@ handleCreateGroup(ListStatus state) {
         return Stack(
           children: [
             !kIsWeb
-                ? meidaType == MediaType.video
-                    ? Container(
+                ? meidaType == MediaType.video?
+                //     ?   rendererListWithRefID.length==1? Column(
+                //   children: [
+                //     Container(height: 300,width:300,
+                //     child: RemoteStream(
+                //                 remoteRenderer:  rendererListWithRefID[0]
+                //                     ["rtcVideoRenderer"],)
+                //     // RTCVideoView(rendererListWithRefID[0]
+                //     //                  ["rtcVideoRenderer"],)
+                //     ),
+                //     ],
+                // ): rendererListWithRefID.length==2?
+                // Column(
+                //   children: [
+                //     Container(height: 300,width:300,
+                //     color:Colors.yellow,
+                //     child:
+                //     //  RemoteStream(
+                //     //             remoteRenderer:  rendererListWithRefID[0]
+                //     //                 ["rtcVideoRenderer"],)
+                //     RTCVideoView(rendererListWithRefID[0]
+                //                      ["rtcVideoRenderer"],)
+                //     ),
+                //       Container(height: 300,width:300,
+                //       color:Colors.red,
+                //       child:
+                //       //  RemoteStream(
+                //       //           remoteRenderer:  rendererListWithRefID[1]
+                //       //               ["rtcVideoRenderer"],)
+                //       RTCVideoView(rendererListWithRefID[1]
+                //                      ["rtcVideoRenderer"],)
+                //      )
+                //     ],
+                // ):Container()
+                    Container(
                         // color: Colors.red,
                         //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: RTCVideoView(localRenderer,
-                            key: forDialView,
-                            mirror: false,
-                            objectFit: RTCVideoViewObjectFit
-                                .RTCVideoViewObjectFitCover))
+                        //////////////////////////////////////////////this is code comment in for camera
+                        // width: MediaQuery.of(context).size.width,
+                        // height: MediaQuery.of(context).size.height,
+                        // child: RTCVideoView(localRenderer,
+                        //     key: forDialView,
+                        //     mirror: false,
+                        //     objectFit: RTCVideoViewObjectFit
+                        //         .RTCVideoViewObjectFitCover)
+                                )
                     : Container(
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -1804,15 +1899,74 @@ Container(
                 ],
               ),
             )])):
-        isDDialer==false?Container(
+        isDDialer==false?
+        Container(
           child: Stack(children: <Widget>[
             meidaType == MediaType.video
-                ? remoteVideoFlag
-                    ? RTCVideoView(remoteRenderer,
-                        mirror: false,
-                        objectFit: kIsWeb
-                            ? RTCVideoViewObjectFit.RTCVideoViewObjectFitContain
-                            : RTCVideoViewObjectFit.RTCVideoViewObjectFitCover)
+                ? remoteVideoFlag?
+               rendererListWithRefID.length==1? Column(
+                  children: [
+                    Container(
+                       //  width:        MediaQuery.of(context).size.width,
+                     height: 300,width:300,
+                    child: RemoteStream(
+                                remoteRenderer:  rendererListWithRefID[0]
+                                    ["rtcVideoRenderer"],)
+                    // RTCVideoView(rendererListWithRefID[0]
+                    //                  ["rtcVideoRenderer"],)
+                    ),
+                    ],
+                ): rendererListWithRefID.length==2?
+                Column(
+                  children: [
+                   Container(
+                   // width:        MediaQuery.of(context).size.width,
+                        height: 300,width:300,
+                     // color:Colors.yellow,
+                      child:
+                      //  RemoteStream(
+                      //             remoteRenderer:  rendererListWithRefID[0]
+                      //                 ["rtcVideoRenderer"],)
+                      RTCVideoView(rendererListWithRefID[0]
+                                       ["rtcVideoRenderer"],)
+                      ),
+                      Container(
+                          height: 300,width:300,
+                        //    width:        MediaQuery.of(context).size.width,
+                       // color:Colors.red,
+                        child:
+                        //  RemoteStream(
+                        //           remoteRenderer:  rendererListWithRefID[1]
+                        //               ["rtcVideoRenderer"],)
+                        RTCVideoView(rendererListWithRefID[1]
+                                       ["rtcVideoRenderer"],)
+                     )
+                    ],
+                ):Container()
+                    //  Container(height: 300,width:300,
+                    //   child: RTCVideoView(rendererListWithRefID[1]
+                    //                  ["rtcVideoRenderer"],)
+                    //  )
+
+                    // RTCVideoView(rendererListWithRefID[0]
+                    //                 ["rtcVideoRenderer"],
+                    //     mirror: false,
+                    //     objectFit: kIsWeb
+                    //         ? RTCVideoViewObjectFit.RTCVideoViewObjectFitContain
+                    //         : RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
+                    //         RTCVideoView(rendererListWithRefID[1]
+                    //                 ["rtcVideoRenderer"],
+                    //     mirror: false,
+                    //     objectFit: kIsWeb
+                    //         ? RTCVideoViewObjectFit.RTCVideoViewObjectFitContain
+                    //         : RTCVideoViewObjectFit.RTCVideoViewObjectFitCover)
+
+                  
+                    // ? RTCVideoView(remoteRenderer,
+                    //     mirror: false,
+                    //     objectFit: kIsWeb
+                    //         ? RTCVideoViewObjectFit.RTCVideoViewObjectFitContain
+                    //         : RTCVideoViewObjectFit.RTCVideoViewObjectFitCover)
                     : Container(
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -2128,7 +2282,9 @@ Container(
               ),
             )
           ]),
-        ):Container(child: Stack(children: <Widget>[
+        ):Container(
+          child: 
+            Stack(children: <Widget>[
             meidaType == MediaType.video? 
              enableCamera
                               ? RTCVideoView(localRenderer,
@@ -2136,8 +2292,48 @@ Container(
                                   mirror: false,
                                   objectFit: RTCVideoViewObjectFit
                                       .RTCVideoViewObjectFitCover)
-                              : Container()
-                        
+                              :
+                               Container()
+                //          rendererListWithRefID.length==1? Column(
+                //   children: [
+                //     Container(height: 300,width:300,
+                //      padding: EdgeInsets.only(top:50),
+                //     color:Colors.pink,
+ 
+                //      child: 
+                //     // RemoteStream(
+                //     //             remoteRenderer:  rendererListWithRefID[0]
+                //     //                 ["rtcVideoRenderer"],)
+                //     RTCVideoView(rendererListWithRefID[0]
+                //                      ["rtcVideoRenderer"],)
+                //     ),
+                //     ],
+                // ): rendererListWithRefID.length==2?
+                // Center(
+                //   child: Column(
+                //     children: [
+                //       Container(height: 200,width:200,
+                //       color:Colors.red,
+                //       padding: EdgeInsets.only(top:50),
+                //       child: 
+                //       // RemoteStream(
+                //       //             remoteRenderer:  rendererListWithRefID[0]
+                //       //                 ["rtcVideoRenderer"],)
+                //       RTCVideoView(rendererListWithRefID[0]
+                //                        ["rtcVideoRenderer"],)
+                //       ),
+                //         Container(height: 200,width:200,
+                //         color:Colors.yellow,
+                //         child: 
+                //         // RemoteStream(
+                //         //           remoteRenderer:  rendererListWithRefID[1]
+                //         //               ["rtcVideoRenderer"],)
+                //         RTCVideoView(rendererListWithRefID[1]
+                //                        ["rtcVideoRenderer"],)
+                //        )
+                //       ],
+                //   ),
+                // ):Container()
                      
               //  ? remoteVideoFlag
                     // ?Container(color:Colors.red)

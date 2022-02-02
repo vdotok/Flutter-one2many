@@ -4,7 +4,7 @@
 // import 'package:vdotok_stream/vdotok_stream.dart';
 // import 'package:vdotok_stream_example/constant.dart';
 // import 'package:vdotok_stream_example/sample.dart';
-// import 'package:vdotok_stream_example/src/landingScreen.dart';
+// import 'package:vdotok_stream_example/src/landwqgScreen.dart';
 // import 'package:vdotok_stream_example/src/login/bloc/login_bloc.dart';
 // import 'package:vdotok_stream_example/src/login/loginIndex.dart';
 // import 'package:vdotok_stream_example/src/routing/routes.dart';
@@ -155,7 +155,7 @@
 //       //         ),
 //       //         registerRow(),
 //       //         callRow(),
-//       //         ElevatedButton(onPressed: startCall, child: Text("Start call")),
+//       //         ElevatedButton(onPressed: startCall, child: Text("                                                          s call")),
 //       //         Flexible(
 //       //           child: new Container(
 //       //               key: new Key("local"),
