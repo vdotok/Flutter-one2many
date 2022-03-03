@@ -11,10 +11,16 @@ class LandingScreen extends StatefulWidget {
   GroupListProvider grouplistprovider;
   final startCall;
   AuthProvider authprovider;
-   var registerRes;
+  var registerRes;
   bool sockett;
   bool isdev;
-  LandingScreen({this.grouplistprovider, this.startCall,this.authprovider,this.registerRes,this.isdev,this.sockett});
+  LandingScreen(
+      {this.grouplistprovider,
+      this.startCall,
+      this.authprovider,
+      this.registerRes,
+      this.isdev,
+      this.sockett});
   @override
   _LandingScreenState createState() => _LandingScreenState();
 }
@@ -37,11 +43,10 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:
-         SingleChildScrollView(
-                    child: Container(
-      child: Column(
-        children: [
+        body: SingleChildScrollView(
+      child: Container(
+        child: Column(
+          children: [
             SizedBox(height: 50),
             Row(
               children: [
@@ -65,13 +70,13 @@ class _LandingScreenState extends State<LandingScreen> {
               width: 265,
               height: 70,
               decoration: BoxDecoration(
-                  color: isAppAudiobuttonSelected ? Colors.yellow : Colors.white,
+                  color:
+                      isAppAudiobuttonSelected ? Colors.yellow : Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               child: FlatButton(
                 onPressed: () {
-                  if(ismicAudiobuttonSelected)
-                  {
-                    ismicAudiobuttonSelected=!ismicAudiobuttonSelected;
+                  if (ismicAudiobuttonSelected) {
+                    ismicAudiobuttonSelected = !ismicAudiobuttonSelected;
                   }
                   setState(() {
                     isAppAudiobuttonSelected = !isAppAudiobuttonSelected;
@@ -93,12 +98,13 @@ class _LandingScreenState extends State<LandingScreen> {
               width: 265,
               height: 70,
               decoration: BoxDecoration(
-                  color: ismicAudiobuttonSelected ? Colors.yellow : Colors.white,
+                  color:
+                      ismicAudiobuttonSelected ? Colors.yellow : Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               child: FlatButton(
                 onPressed: () {
-                  if(isAppAudiobuttonSelected){
-                    isAppAudiobuttonSelected=!isAppAudiobuttonSelected;
+                  if (isAppAudiobuttonSelected) {
+                    isAppAudiobuttonSelected = !isAppAudiobuttonSelected;
                   }
                   setState(() {
                     ismicAudiobuttonSelected = !ismicAudiobuttonSelected;
@@ -128,7 +134,8 @@ class _LandingScreenState extends State<LandingScreen> {
                     iscamerabuttonSelected = !iscamerabuttonSelected;
                   });
                 },
-                child: Text('CAMERA', style: TextStyle(color: screensharecolor)),
+                child:
+                    Text('CAMERA', style: TextStyle(color: screensharecolor)),
                 textColor: Colors.green,
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
@@ -163,114 +170,114 @@ class _LandingScreenState extends State<LandingScreen> {
                             broadcast == 0) {
                           // broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": true, "micAudio": true ,};
                           print("i am here in public camera broadcast ");
-                          broadcasttype="camera";
+                          broadcasttype = "camera";
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return StartBroadcastPopUp(
-                                    startCall: widget.startCall,
-                                   
-                                    );
+                                  startCall: widget.startCall,
+                                );
                               });
                         }
                         //case of group video call
-                         else if (!isAppAudiobuttonSelected &&
+                        else if (!isAppAudiobuttonSelected &&
                             !ismicAudiobuttonSelected &&
                             iscamerabuttonSelected &&
                             broadcast == 1) {
-                                  broadcasttype="camera";
+                          broadcasttype = "camera";
                           widget.grouplistprovider
                               .handleGroupListState(ListStatus.Scussess);
-                        } 
+                        }
                         //case of app audio with public broadcast
                         else if (isAppAudiobuttonSelected &&
                             !ismicAudiobuttonSelected &&
                             !iscamerabuttonSelected &&
                             broadcast == 0) {
-                                  broadcasttype="appaudio";
-                       //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
+                          broadcasttype = "appaudio";
+                          //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
                           print("this is app audio with public broadcast");
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return StartBroadcastPopUp(
-                                    startCall: widget.startCall,
-                                   // broadcastObject: broadcastObject,
-                                    );
+                                  startCall: widget.startCall,
+                                  // broadcastObject: broadcastObject,
+                                );
                               });
-                        } 
+                        }
                         //case of app audio with group broadcast
                         else if (isAppAudiobuttonSelected &&
                             !ismicAudiobuttonSelected &&
                             !iscamerabuttonSelected &&
                             broadcast == 1) {
-                               broadcasttype="appaudio";
-                               widget.grouplistprovider
+                          broadcasttype = "appaudio";
+                          widget.grouplistprovider
                               .handleGroupListState(ListStatus.Scussess);
                           print("this is screen share with internal audio");
-                        } 
+                        }
                         //case of mic audio with public broadcast
                         else if (!isAppAudiobuttonSelected &&
                             ismicAudiobuttonSelected &&
                             !iscamerabuttonSelected &&
                             broadcast == 0) {
-                              broadcasttype="micaudio";
-                       //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
+                          broadcasttype = "micaudio";
+                          //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
                           print("this is mic audio with public broadcast");
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return StartBroadcastPopUp(
-                                    startCall: widget.startCall,
-                                   // broadcastObject: broadcastObject,
-                                    );
+                                  startCall: widget.startCall,
+                                  // broadcastObject: broadcastObject,
+                                );
                               });
                           print("this is screen share with internal audio");
-                        } 
+                        }
                         //case of mic audio with group broadcast
                         else if (!isAppAudiobuttonSelected &&
                             ismicAudiobuttonSelected &&
                             !iscamerabuttonSelected &&
                             broadcast == 1) {
-                               broadcasttype="micaudio";
-                               widget.grouplistprovider
+                          broadcasttype = "micaudio";
+                          widget.grouplistprovider
                               .handleGroupListState(ListStatus.Scussess);
                           print("this is screen share with internal audio");
-                        } 
-                        //  else if (isAppAudiobuttonSelected &&
-                        //     !ismicAudiobuttonSelected &&
-                        //     iscamerabuttonSelected &&
-                        //     broadcast == 1) {
-                        //        broadcasttype="appaudioandcamera";
-                        //        widget.grouplistprovider
-                        //       .handleGroupListState(ListStatus.Scussess);
-                        //   print("this is screen share with app audio and camera");
-                        // } 
+                        } else if (isAppAudiobuttonSelected &&
+                            !ismicAudiobuttonSelected &&
+                            iscamerabuttonSelected &&
+                            broadcast == 1) {
+                          broadcasttype = "appaudioandcamera";
+                          widget.grouplistprovider
+                              .handleGroupListState(ListStatus.Scussess);
+                          print(
+                              "this is screen share with app audio and camera");
+                        }
                         // else if (isAppAudiobuttonSelected &&
                         //     !ismicAudiobuttonSelected &&
                         //     iscamerabuttonSelected &&
                         //     broadcast == 0) {
-                        //        broadcasttype="appaudioandcamera";
-                        //        showDialog(
+                        //   broadcasttype = "appaudioandcamera";
+                        //   showDialog(
                         //       context: context,
                         //       builder: (BuildContext context) {
                         //         return StartBroadcastPopUp(
-                        //             startCall: widget.startCall,
-                        //            // broadcastObject: broadcastObject,
-                        //             );
+                        //           startCall: widget.startCall,
+                        //           // broadcastObject: broadcastObject,
+                        //         );
                         //       });
-                        //   print("this is screen share with app audio and camera");
-                        // } 
-                        // else if (!isAppAudiobuttonSelected &&
-                        //     ismicAudiobuttonSelected &&
-                        //     iscamerabuttonSelected &&
-                        //     broadcast == 1) {
-                        //        broadcasttype="micaudioandcamera";
-                        //        widget.grouplistprovider
-                        //       .handleGroupListState(ListStatus.Scussess);
-                        //   print("this is screen share with app audio and camera");
-                        // } 
-                        else {
+                        //   print(
+                        //       "this is screen share with app audio and camera");
+                        // }
+                        else if (!isAppAudiobuttonSelected &&
+                            ismicAudiobuttonSelected &&
+                            iscamerabuttonSelected &&
+                            broadcast == 1) {
+                          broadcasttype = "micaudioandcamera";
+                          widget.grouplistprovider
+                              .handleGroupListState(ListStatus.Scussess);
+                          print(
+                              "this is screen share with app audio and camera");
+                        } else {
                           print("i am here in else");
                         }
                       }
@@ -284,54 +291,54 @@ class _LandingScreenState extends State<LandingScreen> {
                 // ), borderRadius: BorderRadius.circular(30)),
               ),
             ),
-            SizedBox(height:19),
-                      Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: FlatButton(
-                                  onPressed: () {
-                                    widget.authprovider.logout();
+            SizedBox(height: 19),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: FlatButton(
+                              onPressed: () {
+                                widget.authprovider.logout();
 
-                                    signalingClient
-                                        .unRegister(widget.registerRes["mcToken"]);
-                                  },
-                                  child: Text(
-                                    "LOG OUT",
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontFamily: primaryFontFamily,
-                                        fontStyle: FontStyle.normal,
-                                        fontWeight: FontWeight.w700,
-                                        color: logoutButtonColor,
-                                        letterSpacing: 0.90),
-                                  ),
-                                ),
+                                signalingClient
+                                    .unRegister(widget.registerRes["mcToken"]);
+                              },
+                              child: Text(
+                                "LOG OUT",
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontFamily: primaryFontFamily,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w700,
+                                    color: logoutButtonColor,
+                                    letterSpacing: 0.90),
                               ),
-                              Container(
-                                height: 25,
-                                width: 25,
-                                child: SvgPicture.asset(
-                                  'assets/call.svg',
-                                  color: widget.sockett && widget.isdev
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
-                              ),
-                            ]),
-                      ),
-                      Container(
-                          padding: const EdgeInsets.only(bottom: 60),
-                          child: Text(widget.authprovider.getUser.full_name))
-                    ]))
-        ],
+                            ),
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            child: SvgPicture.asset(
+                              'assets/call.svg',
+                              color: widget.sockett && widget.isdev
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
+                          ),
+                        ]),
+                  ),
+                  Container(
+                      padding: const EdgeInsets.only(bottom: 60),
+                      child: Text(widget.authprovider.getUser.full_name))
+                ]))
+          ],
+        ),
       ),
-    ),
-         ));
+    ));
   }
 }
