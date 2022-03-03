@@ -25,6 +25,7 @@
 //
 // class App extends StatefulWidget {
 //   @override
+
 //   _AppState createState() => _AppState();
 // }
 //
@@ -103,7 +104,7 @@
 //     signalingClient.onError = (e, m) {
 //       print("on Error $e, $m");
 //     };
-//     signalingClient.onLocalStream = (stream) {
+//     signalingClient.onLocalStream = (stream){ 
 //       print("this is stream id ${stream.id}");
 //       setState(() {
 //         _localRenderer.srcObject = stream;
