@@ -138,6 +138,9 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                     child: 
                                     GestureDetector(
                                       onTap: (){
+                                        groupName = widget.grouplistprovider.groupList
+
+.groups[position].group_title;
                                          if(broadcasttype=="camera"){
 widget.startCall(
                                              element,

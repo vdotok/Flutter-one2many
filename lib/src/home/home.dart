@@ -29,6 +29,7 @@ import '../core/providers/call_provider.dart';
 import '../core/providers/contact_provider.dart';
 
 String callTo = "";
+String groupName="";
 bool ispublicbroadcast = false;
 String broadcasttype = "";
 bool isDDialer = false;
@@ -268,6 +269,25 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       //   });
       // }
       if (code == 1001 || code == 1002) {
+        signalingClient.sendPing(registerRes["mctoken"]);
+
+// if (isConnected && !isRegisteredAlready) {
+
+// print("internet is connected $sockett");
+
+// signalingClient.connect(project_id, _auth.completeAddress);
+
+// } else {
+
+setState(() {
+
+sockett = false;
+
+
+
+
+
+});
         setState(() {
           sockett = false;
           isConnected = false;
@@ -327,6 +347,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       //   }
       // }
     };
+
+
     signalingClient.internetConnectivityCallBack = (mesg) {
       if (mesg == "Connected") {
         setState(() {
@@ -423,9 +445,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           _time = DateTime.now();
           _callTime = DateTime.now();
         } else {
-          //  if(_ticker!=null){
+            if(_ticker!=null){
           _ticker.cancel();
-          //   }
+             }
 
           _time = _callTime;
           isTimer = false;
@@ -441,7 +463,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 signalingClient.onTargetAlerting = () {setState(() {isRinging = true;});};
 
 
-    signalingClient.onParticipantsLeft = (refID) async {
+    signalingClient.onParticipantsLeft = (refID, boolFlag) async {
       print("call callback on call left by participant");
 
       // on participants left
@@ -449,23 +471,21 @@ signalingClient.onTargetAlerting = () {setState(() {isRinging = true;});};
       } else {}
     };
     signalingClient.onReceiveCallFromUser = (
-      receivefrom,
-      type,
-      isonetone,
+     mapData
     ) async {
-      print("incomming call from user");
+      print("incomming call from user ${mapData["from"]}");
       startRinging();
-
+    groupName=mapData["data"]["groupName"];
       setState(() {
         inCall = true;
         pressDuration = "";
         onRemoteStream = false;
-        iscalloneto1 = isonetone;
-        incomingfrom = receivefrom;
-        meidaType = type;
+        iscalloneto1 = false;
+        incomingfrom = mapData["from"];
+        meidaType = mapData["media_type"];
         switchMute = true;
         enableCamera = true;
-        switchSpeaker = type == MediaType.audio ? true : false;
+        switchSpeaker = mapData["media_type"] == MediaType.audio ? true : false;
         remoteVideoFlag = true;
         remoteAudioFlag = true;
       });
@@ -729,6 +749,7 @@ signalingClient.onTargetAlerting = () {setState(() {isRinging = true;});};
     print(
         "this is signaling client start callllllll $broadcasttype..... $sessionType");
     signalingClient.startCallonetomany(
+       groupName: to == null? null:to.group_title,
         from: _auth.getUser.ref_id,
         to: groupRefIDS,
         mcToken: registerRes["mcToken"],
@@ -1318,18 +1339,20 @@ signalingClient.onTargetAlerting = () {setState(() {isRinging = true;});};
               SizedBox(
                 height: 8,
               ),
-              Consumer<ContactProvider>(
-                builder: (context, contact, child) {
-                  if (contact.contactState == ContactStates.Success) {
-                    int index = contact.contactList.users.indexWhere(
-                        (element) => element.ref_id == incomingfrom);
-                    print("callto is $callTo");
-                    print(
-                        "incoming ${index == -1 ? incomingfrom : contact.contactList.users[index].full_name}");
-                    return Text(
-                      index == -1
-                          ? incomingfrom
-                          : contact.contactList.users[index].full_name,
+              // Consumer<ContactProvider>(
+              //   builder: (context, contact, child) {
+                  // if (contact.contactState == ContactStates.Success) {
+                  //   int index = contact.contactList.users.indexWhere(
+                  //       (element) => element.ref_id == incomingfrom);
+                  //   print("callto is $callTo");
+                  //   print(
+                  //       "incoming ${index == -1 ? incomingfrom : contact.contactList.users[index].full_name}");
+                  //   return 
+                    Text(
+                      "$groupName",
+                      // index == -1
+                      //     ? incomingfrom
+                      //     : contact.contactList.users[index].full_name,
                       style: TextStyle(
                           fontFamily: primaryFontFamily,
                           color: darkBlackColor,
@@ -1337,10 +1360,10 @@ signalingClient.onTargetAlerting = () {setState(() {isRinging = true;});};
                           fontWeight: FontWeight.w700,
                           fontStyle: FontStyle.normal,
                           fontSize: 24),
-                    );
-                  } else
-                    return Container();
-                },
+                   // );
+                //   } else
+                //     return Container();
+                // },
               ),
             ],
           ),
@@ -1518,7 +1541,7 @@ signalingClient.onTargetAlerting = () {setState(() {isRinging = true;});};
                         height: 8,
                       ),
                       Text(
-                        callTo,
+                        groupName,
                         style: TextStyle(
                             fontFamily: primaryFontFamily,
                             color: darkBlackColor,
@@ -1862,7 +1885,7 @@ signalingClient.onTargetAlerting = () {setState(() {isRinging = true;});};
                                           remoteRenderer:
                                               rendererListWithRefID[0]
                                                   ["rtcVideoRenderer"])
-                              : Container(color:Colors.pink),
+                              : Container(),
                         ),
                       ),
                     ),
