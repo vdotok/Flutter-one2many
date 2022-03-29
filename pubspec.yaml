@@ -32,16 +32,16 @@ dependencies:
   flutter_ringtone_player: ^2.0.0
   vibration: ^1.7.3
   equatable:
-  http: ^0.12.2
-  json_annotation:
-  device_info: ^2.0.0
-  path_provider: ^2.0.1
+  http: ^0.13.0
+  json_annotation: ^3.1.1
+  device_info:
+  path_provider:
   provider: ^5.0.0
-  flutter_svg:
+  flutter_svg: "0.23.0+1"
   # data_connection_checker: ^0.3.4
   #vdotok_stream: ^0.0.10
   vdotok_stream:
-    path: ../flutter-sdk-streaming
+     path: ../flutter-sdk-streaming/
   flutter_device_type: ^0.4.0
   # battery: ^2.0.3
   shared_preferences:
@@ -52,7 +52,7 @@ dev_dependencies:
     sdk: flutter
   build_runner:
   json_serializable:
-  flutter_launcher_icons: "^0.8.0"
+  # flutter_launcher_icons: "^0.8.0"
 
 flutter_icons:
   android: "launcher_icon"

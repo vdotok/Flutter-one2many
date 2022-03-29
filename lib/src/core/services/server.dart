@@ -8,7 +8,7 @@ import '../../../src/core/config/config.dart';
 Future<dynamic> callAPI(datarequest, myurl, authToken) async {
   final url = URL + version + myurl;
   print("this is api call $datarequest $url  $authToken");
-  final response = await http.post('$url',
+  final response = await http.post(Uri.parse('$url'),
       headers: authToken != null
           ? {
               HttpHeaders.contentTypeHeader: 'application/json',
@@ -29,7 +29,7 @@ Future<dynamic> getAPI(myurl, authToken) async {
   final url = URL + version + myurl;
   print('this is url $url');
   final response = await http.get(
-    '$url',
+    Uri.parse('$url'),
     headers: authToken != null
         ? {
             HttpHeaders.contentTypeHeader: 'application/json',
