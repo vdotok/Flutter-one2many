@@ -1,21 +1,14 @@
-
 import ReplayKit
 import iOSSDKStreaming
 import MMWormhole
-
 class SampleHandler: RPBroadcastSampleHandler {
-
     var vtokSdk : VideoTalkSDK?
     var request: RegisterRequest?
     var audioState: ScreenShareAudioState!
     var screenState: ScreenShareScreenState!
-
     let wormhole = MMWormhole(applicationGroupIdentifier: AppsGroup.APP_GROUP, optionalDirectory: "wormhole")
-
     var baseSession : VTokBaseSession?
     var screenShareData: ScreenShareAppData?
-
-
     override init() {
         super.init()
         audioState = ScreenShareAudioState(screenShareAudio: .passAll)
@@ -27,7 +20,6 @@ class SampleHandler: RPBroadcastSampleHandler {
                 self.getScreenShareAppData(with: message)
             }
         })
-
         wormhole.listenForMessage(withIdentifier: "updateAudioState", listener: { [weak self] (messageObject) -> Void in
             guard let self = self else {return }
             if let message = messageObject as? String {
@@ -35,7 +27,6 @@ class SampleHandler: RPBroadcastSampleHandler {
                 self.setScreenShareAppAudio(with: message)
             }
         })
-
         wormhole.listenForMessage(withIdentifier: "updateScreenState", listener: { [weak self] (messageObject) -> Void in
             guard let self = self else {return }
             if let message = messageObject as? String {
@@ -47,19 +38,14 @@ class SampleHandler: RPBroadcastSampleHandler {
                 sdk.disableScreen(for: session.baseSession, state: self.screenState.screenShareScreen)
             }
         })
-
     }
-
     func setScreenShareAppAudio(with message: String) {
         guard let data = message.data(using: .utf8) else {return }
         audioState = try! JSONDecoder().decode(ScreenShareAudioState.self, from: data)
-
     }
-
     func setScreenShareScreen(with message: String) {
         guard let data = message.data(using: .utf8) else {return }
         screenState = try! JSONDecoder().decode(ScreenShareScreenState.self, from: data)
-
     }
     func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
@@ -71,7 +57,6 @@ class SampleHandler: RPBroadcastSampleHandler {
         }
         return nil
     }
-
     func getScreenShareAppData(with message: String) {
         let completeData = convertToDictionary(text: message)
         let projectID : String = completeData!["projectID"] as! String
@@ -81,8 +66,6 @@ class SampleHandler: RPBroadcastSampleHandler {
         guard screenShareData != nil else { return }
         initSdk(projectID: projectID)
     }
-
-
     func initSdk(projectID : String){
         guard let screenShareData = screenShareData else {return }
         request = RegisterRequest(type: "request",
@@ -92,37 +75,28 @@ class SampleHandler: RPBroadcastSampleHandler {
                                       socketType: .screenShare,
                                       requestID: getRequestId(),
                                       projectID: projectID)
-
         vtokSdk = VTokSDK(url: screenShareData.url, registerRequest: request!, connectionDelegate: self, connectionType: .screenShare)
     }
-
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
         // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
         let message : NSString =  "StartScreenSharing"
         wormhole.passMessageObject(message, identifier: "Command")
     }
-
     override func broadcastPaused() {
         // User has requested to pause the broadcast. Samples will stop being delivered.
     }
-
     override func broadcastResumed() {
         // User has requested to resume the broadcast. Samples delivery will resume.
     }
-
     override func broadcastFinished() {
         // User has requested to finish the broadcast.
-
         let message: String = "sessionTerminated"
         guard let vtokSdk = vtokSdk, let session = screenShareData?.baseSession else {return}
         let jsonData = try! JSONEncoder().encode(session)
         let jsonString = String(data: jsonData, encoding: .utf8)! as NSString
         wormhole.passMessageObject(jsonString, identifier: message)
         vtokSdk.hangup(session: session)
-
-
     }
-
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
         switch sampleBufferType {
         case .video:
@@ -142,10 +116,8 @@ class SampleHandler: RPBroadcastSampleHandler {
         @unknown default:
             break
         }
-
     }
 }
-
 extension SampleHandler: SDKConnectionDelegate {
     func didGenerate(output: SDKOutPut) {
         switch output {
@@ -161,79 +133,222 @@ extension SampleHandler: SDKConnectionDelegate {
             break
         }
     }
-
 }
-
-
-
 extension SampleHandler: SessionDelegate {
     func configureLocalViewFor(session: VTokBaseSession, with stream: [UserStream]) {
-        
     }
-    
     func configureRemoteViews(for session: VTokBaseSession, with streams: [UserStream]) {
-        
     }
-    
     func sessionTimeDidUpdate(with value: String) {
-        
     }
-    
-   
-
-
     func stateDidUpdate(for session: VTokBaseSession) {
+//        let data = ScreenShareAppData(url: " ",
+//                                      authenticationToken: "",
+//                                      : session)
         switch session.state {
-
         case .calling:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "Calling",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .ringing:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "Ringing",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .connected:
+            do {
+//                let message: NSString = "onParticipantAdd"
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "onParticipantAdd",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .failed:
             break
         case .rejected:
-            print("test")
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "Rejected",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .onhold:
             break
         case .busy:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "Busy",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .missedCall:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "MissedCall",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .receivedSessionInitiation:
             break
         case .invalidTarget:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "InValidTarget",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .hangup:
-            print("test")
+            do {                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "HungUp",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .tryingToConnect:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "TryingConnect",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .reconnect:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "Reconnecting",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         case .updateParticipent:
+            do {
+                let VTokBaseSessionDictionary : [String : String] = [
+                    "from": session.from,
+                    "requestID": session.requestID,
+                    "sessionUUID": session.sessionUUID,
+                    "state": "UpdateParticipent",
+        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+                    "connectedUsers": String(session.connectedUsers.count),
+                    "sessionTime": session.sessionTime
+                ]
+                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+                let message = String(data: jsonData, encoding: .utf8)!
+                   print(message)
+                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+                }
             break
         }
-
-        let message = String(session.connectedUsers.count) as NSString
-        wormhole.passMessageObject(message, identifier: "participantAdded")
     }
-
     func didGetPublicUrl(for session: VTokBaseSession, with url: String) {
         let message : NSString =  url as NSString
 //        print(message)
         wormhole.passMessageObject(message, identifier: "didGetPublicURL")
     }
-
 }
-
-
-
 extension SampleHandler {
     func getRequestId() -> String {
-
         let generatable = IdGenerator()
         let timestamp = NSDate().timeIntervalSince1970
         let myTimeInterval = TimeInterval(timestamp)
@@ -242,7 +357,5 @@ extension SampleHandler {
         let requestId = self.request?.referenceID ?? ""
         let token = generatable.getUUID(string: time + tenantId + requestId)
         return token
-
     }
 }
-
