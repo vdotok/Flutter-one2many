@@ -36,8 +36,8 @@ end
 target 'ScreenShare' do
   use_frameworks!
   pod 'MMWormhole'
-  pod 'VdoTokStreaming'
- #pod 'VdoTokStreaming', :git => 'https://github.com/vdotok/VdoTokStreaming.git'
+  # pod 'VdoTokStreaming'
+ pod 'VdoTokStreaming', :git => 'https://github.com/vdotok/VdoTokStreaming.git'
 end
 
 post_install do |installer|

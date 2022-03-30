@@ -7,7 +7,7 @@
 
 
 
-const URL = "https://tenant.vdotok.com";
+const URL = "https://q-tenant.vdotok.dev";
 
 const version = "/API/v0/";
 
@@ -16,4 +16,4 @@ const version = "/API/v0/";
 
 //const String auth_token = "3d9686b635b15b5bc2d19800407609fa";
 
-const String project_id = "1QK56P";
+const String project_id = "76O1B2";
