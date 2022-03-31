@@ -9,13 +9,12 @@ import 'package:flutter_onetomany/src/home/home.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-
 class GroupListScreen extends StatefulWidget {
   GroupListModel state;
   AuthProvider authprovider;
   String mediatype;
   final refreshList;
- 
+
   GroupListProvider grouplistprovider;
   final groupNameController;
   final startCall;
@@ -23,38 +22,49 @@ class GroupListScreen extends StatefulWidget {
   bool sockett;
   bool isdev;
   final showdialogdeletegroup;
-  GroupListScreen({this.authprovider,this.mediatype,this.state, this.refreshList,this.grouplistprovider, 
-  this.groupNameController, this.startCall,this.registerRes,this.isdev,this.sockett, this.showdialogdeletegroup});
+  GroupListScreen(
+      {this.authprovider,
+      this.mediatype,
+      this.state,
+      this.refreshList,
+      this.grouplistprovider,
+      this.groupNameController,
+      this.startCall,
+      this.registerRes,
+      this.isdev,
+      this.sockett,
+      this.showdialogdeletegroup});
   @override
   _GroupListScreenState createState() => _GroupListScreenState();
 }
 
 class _GroupListScreenState extends State<GroupListScreen> {
-  bool groupnotmatched=false;
+  bool groupnotmatched = false;
   List _groupfilteredList = [];
   final _GroupListsearchController = new TextEditingController();
   onSearch(value) {
-      print("this is here $value");
-      List temp;
-      temp = widget.state.groups
-          .where((element) =>
-              element.group_title.toLowerCase().startsWith(value.toLowerCase()))
-          .toList();
-      print("this is filtered list $_groupfilteredList");
-      setState(() {
-        if (temp.isEmpty) {
-          groupnotmatched = true;
-          print("Here in true not matched");
-        } else {
-          print("Here in false matched");
-          groupnotmatched = false;
-          _groupfilteredList = temp;
-        }
-      });
-    }
+    print("this is here $value");
+    List temp;
+    temp = widget.state.groups
+        .where((element) =>
+            element.group_title.toLowerCase().startsWith(value.toLowerCase()))
+        .toList();
+    print("this is filtered list $_groupfilteredList");
+    setState(() {
+      if (temp.isEmpty) {
+        groupnotmatched = true;
+        print("Here in true not matched");
+      } else {
+        print("Here in false matched");
+        groupnotmatched = false;
+        _groupfilteredList = temp;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       body: RefreshIndicator(
         onRefresh: widget.refreshList,
         child: Container(
@@ -135,56 +145,50 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                     child: SvgPicture.asset('assets/User.svg'),
                                   ),
                                   Expanded(
-                                    child: 
-                                    GestureDetector(
-                                      onTap: (){
-                                        groupName = widget.grouplistprovider.groupList
+                                    child: GestureDetector(
+                                      onTap:
+                                      !isConnected
+                                      ? (!isRegisteredAlready)
+                                          ? () {
+                                              // buildShowDialog(
+                                              //     context,
+                                              //     "No Internet Connection",
+                                              //     "Make sure your device has internet.");
+                                            }
+                                          : () {}
+                                      : isRegisteredAlready
+                                          ? () {}   : () {
+                                        groupName = widget
+                                            .grouplistprovider
+                                            .groupList
+                                            .groups[position]
+                                            .group_title;
+                                        if (broadcasttype == "camera") {
+                                          widget.startCall(
+                                              element,
+                                              MediaType.video,
+                                              CAllType.one2many,
+                                              SessionType.call);
+                                        }
+                                      
+                                        else {
+                                          widget.startCall(
+                                              element,
+                                              MediaType.video,
+                                              CAllType.one2many,
+                                              SessionType.screen);
+                                        }
 
-.groups[position].group_title;
-                                         if(broadcasttype=="camera"){
-widget.startCall(
-                                             element,
-                                                    MediaType.video,
-                                                    CAllType.one2many,
-                                                    SessionType.call
-                                            );
-                                       }
-                                       else if(broadcasttype=="appaudioandcamera"  || broadcasttype=="micaudioandcamera"){
-                                          // broadcasttype="camera";
-                                         //  widget.startCall(
-                                            //  element,
-                                            //         MediaType.video,
-                                            //         CAllType.one2many,
-                                            //         SessionType.call
-                                            // );
-                                          //  broadcasttype="appaudio";
-                                            widget.startCall(
-                                             element,
-                                                    MediaType.video,
-                                                    CAllType.one2many,
-                                                    SessionType.screenandcall
-                                            );
-                                       }
-                                       else{
-                                         widget.startCall(
-                                             element,
-                                                    MediaType.video,
-                                                    CAllType.one2many,
-                                                    SessionType.screen
-                                            );
-                                       }
-                                        
                                         setState(() {
-                                        
                                           callTo = element.group_title;
-                                        
+
                                           widget.mediatype = MediaType.video;
-                                         
                                         });
                                         print("three dot icon pressed");
-                                         print("this is call to in call dial $callTo");
+                                        print(
+                                            "this is call to in call dial $callTo");
                                       },
-                                                                          child: Text(
+                                      child: Text(
                                         "${element.group_title}",
                                         style: TextStyle(
                                           color: contactNameColor,
@@ -212,7 +216,7 @@ widget.startCall(
                                   //       setState(() {
                                   //         callTo = element.group_title;
                                   //         widget.mediatype = MediaType.audio;
-                                         
+
                                   //       });
                                   //       print("three dot icon pressed");
                                   //     },
@@ -220,7 +224,7 @@ widget.startCall(
                                   // ),
 //                                   Container(
 //                                     padding: EdgeInsets.only(right: 5.9),
-                                
+
 //                                     child: IconButton(
 //                                       icon: SvgPicture.asset(
 //                                           'assets/videocallicon.svg'),
@@ -241,13 +245,13 @@ widget.startCall(
 //                                                     SessionType.screen
 //                                             );
 //                                        }
-                                        
+
 //                                         setState(() {
-                                        
+
 //                                           callTo = element.group_title;
-                                        
+
 //                                           widget.mediatype = MediaType.video;
-                                         
+
 //                                         });
 //                                         print("three dot icon pressed");
 //                                          print("this is call to in call dial $callTo");
@@ -255,185 +259,162 @@ widget.startCall(
 //                                     ),
 //                                   )
 //                                   ,
-                                     Consumer<GroupListProvider>(
-       builder: (context, listProvider, child) {
-                                        return    Container(
-                                            height: 24,
-                                            width: 24,
-                                            margin: EdgeInsets.only(right: 19,bottom: 15),
-                                            child: PopupMenuButton(
-                                                offset: Offset(8, 30),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20.0))),
-                                                icon: const Icon(
-                                                  Icons.more_horiz,
-                                                  size: 24,
-                                                  color: horizontalDotIconColor,
+                                  Consumer<GroupListProvider>(
+                                      builder: (context, listProvider, child) {
+                                    return Container(
+                                      height: 24,
+                                      width: 24,
+                                      margin: EdgeInsets.only(
+                                          right: 19, bottom: 15),
+                                      child: PopupMenuButton(
+                                          offset: Offset(8, 30),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20.0))),
+                                          icon: const Icon(
+                                            Icons.more_horiz,
+                                            size: 24,
+                                            color: horizontalDotIconColor,
+                                          ),
+                                          itemBuilder: (BuildContext context) =>
+                                              [
+                                                PopupMenuItem(
+                                                  enabled: (listProvider
+                                                                  .groupList
+                                                                  .groups[
+                                                                      position]
+                                                                  .participants
+                                                                  .length ==
+                                                              1 ||
+                                                          listProvider
+                                                                  .groupList
+                                                                  .groups[
+                                                                      position]
+                                                                  .participants
+                                                                  .length ==
+                                                              2)
+                                                      ? false
+                                                      : true,
+                                                  padding: EdgeInsets.only(
+                                                      right: 12, left: 12),
+                                                  value: 1,
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                        top: 14,
+                                                        left: 16,
+                                                        right: 50),
+                                                    width: 200,
+                                                    height: 44,
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            chatRoomBackgroundColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8)),
+                                                    child: Text(
+                                                      "Edit Group Name",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontFamily: font_Family,
+                                                        fontStyle:
+                                                            FontStyle.normal,
+                                                        color: personNameColor,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                                itemBuilder:
-                                                    (BuildContext context) => [
-                                                          PopupMenuItem(
-                                                            enabled: (
-                                                                         listProvider.groupList
-                                                                            .groups[
-                                                                                position]
-                                                                            .participants
-                                                                            .length ==
-                                                                        1 ||
-                                                                    listProvider
-                                                                            .groupList
-                                                                            .groups[
-                                                                                position]
-                                                                            .participants
-                                                                            .length ==
-                                                                        2)
-                                                                ? false
-                                                                : true,
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                  right: 12,
-                                                                    left: 12),
-                                                            value: 1,
-
-                                                            child: Container(
-                                                              padding:
-                                                                  EdgeInsets.only(
-                                                                      top: 14,
-                                                                      left: 16,
-                                                                      right: 50),
-                                                              width: 200,
-                                                              height: 44,
-                                                              decoration: BoxDecoration(
-                                                                  color:
-                                                                      chatRoomBackgroundColor,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8)),
-                                                              child: Text(
-                                                                "Edit Group Name",
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontFamily:
-                                                                      font_Family,
-                                                                  fontStyle:
-                                                                      FontStyle
-                                                                          .normal,
-                                                                  color:
-                                                                      personNameColor,
-                                                                ),
-                                                              ),
+                                                PopupMenuItem(
+                                                    padding: EdgeInsets.only(
+                                                        right: 12, left: 12),
+                                                    value: 2,
+                                                    child: Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 8,
+                                                        ),
+                                                        Container(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            top: 14,
+                                                            left: 16,
+                                                          ),
+                                                          width: 200,
+                                                          height: 44,
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  chatRoomBackgroundColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
+                                                          //  color:popupGreyColor,
+                                                          child: Text(
+                                                            "Delete",
+                                                            style: TextStyle(
+                                                              //decoration: TextDecoration.underline,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontFamily:
+                                                                  font_Family,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .normal,
+                                                              color: Colors
+                                                                  .red[700],
                                                             ),
                                                           ),
-                                                        
-
-                                                          PopupMenuItem(
-                                                              padding:
-                                                                  EdgeInsets.only(
-                                                                      right: 12,
-                                                                      left: 12),
-                                                              value: 2,
-                                                              child: Column(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height: 8,
-                                                                  ),
-                                                                  Container(
-                                                                    padding:
-                                                                        EdgeInsets
-                                                                            .only(
-                                                                      top: 14,
-                                                                      left: 16,
-                                                                    ),
-                                                                    width: 200,
-                                                                    height: 44,
-                                                                    decoration: BoxDecoration(
-                                                                        color:
-                                                                            chatRoomBackgroundColor,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                8)),
-                                                                    //  color:popupGreyColor,
-                                                                    child: Text(
-                                                                      "Delete",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        //decoration: TextDecoration.underline,
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        fontFamily:
-                                                                            font_Family,
-                                                                        fontStyle:
-                                                                            FontStyle
-                                                                                .normal,
-                                                                        color:
-                                                                            Colors.red[700],
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              )),
-                                                        ],
-                                                onSelected: (menu) {
-                                                  if (menu == 1) {
-                                                    print("i am in edit group name press");
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return ListenableProvider<
-                                                                  GroupListProvider>.value(
-                                                              value:
-                                                                  widget.grouplistprovider,
-                                                              child:
-                                                                  CreateGroupPopUp(
-                                                                editGroupName:
-                                                                    true,
-                                                                groupid:
-                                                                    listProvider
-                                                                        .groupList
-                                                                        .groups[
-                                                                            position]
-                                                                        .id,
-                                                                controllerText:
-                                                                    listProvider
-                                                                        .groupList
-                                                                        .groups[
-                                                                            position]
-                                                                        .group_title,
-                                                                groupNameController:
-                                                                    widget.groupNameController,
-                                                               // publishMessage:
-                                                                 //   publishMessage,
-                                                                authProvider:
-                                                                    widget.authprovider,
-                                                              ));
-                                                        });
-                                                    print("i am after here");
-                                                   
-
-                                                  } else if (menu == 2) {
-                                                 widget.showdialogdeletegroup(
-                                                        listProvider.groupList
-                                                            .groups[position].id,
-                                                        listProvider.groupList
-                                                            .groups[position]);
-                                                 
-                                                  }
-                                                }),
- 
-                                          );
-                                  
-       })
+                                                        )
+                                                      ],
+                                                    )),
+                                              ],
+                                          onSelected: (menu) {
+                                            if (menu == 1) {
+                                              print(
+                                                  "i am in edit group name press");
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return ListenableProvider<
+                                                            GroupListProvider>.value(
+                                                        value: widget
+                                                            .grouplistprovider,
+                                                        child: CreateGroupPopUp(
+                                                          editGroupName: true,
+                                                          groupid: listProvider
+                                                              .groupList
+                                                              .groups[position]
+                                                              .id,
+                                                          controllerText:
+                                                              listProvider
+                                                                  .groupList
+                                                                  .groups[
+                                                                      position]
+                                                                  .group_title,
+                                                          groupNameController:
+                                                              widget
+                                                                  .groupNameController,
+                                                          // publishMessage:
+                                                          //   publishMessage,
+                                                          authProvider: widget
+                                                              .authprovider,
+                                                        ));
+                                                  });
+                                              print("i am after here");
+                                            } else if (menu == 2) {
+                                              widget.showdialogdeletegroup(
+                                                  listProvider.groupList
+                                                      .groups[position].id,
+                                                  listProvider.groupList
+                                                      .groups[position]);
+                                            }
+                                          }),
+                                    );
+                                  })
                                 ],
                               ),
                             );
@@ -463,10 +444,13 @@ widget.startCall(
                             Container(
                               child: FlatButton(
                                 onPressed: () {
-                                  widget.authprovider.logout();
-
-                                  signalingClient
-                                      .unRegister(widget.registerRes["mcToken"]);
+                                  if (isRegisteredAlready) {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        isRegisteredAlready = false;
+                      }
+                                  
+                                  signalingClient.unRegister(
+                                      widget.registerRes["mcToken"]);
                                 },
                                 child: Text(
                                   "LOG OUT",
@@ -502,5 +486,4 @@ widget.startCall(
       ),
     );
   }
-  
 }

@@ -74,9 +74,9 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
+import 'package:flutter_onetomany/src/home/home.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../src/core/providers/auth.dart';
@@ -122,7 +122,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: IconButton(
-                      onPressed: () {
+                      onPressed: 
+                      !isConnected
+                              ? (!isRegisteredAlready)
+                                  ? () {
+                                      // buildShowDialog(
+                                      //     context,
+                                      //     "No Internet Connection",
+                                      //     "Make sure your device has internet.");
+                                    }
+                                  : () {}
+                              : isRegisteredAlready
+                                  ? () {}:() {
+                        print("sjhjbfhjdj $isRegisteredAlready");
+
                         handlePress(groupProvider.groupListStatus);
                         // Navigator.pushNamed(context, "/contactList");
                       },
@@ -131,43 +144,43 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     )),
               ]);
-           else if (groupProvider.groupListStatus == ListStatus.SelectBroadCast)
-            return AppBar(
-              centerTitle: false,
-              backgroundColor: chatRoomBackgroundColor,
-              elevation: 0.0,
-              // leading: IconButton(
-              //   icon: Icon(Icons.arrow_back, color: chatRoomColor),
-              //   onPressed: () {
-              //     groupProvider.handleGroupListState(ListStatus.Scussess);
-              //   },
-              // ),
-              title: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  "Available Features",
-                  style: TextStyle(
-                    color: chatRoomColor,
-                    fontSize: 20,
-                    fontFamily: primaryFontFamily,
-                    fontWeight: FontWeight.w500,
-                  ),
+        else if (groupProvider.groupListStatus == ListStatus.SelectBroadCast)
+          return AppBar(
+            centerTitle: false,
+            backgroundColor: chatRoomBackgroundColor,
+            elevation: 0.0,
+            // leading: IconButton(
+            //   icon: Icon(Icons.arrow_back, color: chatRoomColor),
+            //   onPressed: () {
+            //     groupProvider.handleGroupListState(ListStatus.Scussess);
+            //   },
+            // ),
+            title: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                "Available Features",
+                style: TextStyle(
+                  color: chatRoomColor,
+                  fontSize: 20,
+                  fontFamily: primaryFontFamily,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              // actions: [
-              //   Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 10),
-              //       child: IconButton(
-              //         onPressed: () {
-              //           handlePress(groupProvider.groupListStatus);
-              //           // Navigator.pushNamed(context, "/contactList");
-              //         },
-              //         icon: SvgPicture.asset(
-              //           'assets/checkmark.svg',
-              //         ),
-              //       )),
-              // ]
-              );
+            ),
+            // actions: [
+            //   Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 10),
+            //       child: IconButton(
+            //         onPressed: () {
+            //           handlePress(groupProvider.groupListStatus);
+            //           // Navigator.pushNamed(context, "/contactList");
+            //         },
+            //         icon: SvgPicture.asset(
+            //           'assets/checkmark.svg',
+            //         ),
+            //       )),
+            // ]
+          );
         else
           return AppBar(
               centerTitle: false,
@@ -176,7 +189,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: chatRoomColor),
                 onPressed: () {
-                  groupProvider.handleGroupListState(ListStatus.SelectBroadCast);
+                  groupProvider
+                      .handleGroupListState(ListStatus.SelectBroadCast);
                 },
               ),
               title: Container(

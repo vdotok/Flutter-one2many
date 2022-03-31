@@ -22,6 +22,7 @@ const attachmentNameColor = Color(0xff3d5d57);
 const selectcontactColor = Color(0xff190354);
 const participantcolor = Color(0xff659B91);
 const screensharecolor = Color(0xff190354);
+const screensharetextcolor = Color(0xFF848484);
 //ChatScreen Colors//
 //ChatScreen Colors//
 const chatRoomBackgroundColor = Color(0xFFFFFFFF);
@@ -52,6 +53,7 @@ const contactNameColor = Color(0xff1e2f2c);
 //fonts for the text
 const primaryFontFamily = "Manrope";
 const secondaryFontFamily = "Inter";
+const searchFontFamily = "Poppins";
 
 Size size;
 

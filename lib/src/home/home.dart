@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,9 +17,11 @@ import 'package:flutter_onetomany/src/home/CreateGroupPopUp.dart';
 import 'package:flutter_onetomany/src/home/remoteStream.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'dart:io' show Platform;
 
@@ -30,12 +33,15 @@ import '../core/providers/call_provider.dart';
 import '../core/providers/contact_provider.dart';
 
 String callTo = "";
-String groupName="";
+String groupName = "";
+String typeOfCall = "";
 bool ispublicbroadcast = false;
 String broadcasttype = "";
+bool isRegisteredAlready = false;
 bool isDDialer = false;
 String pressDuration = "";
 bool remoteVideoFlag = true;
+bool groupBroadcast = false;
 bool isDeviceConnected = false;
 SignalingClient signalingClient = SignalingClient.instance..checkConnectivity();
 bool enableCamera = true;
@@ -47,11 +53,14 @@ List<Map<String, dynamic>> rendererListWithRefID = [];
 MediaStream local;
 MediaStream remote;
 bool islogout = false;
+String session_type = "";
 BuildContext popupcontext;
 GlobalKey forsmallView = new GlobalKey();
 GlobalKey forlargView = new GlobalKey();
 GlobalKey forDialView = new GlobalKey();
 bool groupnotmatched = false;
+var snackBar;
+bool isConnected = true;
 
 List _groupfilteredList = [];
 List<Contact> _selectedContacts = [];
@@ -84,6 +93,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   bool inPaused = false;
   bool isRinging = false;
   //bool isPushed = false;
+  AudioPlayer _audioPlayer = AudioPlayer();
   bool isInternetConnected = false;
   int participantcount = 0;
   String publicbroadcasturl = "";
@@ -118,7 +128,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   RTCPeerConnection _peerConnection;
   RTCPeerConnection _answerPeerConnection;
   MediaStream _localStream;
-  bool isConnected = true;
+
   var registerRes;
   // bool isdev = true;
   String incomingfrom;
@@ -127,7 +137,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   // LoginBloc _loginBloc;
   CallProvider _callProvider;
   AuthProvider _auth;
-
+  BuildContext dialogBoxContext;
   // String callTo = "";
   List _filteredList = [];
   bool iscalloneto1 = false;
@@ -249,56 +259,51 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     signalingClient.unRegisterSuccessfullyCallBack = () {
       _auth.logout();
     };
-    signalingClient.onAddparticpant = (paticipantcount) {
-      print("this is participant count ffffff $paticipantcount");
-      setState(() {
-        participantcount = paticipantcount - 1;
-      });
+    signalingClient.onAddparticpant = (paticipantcount, calltype) {
+      print("this is participant count ffffff $paticipantcount $calltype ");
+      // setState(() {
+      if (Platform.isIOS) {
+        setState(() {
+          participantcount = paticipantcount;
+          //typeOfCall = calltype;
+          _audioPlayer.stop();
+          _callProvider.callStart();
+        });
+      } else {
+        setState(() {
+          participantcount = paticipantcount - 1;
+          print("hgshd $participantcount");
+        });
+      }
+      // });
+    };
+    signalingClient.insufficientBalance = (res) {
+      print("here in insufficient balance");
+      snackBar = SnackBar(content: Text('$res'));
+
+// Find the Scaffold in the widget tree and use it to show a SnackBar.
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     };
     signalingClient.onError = (code, res) {
       print("onError $code $res");
-      // if (isConnected == false) {
-      //   setState(() {
-      //     isConnected = false;
-      //     //sockett = false;
-      //   });
-      // }
-      // else{
-      //   setState(() {
-      //     isConnected = true;
-      //     //sockett = false;
-      //   });
-      // }
+
       if (code == 1001 || code == 1002) {
         signalingClient.sendPing(registerRes["mctoken"]);
 
-// if (isConnected && !isRegisteredAlready) {
-
-// print("internet is connected $sockett");
-
-// signalingClient.connect(project_id, _auth.completeAddress);
-
-// } else {
-
-setState(() {
-
-sockett = false;
-
-
-
-
-
-});
         setState(() {
           sockett = false;
-          isConnected = false;
+
+          isRegisteredAlready = false;
         });
       } else if (code == 401) {
         print("here in 401");
         setState(() {
           sockett = false;
-          isConnected = false;
-          final snackBar = SnackBar(content: Text('$res'));
+          isRegisteredAlready = true;
+          snackBar = SnackBar(
+            content: Text('$res'),
+            duration: Duration(days: 365),
+          );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         });
       } else {
@@ -310,7 +315,7 @@ sockett = false;
           if (isResumed) {
             // if (_auth.loggedInStatus == Status.LoggedOut) {
             // } else {
-            if (isConnected && sockett == false) {
+            if (isConnected && sockett == false && !isRegisteredAlready) {
               print("i am in connect in 1005");
               signalingClient.connect(project_id, _auth.completeAddress);
 
@@ -348,7 +353,6 @@ sockett = false;
       //   }
       // }
     };
-
 
     signalingClient.internetConnectivityCallBack = (mesg) {
       if (mesg == "Connected") {
@@ -446,9 +450,9 @@ sockett = false;
           _time = DateTime.now();
           _callTime = DateTime.now();
         } else {
-            if(_ticker!=null){
-          _ticker.cancel();
-             }
+          if (_ticker != null) {
+            _ticker.cancel();
+          }
 
           _time = _callTime;
           isTimer = false;
@@ -456,6 +460,7 @@ sockett = false;
         _updateTimer();
         _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
         onRemoteStream = true;
+        _audioPlayer.stop();
 
         _callProvider.callStart();
       });
@@ -469,22 +474,28 @@ sockett = false;
 
     signalingClient.onParticipantsLeft = (refID, boolFlag) async {
       print("call callback on call left by participant");
-
+      if (typeOfCall == "one_to_many" && !boolFlag) {
+        participantcount = participantcount - 1;
+      }
       // on participants left
       if (refID == _auth.getUser.ref_id) {
       } else {}
     };
-    signalingClient.onReceiveCallFromUser = (
-     mapData
-    ) async {
+    signalingClient.onReceiveCallFromUser = (mapData) async {
       print("incomming call from user ${mapData}");
       startRinging();
-    groupName=mapData["data"]["groupName"];
+      groupName = mapData["data"]["groupName"];
       setState(() {
+        if (mapData["call_type"] == "one_to_many") {
+          groupBroadcast = true;
+        }
+        session_type = mapData["session_type"];
         inCall = true;
+        typeOfCall = mapData["call_type"];
         pressDuration = "";
         onRemoteStream = false;
         iscalloneto1 = false;
+        Wakelock.toggle(enable: true);
         incomingfrom = mapData["from"];
         meidaType = mapData["media_type"];
         switchMute = true;
@@ -502,13 +513,9 @@ sockett = false;
       inCall = true;
       iscallAcceptedbyuser = true;
       pressDuration = "";
-      signalingClient.onCallStatsuploads = (uploadstats) {
-        var nummm = uploadstats;
-      };
-      signalingClient.onCallstats = (timeStatsdownloads, timeStatsuploads) {
-        print("NOT NULL  $timeStatsdownloads");
-        number = timeStatsdownloads;
-      };
+      if (typeOfCall == "one_to_many") {
+        groupBroadcast = true;
+      }
       if (!ispublicbroadcast) {
         _callProvider.callStart();
       }
@@ -534,6 +541,8 @@ sockett = false;
       _callProvider.initial();
       disposeAllRenderer();
       setState(() {
+        Wakelock.toggle(enable: false);
+        groupBroadcast = false;
         inCall = false;
         isRinging = false;
         iscallAcceptedbyuser = false;
@@ -563,8 +572,7 @@ sockett = false;
     signalingClient.onCallBusyCallback = () {
       print("hey i am here");
       _callProvider.initial();
-      final snackBar =
-          SnackBar(content: Text('User is busy with another call.'));
+      snackBar = SnackBar(content: Text('User is busy with another call.'));
 
 // Find the Scaffold in the widget tree and use it to show a SnackBar.
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -592,8 +600,11 @@ sockett = false;
     signalingClient.onReceiveUrlCallback = (url) {
       print("this is url from signalˆng client $url");
       publicbroadcasturl = url;
+      _audioPlayer.stop();
+      Navigator.pop(dialogBoxContext);
+      MoveToBackground.moveTaskToBack();
       //   Navigator.pop(popupcontext);
-      Navigator.pop(context);
+
       _callProvider.callStart();
     };
     signalingClient.onAudioVideoStateInfo = (audioFlag, videoFlag, refID) {
@@ -729,7 +740,9 @@ sockett = false;
   _startCall(GroupModel to, String mtype, String callType, String sessionType) {
     setState(() {
       isDDialer = true;
+      Wakelock.toggle(enable: true);
       inCall = true;
+      typeOfCall = callType;
       pressDuration = "";
       onRemoteStream = false;
       switchMute = true;
@@ -739,8 +752,14 @@ sockett = false;
     List<String> groupRefIDS = [];
 
     if (to == null) {
-      Dialogs _dialog = new Dialogs();
-      _dialog.loginLoading(context, "loading", "loading...");
+      print("one2many call");
+      _showMyDialog(context);
+    } else {
+      if (callType == "one_to_many") {
+        setState(() {
+          groupBroadcast = true;
+        });
+      }
     }
 
     if (to != null) {
@@ -752,15 +771,13 @@ sockett = false;
     }
     print(
         "this is signaling client start callllllll $broadcasttype..... $sessionType");
-         Map<String, dynamic>   customdata ={
-            "calleName":"",
-
-    "groupName": to == null? null:to.group_title,
-
-   "groupAutoCreatedValue":""
-        };
+    Map<String, dynamic> customdata = {
+      "calleName": "",
+      "groupName": to == null ? null : to.group_title,
+      "groupAutoCreatedValue": ""
+    };
     signalingClient.startCallonetomany(
-       customData: customdata,
+        customData: customdata,
         from: _auth.getUser.ref_id,
         to: groupRefIDS,
         mcToken: registerRes["mcToken"],
@@ -876,14 +893,13 @@ sockett = false;
         ));
     } else if (check == true) {
       rootScaffoldMessengerKey.currentState
-        ..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(
           content: Text(
             '$text',
             style: TextStyle(color: color),
           ),
           backgroundColor: backgroundColor,
-          duration: Duration(seconds: 2),
+          duration: Duration(days: 365),
         ));
     }
   }
@@ -1082,104 +1098,14 @@ sockett = false;
         print("this is callStatus ${callProvider.callStatus} $inCall");
         if (callProvider.callStatus == CallStatus.CallReceive)
           return callReceive();
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => MultiProvider(
-        //         providers: [
-        //           ChangeNotifierProvider<AuthProvider>(
-        //               create: (context) => AuthProvider()),
-        //           ChangeNotifierProvider(
-        //               create: (context) => ContactProvider()),
-        //           ChangeNotifierProvider(create: (context) => CallProvider()),
-        //         ],
-        //         child: CallReceiveScreen(
-        //           //  rendererListWithRefID:rendererListWithRefID,
-        //           mediaType: meidaType,
-
-        //           incomingfrom: incomingfrom,
-        //           callProvider: _callProvider,
-        //           registerRes: registerRes,
-        //           authProvider: authProvider,
-        //           from: authProvider.getUser.ref_id,
-        //           stopRinging: stopRinging,
-        //           authtoken: authProvider.getUser.auth_token,
-        //           contactList: contactProvider.contactList,
-        //         )),
-        //   ),
-        // );
 
         if (callProvider.callStatus == CallStatus.CallStart) {
           print("here in call provider status");
-          // if (isPushed == false) {
-          //   isPushed = true;
-          //   WidgetsBinding.instance.addPostFrameCallback((_) {
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (BuildContext context) => MultiProvider(
-          //             providers: [
-          //               ChangeNotifierProvider<AuthProvider>(
-          //                   create: (context) => AuthProvider()),
-          //               ChangeNotifierProvider(
-          //                   create: (context) => ContactProvider()),
-          //               ChangeNotifierProvider(
-          //                   create: (context) => CallProvider()),
-          //             ],
-          //             child: CallStartScreen(
-          //               // onSpeakerCallBack: onSpeakerCallBack,
-          //               // onCameraCallBack: onCameraCallBack,
-          //               // onMicCallBack: onMicCallBack,
-          //               //  rendererListWithRefID:rendererListWithRefID,
-          //               //  onRemoteStream:onRemoteStream,
-          //               mediaType: meidaType,
-          //               localRenderer: localRenderer,
-          //               remoteRenderer: remoteRenderer,
-          //               incomingfrom: incomingfrom,
-          //               registerRes: registerRes,
-          //               stopCall: stopCall,
-          //               callTo: callTo,
-          //               // signalingClient: signalingClient,
-          //               callProvider: _callProvider,
-          //               authProvider: _auth,
-          //               contactProvider: _contactProvider,
-          //               mcToken: registerRes["mcToken"],
 
-          //               contactList: _contactProvider.contactList,
-          //               //  popCallBAck: screenPopCallBack
-          //             )),
-          //       ),
-          //     );
-          //   });
-          // }
           return callStart();
         }
         if (callProvider.callStatus == CallStatus.CallDial)
           return callDial();
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => MultiProvider(
-        //         providers: [
-        //           ChangeNotifierProvider<AuthProvider>(
-        //               create: (context) => AuthProvider()),
-        //           ChangeNotifierProvider(
-        //               create: (context) => ContactProvider()),
-        //           ChangeNotifierProvider(create: (context) => CallProvider()),
-        //         ],
-        //         child: CallDialScreen(
-        //           //  rendererListWithRefID:rendererListWithRefID,
-
-        //           mediaType: meidaType,
-        //           callTo: callTo,
-        //           //  incomingfrom: incomingfrom,
-        //           callProvider: _callProvider,
-        //           registerRes: registerRes,
-        //           // authProvider: authProvider,
-        //           // stopRinging: stopRinging,
-
-        //           // authtoken: authProvider.getUser.auth_token,
-        //           // contactList: contactProvider.contactList,
-        //         )),
-        //   ),
-        // );
         else if (callProvider.callStatus == CallStatus.Initial)
           return SafeArea(
             child: GestureDetector(
@@ -1216,6 +1142,7 @@ sockett = false;
                           ListStatus.Scussess) {
                         if (groupProvider.groupList.groups.length == 0) {
                           return NoContactsScreen(
+                              registerRes: registerRes,
                               isConnect: isConnected,
                               state: sockett,
                               refreshList: renderList,
@@ -1352,26 +1279,26 @@ sockett = false;
               ),
               // Consumer<ContactProvider>(
               //   builder: (context, contact, child) {
-                  // if (contact.contactState == ContactStates.Success) {
-                  //   int index = contact.contactList.users.indexWhere(
-                  //       (element) => element.ref_id == incomingfrom);
-                  //   print("callto is $callTo");
-                  //   print(
-                  //       "incoming ${index == -1 ? incomingfrom : contact.contactList.users[index].full_name}");
-                  //   return 
-                    Text(
-                      "$groupName",
-                      // index == -1
-                      //     ? incomingfrom
-                      //     : contact.contactList.users[index].full_name,
-                      style: TextStyle(
-                          fontFamily: primaryFontFamily,
-                          color: darkBlackColor,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w700,
-                          fontStyle: FontStyle.normal,
-                          fontSize: 24),
-                   // );
+              // if (contact.contactState == ContactStates.Success) {
+              //   int index = contact.contactList.users.indexWhere(
+              //       (element) => element.ref_id == incomingfrom);
+              //   print("callto is $callTo");
+              //   print(
+              //       "incoming ${index == -1 ? incomingfrom : contact.contactList.users[index].full_name}");
+              //   return
+              Text(
+                "$groupName",
+                // index == -1
+                //     ? incomingfrom
+                //     : contact.contactList.users[index].full_name,
+                style: TextStyle(
+                    fontFamily: primaryFontFamily,
+                    color: darkBlackColor,
+                    decoration: TextDecoration.none,
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 24),
+                // );
                 //   } else
                 //     return Container();
                 // },
@@ -2398,701 +2325,36 @@ sockett = false;
       }),
     );
   }
-  // Scaffold groupList(){
-  //     onSearch(value) {
-  //     print("this is here $value");
-  //     List temp;
-  //     temp = widget.state.groups
-  //         .where((element) =>
-  //             element.group_title.toLowerCase().startsWith(value.toLowerCase()))
-  //         .toList();
-  //     print("this is filtered list $_groupfilteredList");
-  //     setState(() {
-  //       if (temp.isEmpty) {
-  //         groupnotmatched = true;
-  //         print("Here in true not matched");
-  //       } else {
-  //         print("Here in false matched");
-  //         groupnotmatched = false;
-  //         _groupfilteredList = temp;
-  //       }
-  //     });
-  //   }
-  // return Scaffold(
-  //     body: RefreshIndicator(
-  //       onRefresh: refreshList,
-  //       child: Container(
-  //         child: Column(
-  //           children: [
-  //             Container(
-  //               height: 50,
-  //               padding: EdgeInsets.only(left: 21, right: 21),
-  //               child: TextFormField(
-  //                 controller: _GroupListsearchController,
-  //                 onChanged: (value) {
-  //                   onSearch(value);
-  //                 },
-  //                 validator: (value) =>
-  //                     value.isEmpty ? "Field cannot be empty." : null,
-  //                 decoration: InputDecoration(
-  //                   fillColor: refreshTextColor,
-  //                   filled: true,
-  //                   prefixIcon: Padding(
-  //                     padding: const EdgeInsets.all(10.0),
-  //                     child: SvgPicture.asset(
-  //                       'assets/SearchIcon.svg',
-  //                       width: 20,
-  //                       height: 20,
-  //                       fit: BoxFit.fill,
-  //                     ),
-  //                   ),
-  //                   border: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.circular(5),
-  //                       borderSide: BorderSide(color: searchbarContainerColor)),
-  //                   enabledBorder: OutlineInputBorder(
-  //                     borderRadius: BorderRadius.circular(5.0),
-  //                     borderSide: BorderSide(
-  //                       color: searchbarContainerColor,
-  //                     ),
-  //                   ),
-  //                   focusedBorder: OutlineInputBorder(
-  //                       borderRadius: BorderRadius.all(Radius.circular(5)),
-  //                       borderSide: BorderSide(color: searchbarContainerColor)),
-  //                   hintText: "Search",
-  //                   hintStyle: TextStyle(
-  //                       fontSize: 14.0,
-  //                       fontWeight: FontWeight.w400,
-  //                       color: searchTextColor,
-  //                       fontFamily: secondaryFontFamily),
-  //                 ),
-  //               ),
-  //               //),
-  //             ),
-  //             SizedBox(height: 30),
-  //             Expanded(
-  //               child: Scrollbar(
-  //                 child: groupnotmatched == true
-  //                     ? Text("No data Found")
-  //                     : ListView.separated(
-  //                         shrinkWrap: true,
-  //                         padding: const EdgeInsets.all(8),
-  //                         cacheExtent: 9999,
-  //                         scrollDirection: Axis.vertical,
-  //                         itemCount: _GroupListsearchController.text.isEmpty
-  //                             ? state.groups.length
-  //                             : _groupfilteredList.length,
-  //                         itemBuilder: (context, position) {
-  //                           GroupModel element =
-  //                               _GroupListsearchController.text.isEmpty
-  //                                   ? widget.state.groups[position]
-  //                                   : _groupfilteredList[position];
-  //                           return Container(
-  //                             height: 50,
-  //                             child: Row(
-  //                               children: [
-  //                                 Container(
-  //                                   padding: const EdgeInsets.only(
-  //                                       left: 11.5, right: 13.5),
-  //                                   decoration: BoxDecoration(
-  //                                     borderRadius: BorderRadius.circular(8),
-  //                                   ),
-  //                                   child: SvgPicture.asset('assets/User.svg'),
-  //                                 ),
-  //                                 Expanded(
-  //                                   child: Text(
-  //                                     "${element.group_title}",
-  //                                     style: TextStyle(
-  //                                       color: contactNameColor,
-  //                                       fontSize: 16,
-  //                                       fontFamily: primaryFontFamily,
-  //                                       fontWeight: FontWeight.w500,
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                                 Container(
-  //                                   child: IconButton(
-  //                                     icon: SvgPicture.asset('assets/call.svg'),
-  //                                     onPressed: () {
-  //                                       widget.startCall(
-  //                                           element,
-  //                                           MediaType.audio,
-  //                                           CAllType.many2many,
-  //                                           SessionType.call);
-  //                                       setState(() {
-  //                                         callTo = element.group_title;
-  //                                         widget.mediatype = MediaType.audio;
 
-  //                                       });
-  //                                       print("three dot icon pressed");
-  //                                     },
-  //                                   ),
-  //                                 ),
-  //                                 Container(
-  //                                   padding: EdgeInsets.only(right: 5.9),
-
-  //                                   child: IconButton(
-  //                                     icon: SvgPicture.asset(
-  //                                         'assets/videocallicon.svg'),
-  //                                     onPressed: () {
-  //                                       startCall(
-  //                                           element,
-  //                                           MediaType.video,
-  //                                           CAllType.many2many,
-  //                                           SessionType.call);
-  //                                       setState(() {
-
-  //                                         callTo = element.group_title;
-
-  //                                         widget.mediatype = MediaType.video;
-
-  //                                       });
-  //                                       print("three dot icon pressed");
-  //                                     },
-  //                                   ),
-  //                                 )
-  //                                 ,
-  //                                    Consumer<GroupListProvider>(
-  //      builder: (context, listProvider, child) {
-  //                                       return    Container(
-  //                                           height: 24,
-  //                                           width: 24,
-  //                                           margin: EdgeInsets.only(right: 19,bottom: 15),
-  //                                           child: PopupMenuButton(
-  //                                               offset: Offset(8, 30),
-  //                                               shape: RoundedRectangleBorder(
-  //                                                   borderRadius:
-  //                                                       BorderRadius.all(
-  //                                                           Radius.circular(
-  //                                                               20.0))),
-  //                                               icon: const Icon(
-  //                                                 Icons.more_horiz,
-  //                                                 size: 24,
-  //                                                 color: horizontalDotIconColor,
-  //                                               ),
-  //                                               itemBuilder:
-  //                                                   (BuildContext context) => [
-  //                                                         PopupMenuItem(
-  //                                                           enabled: (
-  //                                                                        listProvider.groupList
-  //                                                                           .groups[
-  //                                                                               position]
-  //                                                                           .participants
-  //                                                                           .length ==
-  //                                                                       1 ||
-  //                                                                   listProvider
-  //                                                                           .groupList
-  //                                                                           .groups[
-  //                                                                               position]
-  //                                                                           .participants
-  //                                                                           .length ==
-  //                                                                       2)
-  //                                                               ? false
-  //                                                               : true,
-  //                                                           padding:
-  //                                                               EdgeInsets.only(
-  //                                                                 right: 12,
-  //                                                                   left: 12),
-  //                                                           value: 1,
-
-  //                                                           child: Container(
-  //                                                             padding:
-  //                                                                 EdgeInsets.only(
-  //                                                                     top: 14,
-  //                                                                     left: 16,
-  //                                                                     right: 50),
-  //                                                             width: 200,
-  //                                                             height: 44,
-  //                                                             decoration: BoxDecoration(
-  //                                                                 color:
-  //                                                                     chatRoomBackgroundColor,
-  //                                                                 borderRadius:
-  //                                                                     BorderRadius
-  //                                                                         .circular(
-  //                                                                             8)),
-  //                                                             child: Text(
-  //                                                               "Edit Group Name",
-  //                                                               style: TextStyle(
-  //                                                                 fontSize: 14,
-  //                                                                 fontWeight:
-  //                                                                     FontWeight
-  //                                                                         .w600,
-  //                                                                 fontFamily:
-  //                                                                     font_Family,
-  //                                                                 fontStyle:
-  //                                                                     FontStyle
-  //                                                                         .normal,
-  //                                                                 color:
-  //                                                                     personNameColor,
-  //                                                               ),
-  //                                                             ),
-  //                                                           ),
-  //                                                         ),
-
-  //                                                         PopupMenuItem(
-  //                                                             padding:
-  //                                                                 EdgeInsets.only(
-  //                                                                     right: 12,
-  //                                                                     left: 12),
-  //                                                             value: 2,
-  //                                                             child: Column(
-  //                                                               children: [
-  //                                                                 SizedBox(
-  //                                                                   height: 8,
-  //                                                                 ),
-  //                                                                 Container(
-  //                                                                   padding:
-  //                                                                       EdgeInsets
-  //                                                                           .only(
-  //                                                                     top: 14,
-  //                                                                     left: 16,
-  //                                                                   ),
-  //                                                                   width: 200,
-  //                                                                   height: 44,
-  //                                                                   decoration: BoxDecoration(
-  //                                                                       color:
-  //                                                                           chatRoomBackgroundColor,
-  //                                                                       borderRadius:
-  //                                                                           BorderRadius.circular(
-  //                                                                               8)),
-  //                                                                   //  color:popupGreyColor,
-  //                                                                   child: Text(
-  //                                                                     "Delete",
-  //                                                                     style:
-  //                                                                         TextStyle(
-  //                                                                       //decoration: TextDecoration.underline,
-  //                                                                       fontSize:
-  //                                                                           14,
-  //                                                                       fontWeight:
-  //                                                                           FontWeight
-  //                                                                               .w600,
-  //                                                                       fontFamily:
-  //                                                                           font_Family,
-  //                                                                       fontStyle:
-  //                                                                           FontStyle
-  //                                                                               .normal,
-  //                                                                       color:
-  //                                                                           Colors.red[700],
-  //                                                                     ),
-  //                                                                   ),
-  //                                                                 )
-  //                                                               ],
-  //                                                             )),
-  //                                                       ],
-  //                                               onSelected: (menu) {
-  //                                                 if (menu == 1) {
-  //                                                   print("i am in edit group name press");
-  //                                                   showDialog(
-  //                                                       context: context,
-  //                                                       builder: (BuildContext
-  //                                                           context) {
-  //                                                         return ListenableProvider<
-  //                                                                 GroupListProvider>.value(
-  //                                                             value:
-  //                                                                 widget.grouplistprovider,
-  //                                                             child:
-  //                                                                 CreateGroupPopUp(
-  //                                                               editGroupName:
-  //                                                                   true,
-  //                                                               groupid:
-  //                                                                   listProvider
-  //                                                                       .groupList
-  //                                                                       .groups[
-  //                                                                           position]
-  //                                                                       .id,
-  //                                                               controllerText:
-  //                                                                   listProvider
-  //                                                                       .groupList
-  //                                                                       .groups[
-  //                                                                           position]
-  //                                                                       .group_title,
-  //                                                               groupNameController:
-  //                                                                   widget.groupNameController,
-  //                                                              // publishMessage:
-  //                                                                //   publishMessage,
-  //                                                               authProvider:
-  //                                                                   widget.authprovider,
-  //                                                             ));
-  //                                                       });
-  //                                                   print("i am after here");
-
-  //                                                 } else if (menu == 2) {
-  //                                                widget.showdialogdeletegroup(
-  //                                                       listProvider.groupList
-  //                                                           .groups[position].id,
-  //                                                       listProvider.groupList
-  //                                                           .groups[position]);
-
-  //                                                 }
-  //                                               }),
-
-  //                                         );
-
-  //      })
-  //                               ],
-  //                             ),
-  //                           );
-  //                           //});
-  //                         },
-  //                         separatorBuilder: (BuildContext context, int index) {
-  //                           return Padding(
-  //                             padding:
-  //                                 const EdgeInsets.only(left: 14.33, right: 19),
-  //                             child: Divider(
-  //                               thickness: 1,
-  //                               color: listdividerColor,
-  //                             ),
-  //                           );
-  //                         },
-  //                       ),
-  //               ),
-  //             ),
-  //             Align(
-  //                 alignment: Alignment.bottomCenter,
-  //                 child: Column(children: [
-  //                   Container(
-  //                     padding: const EdgeInsets.only(top: 20),
-  //                     child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.center,
-  //                         children: [
-  //                           Container(
-  //                             child: FlatButton(
-  //                               onPressed: () {
-  //                                 widget.authprovider.logout();
-
-  //                                 signalingClient
-  //                                     .unRegister(widget.registerRes["mcToken"]);
-  //                               },
-  //                               child: Text(
-  //                                 "LOG OUT",
-  //                                 style: TextStyle(
-  //                                     fontSize: 14.0,
-  //                                     fontFamily: primaryFontFamily,
-  //                                     fontStyle: FontStyle.normal,
-  //                                     fontWeight: FontWeight.w700,
-  //                                     color: logoutButtonColor,
-  //                                     letterSpacing: 0.90),
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           Container(
-  //                             height: 25,
-  //                             width: 25,
-  //                             child: SvgPicture.asset(
-  //                               'assets/call.svg',
-  //                               color: widget.sockett && widget.isdev
-  //                                   ? Colors.green
-  //                                   : Colors.red,
-  //                             ),
-  //                           ),
-  //                         ]),
-  //                   ),
-  //                   Container(
-  //                       padding: const EdgeInsets.only(bottom: 60),
-  //                       child: Text(widget.authprovider.getUser.full_name))
-  //                 ]))
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //      );
-  //  }
-  Scaffold contactList(ContactList state) {
-    onSearch(value) {
-      print("this is here $value");
-      List temp;
-      temp = state.users
-          .where((element) =>
-              element.full_name.toLowerCase().startsWith(value.toLowerCase()))
-          .toList();
-      print("this is filtered list $_filteredList");
-      setState(() {
-        if (temp.isEmpty) {
-          notmatched = true;
-          print("Here in true not matched");
-        } else {
-          print("Here in false matched");
-          notmatched = false;
-          _filteredList = temp;
-        }
-        //_filteredList = temp;
-      });
-    }
-
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: refreshList,
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                height: 50,
-                padding: EdgeInsets.only(left: 21, right: 21),
-                child: TextFormField(
-                  //textAlign: TextAlign.center,
-                  controller: _searchController,
-                  onChanged: (value) {
-                    onSearch(value);
-                  },
-                  validator: (value) =>
-                      value.isEmpty ? "Field cannot be empty." : null,
-                  decoration: InputDecoration(
-                    fillColor: refreshTextColor,
-                    filled: true,
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SvgPicture.asset(
-                        'assets/SearchIcon.svg',
-                        width: 20,
-                        height: 20,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: searchbarContainerColor)),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                      borderSide: BorderSide(
-                        color: searchbarContainerColor,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        borderSide: BorderSide(color: searchbarContainerColor)),
-                    // border: InputBorder.none,
-                    // focusedBorder: InputBorder.none,
-                    // enabledBorder: InputBorder.none,
-                    // errorBorder: InputBorder.none,
-                    // disabledBorder: InputBorder.none,
-                    //contentPadding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 10.0),
-                    // contentPadding: EdgeInsets.only(
-                    //   top: 15,
-                    // ),
-                    // contentPadding:
-                    //   EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-
-                    // isDense: true,
-                    hintText: "Search",
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400,
-                        color: searchTextColor,
-                        fontFamily: secondaryFontFamily),
-                  ),
-                ),
-                //),
-              ),
-              SizedBox(height: 30),
-              Expanded(
-                child: Scrollbar(
-                  child: notmatched == true
-                      ? Text("No data Found")
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.all(8),
-                          cacheExtent: 9999,
-                          scrollDirection: Axis.vertical,
-                          itemCount: _searchController.text.isEmpty
-                              ? state.users.length
-                              : _filteredList.length,
-                          itemBuilder: (context, position) {
-                            var element = _searchController.text.isEmpty
-                                ? state.users[position]
-                                : _filteredList[position];
-
-                            return Container(
-                              //width: screenwidth,
-                              height: 50,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(
-                                        left: 11.5, right: 13.5),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: SvgPicture.asset('assets/User.svg'),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      "${element.full_name}",
-                                      style: TextStyle(
-                                        color: contactNameColor,
-                                        fontSize: 16,
-                                        fontFamily: primaryFontFamily,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    // width: 32,
-                                    // height: 32,
-                                    child: IconButton(
-                                        icon:
-                                            SvgPicture.asset('assets/call.svg'),
-                                        onPressed: isConnected && sockett
-                                            ? () {
-                                                print(
-                                                    "here in connected start call $isConnected");
-                                                // _startCall(
-                                                //     [element.ref_id],
-                                                //     MediaType.audio,
-                                                //     CAllType.one2one,
-                                                //     SessionType.call);
-                                                setState(() {
-                                                  callTo = element.full_name;
-                                                  meidaType = MediaType.audio;
-                                                  print(
-                                                      "this is callTo $callTo");
-                                                });
-                                                print("three dot icon pressed");
-                                              }
-                                            : () {
-                                                print(
-                                                    "here in connected start call");
-
-                                                final snackBar = SnackBar(
-                                                    content: Text(
-                                                        'Make sure your device has internet connection'));
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar);
-                                              }),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(right: 5.9),
-                                    // width: 35,
-                                    // height: 35,
-                                    child: IconButton(
-                                        icon: SvgPicture.asset(
-                                            'assets/videocallicon.svg'),
-                                        onPressed: isConnected && sockett
-                                            ? () {
-                                                // _startCall(
-                                                //     [element.ref_id],
-                                                //     MediaType.video,
-                                                //     CAllType.one2many,
-                                                //     SessionType.call);
-                                                setState(() {
-                                                  callTo = element.full_name;
-                                                  meidaType = MediaType.video;
-                                                  print(
-                                                      "this is callTo $callTo");
-                                                });
-                                                print("three dot icon pressed");
-                                              }
-                                            : () {
-                                                final snackBar = SnackBar(
-                                                    content: Text(
-                                                        'Make sure your device has internet connection'));
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar);
-                                              }),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 14.33, right: 19),
-                              child: Divider(
-                                thickness: 1,
-                                color: listdividerColor,
-                              ),
-                            );
-                          },
-                        ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: TextButton(
-                      onPressed: () {
-                        islogout = true;
-
-                        signalingClient.unRegister(registerRes["mcToken"]);
-                        // _auth.logout();
-                      },
-                      child: Text(
-                        "LOG OUT",
-                      ),
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14.0,
-                            fontFamily: primaryFontFamily,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.90),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 10,
-                    width: 10,
-                    decoration: BoxDecoration(
-                        color: isConnected && sockett == true
-                            ? Colors.green
-                            : Colors.red,
-                        shape: BoxShape.circle),
-                  )
-                ],
-              ),
-              Container(
-                  padding: const EdgeInsets.only(bottom: 60),
-                  child: Text(_auth.getUser.full_name))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Dialogs {
-  loginLoading(BuildContext context, String type, String description) {
-    // var descriptionBody;
-
-    // if(type == "error"){
-    //   descriptionBody = CircleAvatar(
-    //     radius: 100.0,
-    //     maxRadius: 100.0,
-    //     child: new Icon(Icons.warning),
-    //     backgroundColor: Colors.redAccent,
-    //   );
-    // } else {
-    //   descriptionBody = new Center(
-    //     child: new CircularProgressIndicator(),
-    //   );
-    // }
-
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            // title: descriptionBody,
-            content: SingleChildScrollView(
-                child: Container(
-                    height: 278,
-                    width: 319,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 80),
-                          Text("Creating your URL..."),
-                          SizedBox(height: 30),
-                          Padding(
+  Future<void> _showMyDialog(context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext dContext) {
+        dialogBoxContext = dContext;
+        return AlertDialog(
+          // title: descriptionBody,
+          content: SingleChildScrollView(
+              child: Container(
+                  height: 278,
+                  width: 319,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 80),
+                        Text("Creating your URL..."),
+                        SizedBox(height: 30),
+                        Padding(
                             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            child: LinearProgressIndicator(),
-                          ),
-                        ],
-                      ),
-                    ))),
-          );
-        });
+                            child: LinearProgressIndicator(
+                              color: Colors.yellow,
+                              backgroundColor: Colors.grey,
+                            )),
+                      ],
+                    ),
+                  ))),
+        );
+      },
+    );
   }
 }

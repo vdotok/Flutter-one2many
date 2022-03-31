@@ -43,7 +43,9 @@ dependencies:
   vdotok_stream:
      path: ../flutter-sdk-streaming/
   flutter_device_type: ^0.4.0
-  # battery: ^2.0.3
+  move_to_background: ^1.0.2
+  wakelock:
+  audioplayers:
   shared_preferences:
   # get_it: ^7.2.0
 
