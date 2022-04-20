@@ -59,4 +59,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+     <uses-sdk
+        android:minSdkVersion="23"
+        tools:overrideLibrary="changjoopark.com.flutter_foreground_plugin" />
 </manifest>

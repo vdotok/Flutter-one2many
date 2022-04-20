@@ -259,8 +259,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     signalingClient.unRegisterSuccessfullyCallBack = () {
       _auth.logout();
     };
-    signalingClient.onAddparticpant = (paticipantcount, calltype) {
-      print("this is participant count ffffff $paticipantcount $calltype ");
+    signalingClient.onAddparticpant = (paticipantcount, 
+    //calltype
+    ) {
+      //print("this is participant count ffffff $paticipantcount $calltype ");
       // setState(() {
       if (Platform.isIOS) {
         setState(() {
@@ -481,7 +483,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       if (refID == _auth.getUser.ref_id) {
       } else {}
     };
-    signalingClient.onReceiveCallFromUser = (mapData) async {
+    signalingClient.onReceiveCallFromUser = (mapData,isMultiSession) async {
       print("incomming call from user ${mapData}");
       startRinging();
       groupName = mapData["data"]["groupName"];
@@ -505,8 +507,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         remoteAudioFlag = true;
       });
       //here
+
       // _callBloc.add(CallReceiveEvent());
       _callProvider.callReceive();
+       if (isMultiSession) {
+        iscallAcceptedbyuser = false;
+      } else {
+        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+      }
     };
     signalingClient.onCallAcceptedByUser = () async {
       print("this is call accepted");
@@ -808,7 +816,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       print("this is error on initialize $onError");
     });
     print("after initialixxation");
-    // await remoteRenderer.initialize();
+    //await remoteRenderer.initialize();
   }
 
   initRenderersRemote(RTCVideoRenderer rtcRenderer) async {
@@ -1513,32 +1521,181 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   ///./////////////////////
   ///.///////////////////////////
   ///.//////////////////
-  Scaffold callStart() {
+  Container callStart() {
     //  inCall = true;
-    print("this is media type $meidaType $remoteVideoFlag $localRenderer");
-    return Scaffold(
-      body: OrientationBuilder(builder: (context, orientation) {
-        return ispublicbroadcast
-            ? Container(
-                child: Stack(children: <Widget>[
-                enableCamera
+    print("this is media type $meidaType $remoteVideoFlag $enableCamera");
+   
+      return ispublicbroadcast
+          ? Container(
+              child: Stack(children: <Widget>[
+            participantcount >= 1
+                ? broadcasttype == "camera"
                     ? RTCVideoView(localRenderer,
-                        key: forsmallView,
-                        mirror: false,
-                        objectFit:
-                            RTCVideoViewObjectFit.RTCVideoViewObjectFitCover)
-                    : Container(),
+                      key: forsmallView,
+                      mirror: false,
+                      objectFit:
+                          RTCVideoViewObjectFit.RTCVideoViewObjectFitCover)
+                    : Container()
+                : Container(),
+            Column(
+              //mainAxisAlignment: MainAxisAlignment.start,
+              children: [
                 Container(
-                  padding: EdgeInsets.only(top: 55, left: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Container(
-                          padding: EdgeInsets.only(
-                            top: 150,
-                          ),
+                  padding: const EdgeInsets.only(top: 50.85),
+                ),
+                //backArrow(),
+                participantcount < 1
+                    ? SizedBox()
+                    : Text(
+                        "Public Broadcast",
+                        style: TextStyle(
+                            fontSize: 26,
+                            decoration: TextDecoration.none,
+                            fontFamily: secondaryFontFamily,
+                            fontWeight: FontWeight.w800,
+                            fontStyle: FontStyle.normal,
+                            color: darkBlackColor),
+                      ),
+                participantcount < 1 ? SizedBox() : Spacer(),
+                participantcount < 1
+                    ? SizedBox()
+                    : FlatButton(
+                        onPressed: () {
+                          print(
+                              "this is url for public broadcast $publicbroadcasturl");
+                          Clipboard.setData(new ClipboardData(
+                              text: publicbroadcasturl));
+                        },
+                        child: Text('Copy URL',
+                            style: TextStyle(color: textTypeColor)),
+                      ),
+                participantcount < 1
+                    ? SizedBox()
+                    : Container(
+                        child: Align(
+                            alignment: Alignment.topRight,
+                            // color: Colors.red,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 20),
+                                    child: Text(
+                                      pressDuration,
+                                      style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          fontSize: 14,
+                                          fontFamily: secondaryFontFamily,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                          color: darkBlackColor),
+                                    ),
+                                  ),
+                                  (broadcasttype == "camera")
+                                      ? Container(
+                                          // padding: EdgeInsets.zero,
+                                          // height: 500,
+                                          // width: 500,
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 15, 20, 0),
+
+                                          child: GestureDetector(
+                                            child: SvgPicture.asset(
+                                                'assets/switch_camera.svg'),
+                                            onTap: () {
+                                              signalingClient.switchCamera();
+                                            },
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                  Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 10, 20, 0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.end,
+                                      //crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          child:
+                                              //SvgPicture.asset("assets/person.svg")
+                                              Icon(
+                                            Icons.person,
+                                            color: participantcolor,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 0, 0, 20),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                "+",
+                                                style: TextStyle(
+                                                    color: participantcolor),
+                                              ),
+                                              Text(
+                                                "$participantcount",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    decoration:
+                                                        TextDecoration.none,
+                                                    fontFamily:
+                                                        secondaryFontFamily,
+                                                    fontWeight:
+                                                        FontWeight.w400,
+                                                    fontStyle:
+                                                        FontStyle.normal,
+                                                    color: participantcolor),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                              
+                                ]))),
+              ],
+            ),
+            // enableCamera
+            //     ? RTCVideoView(widget.localRenderer,
+            //         key: forsmallView,
+            //         mirror: false,
+            //         objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover)
+            //
+            //    : Container(),
+            participantcount >= 1
+                ? broadcasttype == "camera"
+                    ? SizedBox()
+                    : Center(
+                        child: Text(
+                          '''You are sharing your 
+screen at the moment..''',
+                          style: TextStyle(
+                              fontSize: 20,
+                              decoration: TextDecoration.none,
+                              fontFamily: searchFontFamily,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.normal,
+                              color: screensharetextcolor),
+                        ),
+                      )
+                : Center(
+                    // padding: EdgeInsets.only(top: 55, left: 20),
+                    //height: 79,
+                    //width: MediaQuery.of(context).size.width,
+
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          // padding: EdgeInsets.only(top: 150, left: 50),
                           child: Text(
                             "Initiating Public Broadcast",
                             style: TextStyle(
@@ -1550,19 +1707,15 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                                 color: darkBlackColor),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      Center(
-                        child: Container(
-                            // padding: EdgeInsets.only(left: 65),
+                        SizedBox(height: 20),
+                        Container(
+                            //padding: EdgeInsets.only(left: 65),
                             child: Image.asset(
                           'assets/broadcast.png',
                         )),
-                      ),
-                      SizedBox(height: 40),
-                      Center(
-                        child: Container(
-                          // margin: EdgeInsets.only(left: 85),
+                        SizedBox(height: 40),
+                        Container(
+                          //  margin: EdgeInsets.only(left: 85),
                           width: 115,
                           height: 35,
                           decoration: BoxDecoration(
@@ -1571,759 +1724,709 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                                   BorderRadius.all(Radius.circular(10))),
                           child: FlatButton(
                             onPressed: () {
-                              Clipboard.setData(
-                                  new ClipboardData(text: publicbroadcasturl));
+                              print(
+                                  "this is url for public broadcast $publicbroadcasturl");
+                              Clipboard.setData(new ClipboardData(
+                                  text: publicbroadcasturl));
                             },
                             child: Text('Copy URL',
                                 style: TextStyle(color: Colors.white)),
                           ),
-                        ),
+                        )
+                      ],
+                    ),
+                  ),
+            Container(
+              padding: EdgeInsets.only(
+                bottom: 56,
+              ),
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // meidaType == MediaType.video
+                  //     ?
+                  Row(
+                    children: [
+                      GestureDetector(
+                          child: !enableCamera
+                              ? broadcasttype == "camera"
+                                  ? SvgPicture.asset('assets/video_off.svg')
+                                  : SvgPicture.asset(
+                                      'assets/screenshareon.svg')
+                              : broadcasttype == "camera"
+                                  ? SvgPicture.asset('assets/video.svg')
+                                  : SvgPicture.asset(
+                                      'assets/screenshareoff.svg'),
+                          onTap: participantcount >= 1
+                              ? () {
+                                  setState(() {
+                                    enableCamera = !enableCamera;
+                                  });
+                                  signalingClient.audioVideoState(
+                                      audioFlag: switchMute ? 1 : 0,
+                                      videoFlag: enableCamera ? 1 : 0,
+                                      mcToken: registerRes["mcToken"]);
+                                  signalingClient.enableCamera(enableCamera);
+                                }
+                              : null),
+                      SizedBox(
+                        width: 20,
                       )
                     ],
                   ),
-                ),
-                !kIsWeb
-                    ? meidaType == MediaType.video
-                        ? Container(
+                  // : SizedBox(),
+
+                  GestureDetector(
+                    child: SvgPicture.asset(
+                      'assets/end.svg',
+                    ),
+                    onTap: () {
+                      remoteVideoFlag = true;
+                      stopCall();
+                      setState(() {
+                        isAppAudiobuttonSelected = false;
+                        iscamerabuttonSelected = false;
+                        ismicAudiobuttonSelected = false;
+                        participantcount = 0;
+                      });
+                      // inCall = false;
+
+                      // setState(() {
+                      //   _isCalling = false;
+                      // });
+                    },
+                  ),
+
+                  // SvgPicture.asset('assets/images/end.svg'),
+
+                  SizedBox(width: 20),
+                  GestureDetector(
+                      child: !switchMute
+                          ? broadcasttype == "camera" ||
+                                  broadcasttype == "micaudio"
+                              ? SvgPicture.asset('assets/mute_microphone.svg')
+                              : SvgPicture.asset('assets/appaudioon.svg')
+                          : broadcasttype == "camera" ||
+                                  broadcasttype == "micaudio"
+                              ? SvgPicture.asset('assets/microphone.svg')
+                              : SvgPicture.asset('assets/appaudiooff.svg'),
+                      onTap: participantcount >= 1
+                          ? () {
+                              final bool enabled = signalingClient.muteMic();
+                              print("this is enabled $enabled");
+                              setState(() {
+                                switchMute = enabled;
+                              });
+                            }
+                          : null),
+                ],
+              ),
+            )
+          ]))
+          //public broad cast case enddddd
+          : isDDialer == false
+              ? Container(
+                  child: Stack(children: <Widget>[
+                    meidaType == MediaType.video
+                        ? remoteVideoFlag
+                            ? rendererListWithRefID.length == 1
+                                ? RemoteStream(
+                                    remoteRenderer: rendererListWithRefID[0]
+                                        ["rtcVideoRenderer"])
+                                : rendererListWithRefID.length == 2
+                                    ? RemoteStream(
+                                        remoteRenderer:
+                                            rendererListWithRefID[1]
+                                                ["rtcVideoRenderer"])
+                                    : Container()
+                            : Container(
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                  colors: [
+                                    backgroundAudioCallDark,
+                                    backgroundAudioCallLight,
+                                    backgroundAudioCallLight,
+                                    backgroundAudioCallLight,
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment(0.0, 0.0),
+                                )),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    'assets/userIconCall.svg',
+                                  ),
+                                ),
+                              )
+                        : Container(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                              colors: [
+                                backgroundAudioCallDark,
+                                backgroundAudioCallLight,
+                                backgroundAudioCallLight,
+                                backgroundAudioCallLight,
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment(0.0, 0.0),
+                            )),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'assets/userIconCall.svg',
+                              ),
+                            ),
+                          ),
+
+                    Container(
+                        // color: Colors.red,
+                        child: Align(
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(
+                                0.0, 120.33, 20, 27),
+                            child: GestureDetector(
+                              child: !switchSpeaker
+                                  ? SvgPicture.asset('assets/VolumnOn.svg')
+                                  : SvgPicture.asset('assets/VolumeOff.svg'),
+                              onTap: () {
+                                signalingClient.switchSpeaker(switchSpeaker);
+                                setState(() {
+                                  switchSpeaker = !switchSpeaker;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+
+                    //),
+
+                    // /////////////// this is local stream
+
+                    rendererListWithRefID.length == 2
+                        ? Positioned(
+                            left: 225.0,
+                            bottom: 145.0,
+                            right: 20,
                             child: Align(
-                              alignment: Alignment.topRight,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 120.33, 20, 27),
-                                    child: GestureDetector(
-                                      child: SvgPicture.asset(
-                                        'assets/switch_camera.svg',
-                                      ),
-                                      onTap: () {
-                                        signalingClient.switchCamera();
-                                      },
-                                    ),
-                                  ),
-
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        child: Icon(
-                                          Icons.person_add_alt_1_outlined,
-                                          color: participantcolor,
-                                        ),
-                                      ),
-                                      Container(
-                                        padding:
-                                            const EdgeInsets.only(right: 20),
-                                        child: Text(
-                                          "$participantcount",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              decoration: TextDecoration.none,
-                                              fontFamily: secondaryFontFamily,
-                                              fontWeight: FontWeight.w400,
-                                              fontStyle: FontStyle.normal,
-                                              color: participantcolor),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                  // ),
-                                ],
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                height: 170,
+                                width: 130,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: enableCamera
+                                      ? RemoteStream(
+                                          remoteRenderer:
+                                              rendererListWithRefID[0]
+                                                  ["rtcVideoRenderer"])
+                                      : Container(color: Colors.pink),
+                                ),
                               ),
                             ),
                           )
-                        : Container(
-                            // color: Colors.red,
-                            child: Align(
-                            alignment: Alignment.topRight,
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      0.0, 120.33, 20, 27),
-                                  child: GestureDetector(
-                                    child: !switchSpeaker
-                                        ? SvgPicture.asset(
-                                            'assets/VolumnOn.svg')
-                                        : SvgPicture.asset(
-                                            'assets/VolumeOff.svg'),
-                                    onTap: () {
-                                      signalingClient
-                                          .switchSpeaker(switchSpeaker);
-                                      setState(() {
-                                        switchSpeaker = !switchSpeaker;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
+                        : Container(),
+
+                    Container(
+                      padding: EdgeInsets.only(
+                        bottom: 56,
+                      ),
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            child: SvgPicture.asset(
+                              'assets/end.svg',
                             ),
-                          ))
-                    : SizedBox(),
-                Container(
-                  padding: EdgeInsets.only(
-                    bottom: 56,
-                  ),
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      meidaType == MediaType.video
-                          ? Row(
-                              children: [
-                                GestureDetector(
-                                  child: !enableCamera
-                                      ? SvgPicture.asset('assets/video_off.svg')
-                                      : SvgPicture.asset('assets/video.svg'),
-                                  onTap: () {
-                                    setState(() {
-                                      enableCamera = !enableCamera;
-                                    });
-                                    signalingClient.audioVideoState(
-                                        audioFlag: switchMute ? 1 : 0,
-                                        videoFlag: enableCamera ? 1 : 0,
-                                        mcToken: registerRes["mcToken"]);
-                                    signalingClient.enableCamera(enableCamera);
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                )
-                              ],
-                            )
-                          : SizedBox(),
-                      GestureDetector(
-                        child: SvgPicture.asset(
-                          'assets/end.svg',
-                        ),
-                        onTap: () {
-                          remoteVideoFlag = true;
-                          stopCall();
-                        },
+                            onTap: () {
+                              remoteVideoFlag = true;
+                              stopCall();
+                            },
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 20),
-                      GestureDetector(
-                        child: !switchMute
-                            ? SvgPicture.asset('assets/mute_microphone.svg')
-                            : SvgPicture.asset('assets/microphone.svg'),
-                        onTap: () {
-                          final bool enabled = signalingClient.muteMic();
-                          print("this is enabled $enabled");
-                          setState(() {
-                            switchMute = enabled;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                    )
+                  ]),
                 )
-              ]))
-            //public broad cast case enddddd
-            : isDDialer == false
-                ? Container(
-                    child: Stack(children: <Widget>[
-                      meidaType == MediaType.video
-                          ? remoteVideoFlag
-                              ? rendererListWithRefID.length == 1
-                                  ? RemoteStream(
-                                      remoteRenderer: rendererListWithRefID[0]
-                                          ["rtcVideoRenderer"])
-                                  : rendererListWithRefID.length == 2
-                                      ? RemoteStream(
-                                          remoteRenderer:
-                                              rendererListWithRefID[1]
-                                                  ["rtcVideoRenderer"])
-                                      : Container()
-                              : Container(
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                    colors: [
-                                      backgroundAudioCallDark,
-                                      backgroundAudioCallLight,
-                                      backgroundAudioCallLight,
-                                      backgroundAudioCallLight,
-                                    ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment(0.0, 0.0),
-                                  )),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      'assets/userIconCall.svg',
-                                    ),
-                                  ),
-                                )
-                          : Container(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                colors: [
-                                  backgroundAudioCallDark,
-                                  backgroundAudioCallLight,
-                                  backgroundAudioCallLight,
-                                  backgroundAudioCallLight,
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment(0.0, 0.0),
-                              )),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'assets/userIconCall.svg',
-                                ),
-                              ),
-                            ),
 
-                      Container(
-                          // color: Colors.red,
-                          child: Align(
-                        alignment: Alignment.topRight,
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(
-                                  0.0, 120.33, 20, 27),
-                              child: GestureDetector(
-                                child: !switchSpeaker
-                                    ? SvgPicture.asset('assets/VolumnOn.svg')
-                                    : SvgPicture.asset('assets/VolumeOff.svg'),
-                                onTap: () {
-                                  signalingClient.switchSpeaker(switchSpeaker);
-                                  setState(() {
-                                    switchSpeaker = !switchSpeaker;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
+              ////////////////////////
+              ///........................
+              //Container(color:Colors.pink)
+              //receiver side starts
+              // Container(
+              //     child: Stack(children: <Widget>[
+              //     meidaType == MediaType.video
+              //         ? remoteVideoFlag
+              //             ? rendererListWithRefID.length == 1
+              //                 ? Column(
+              //                     children: [
+              //                       Expanded(
+              //                         child: Container(
 
-                      //),
+              //                             child: RemoteStream(
+              //                           remoteRenderer:
+              //                               rendererListWithRefID[0]
+              //                                   ["rtcVideoRenderer"],
+              //                         )
 
-                      // /////////////// this is local stream
+              //                             ),
+              //                       ),
+              //                     ],
+              //                   )
+              //                 : rendererListWithRefID.length == 2
+              //                     ? Column(
+              //                         children: [
+              //                           Container(
+              //                               height: MediaQuery.of(context)
+              //                                       .size
+              //                                       .height /
+              //                                   2,
+              //                               width: MediaQuery.of(context)
+              //                                   .size
+              //                                   .width,
 
-                      rendererListWithRefID.length == 2
-                          ? Positioned(
-                              left: 225.0,
-                              bottom: 145.0,
-                              right: 20,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Container(
-                                  height: 170,
-                                  width: 130,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: enableCamera
-                                        ? RemoteStream(
-                                            remoteRenderer:
-                                                rendererListWithRefID[0]
-                                                    ["rtcVideoRenderer"])
-                                        : Container(color: Colors.pink),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(),
+              //                               child:
 
-                      Container(
-                        padding: EdgeInsets.only(
-                          bottom: 56,
-                        ),
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
+              //                                   RTCVideoView(
+              //                                 rendererListWithRefID[0]
+              //                                     ["rtcVideoRenderer"],
+              //                               )),
+              //                           Expanded(
+              //                             child: Container(
+              //                                 width: MediaQuery.of(context)
+              //                                     .size
+              //                                     .width,
+
+              //                                 child:
+
+              //                                     RTCVideoView(
+              //                                   rendererListWithRefID[1]
+              //                                       ["rtcVideoRenderer"],
+              //                                 )),
+              //                           )
+              //                         ],
+              //                       )
+              //                     : Container()
+              //             : Container(
+              //                 decoration: BoxDecoration(
+              //                     gradient: LinearGradient(
+              //                   colors: [
+              //                     backgroundAudioCallDark,
+              //                     backgroundAudioCallLight,
+              //                     backgroundAudioCallLight,
+              //                     backgroundAudioCallLight,
+              //                   ],
+              //                   begin: Alignment.topCenter,
+              //                   end: Alignment(0.0, 0.0),
+              //                 )),
+              //                 child: Center(
+              //                   child: SvgPicture.asset(
+              //                     'assets/userIconCall.svg',
+              //                   ),
+              //                 ),
+              //               )
+              //         : Container(
+              //             padding: EdgeInsets.only(top: 55, left: 20),
+              //             //height: 79,
+              //             //width: MediaQuery.of(context).size.width,
+
+              //             child: Column(
+              //               mainAxisAlignment: MainAxisAlignment.start,
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 Container(
+              //                   padding: EdgeInsets.only(top: 150, left: 50),
+              //                   child: Text(
+              //                     "Initiating Public Broadcast",
+              //                     style: TextStyle(
+              //                         fontSize: 22,
+              //                         decoration: TextDecoration.none,
+              //                         fontFamily: secondaryFontFamily,
+              //                         fontWeight: FontWeight.w400,
+              //                         fontStyle: FontStyle.normal,
+              //                         color: darkBlackColor),
+              //                   ),
+              //                 ),
+              //                 SizedBox(height: 20),
+              //                 Container(
+              //                     padding: EdgeInsets.only(left: 65),
+              //                     child: Image.asset(
+              //                       'assets/broadcast.png',
+              //                     )),
+              //                 SizedBox(height: 40),
+              //                 Container(
+              //                   margin: EdgeInsets.only(left: 85),
+              //                   width: 115,
+              //                   height: 35,
+              //                   decoration: BoxDecoration(
+              //                       color: participantcolor,
+              //                       borderRadius: BorderRadius.all(
+              //                           Radius.circular(10))),
+              //                   child: FlatButton(
+              //                     onPressed: () {
+              //                       Clipboard.setData(new ClipboardData(
+              //                           text: publicbroadcasturl));
+              //                     },
+              //                     child: Text('Copy URL',
+              //                         style: TextStyle(color: Colors.white)),
+              //                   ),
+              //                 )
+              //               ],
+              //             ),
+              //           ),
+              //     !kIsWeb
+              //          ?
+              //              Container(
+              //                 child: Align(
+              //                 alignment: Alignment.topRight,
+              //                 child: Column(
+              //                   children: [
+              //                     Container(
+              //                       padding: const EdgeInsets.fromLTRB(
+              //                           0.0, 120.33, 20, 27),
+              //                       child: GestureDetector(
+              //                         child: !switchSpeaker
+              //                             ? SvgPicture.asset(
+              //                                 'assets/VolumnOn.svg')
+              //                             : SvgPicture.asset(
+              //                                 'assets/VolumeOff.svg'),
+              //                         onTap: () {
+              //                           signalingClient
+              //                               .switchSpeaker(switchSpeaker);
+              //                           setState(() {
+              //                             switchSpeaker = !switchSpeaker;
+              //                           });
+              //                         },
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ))
+              //         : SizedBox(),
+              //     Container(
+              //       padding: EdgeInsets.only(
+              //         bottom: 56,
+              //       ),
+              //       alignment: Alignment.bottomCenter,
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           GestureDetector(
+              //             child: SvgPicture.asset(
+              //               'assets/end.svg',
+              //             ),
+              //             onTap: () {
+              //               remoteVideoFlag = true;
+              //               stopCall();
+              //             },
+              //           ),
+              //         ],
+              //       ),
+              //     )
+              //   ]))
+              : Container(
+                  child: Stack(children: <Widget>[
+                    meidaType == MediaType.video
+                        ? enableCamera
+                            ? RTCVideoView(localRenderer,
+                                key: forsmallView,
+                                mirror: false,
+                                objectFit: RTCVideoViewObjectFit
+                                    .RTCVideoViewObjectFitCover)
+                            : Container(color: Colors.red)
+                        : Container(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                              colors: [
+                                backgroundAudioCallDark,
+                                backgroundAudioCallLight,
+                                backgroundAudioCallLight,
+                                backgroundAudioCallLight,
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment(0.0, 0.0),
+                            )),
+                            child: Center(
                               child: SvgPicture.asset(
-                                'assets/end.svg',
+                                'assets/userIconCall.svg',
                               ),
-                              onTap: () {
-                                remoteVideoFlag = true;
-                                stopCall();
-                              },
                             ),
-                          ],
-                        ),
-                      )
-                    ]),
-                  )
-
-                ////////////////////////
-                ///........................
-                //Container(color:Colors.pink)
-                //receiver side starts
-                // Container(
-                //     child: Stack(children: <Widget>[
-                //     meidaType == MediaType.video
-                //         ? remoteVideoFlag
-                //             ? rendererListWithRefID.length == 1
-                //                 ? Column(
-                //                     children: [
-                //                       Expanded(
-                //                         child: Container(
-
-                //                             child: RemoteStream(
-                //                           remoteRenderer:
-                //                               rendererListWithRefID[0]
-                //                                   ["rtcVideoRenderer"],
-                //                         )
-
-                //                             ),
-                //                       ),
-                //                     ],
-                //                   )
-                //                 : rendererListWithRefID.length == 2
-                //                     ? Column(
-                //                         children: [
-                //                           Container(
-                //                               height: MediaQuery.of(context)
-                //                                       .size
-                //                                       .height /
-                //                                   2,
-                //                               width: MediaQuery.of(context)
-                //                                   .size
-                //                                   .width,
-
-                //                               child:
-
-                //                                   RTCVideoView(
-                //                                 rendererListWithRefID[0]
-                //                                     ["rtcVideoRenderer"],
-                //                               )),
-                //                           Expanded(
-                //                             child: Container(
-                //                                 width: MediaQuery.of(context)
-                //                                     .size
-                //                                     .width,
-
-                //                                 child:
-
-                //                                     RTCVideoView(
-                //                                   rendererListWithRefID[1]
-                //                                       ["rtcVideoRenderer"],
-                //                                 )),
-                //                           )
-                //                         ],
-                //                       )
-                //                     : Container()
-                //             : Container(
-                //                 decoration: BoxDecoration(
-                //                     gradient: LinearGradient(
-                //                   colors: [
-                //                     backgroundAudioCallDark,
-                //                     backgroundAudioCallLight,
-                //                     backgroundAudioCallLight,
-                //                     backgroundAudioCallLight,
-                //                   ],
-                //                   begin: Alignment.topCenter,
-                //                   end: Alignment(0.0, 0.0),
-                //                 )),
-                //                 child: Center(
-                //                   child: SvgPicture.asset(
-                //                     'assets/userIconCall.svg',
-                //                   ),
-                //                 ),
-                //               )
-                //         : Container(
-                //             padding: EdgeInsets.only(top: 55, left: 20),
-                //             //height: 79,
-                //             //width: MediaQuery.of(context).size.width,
-
-                //             child: Column(
-                //               mainAxisAlignment: MainAxisAlignment.start,
-                //               crossAxisAlignment: CrossAxisAlignment.start,
-                //               children: [
-                //                 Container(
-                //                   padding: EdgeInsets.only(top: 150, left: 50),
-                //                   child: Text(
-                //                     "Initiating Public Broadcast",
-                //                     style: TextStyle(
-                //                         fontSize: 22,
-                //                         decoration: TextDecoration.none,
-                //                         fontFamily: secondaryFontFamily,
-                //                         fontWeight: FontWeight.w400,
-                //                         fontStyle: FontStyle.normal,
-                //                         color: darkBlackColor),
-                //                   ),
-                //                 ),
-                //                 SizedBox(height: 20),
-                //                 Container(
-                //                     padding: EdgeInsets.only(left: 65),
-                //                     child: Image.asset(
-                //                       'assets/broadcast.png',
-                //                     )),
-                //                 SizedBox(height: 40),
-                //                 Container(
-                //                   margin: EdgeInsets.only(left: 85),
-                //                   width: 115,
-                //                   height: 35,
-                //                   decoration: BoxDecoration(
-                //                       color: participantcolor,
-                //                       borderRadius: BorderRadius.all(
-                //                           Radius.circular(10))),
-                //                   child: FlatButton(
-                //                     onPressed: () {
-                //                       Clipboard.setData(new ClipboardData(
-                //                           text: publicbroadcasturl));
-                //                     },
-                //                     child: Text('Copy URL',
-                //                         style: TextStyle(color: Colors.white)),
-                //                   ),
-                //                 )
-                //               ],
-                //             ),
-                //           ),
-                //     !kIsWeb
-                //          ?
-                //              Container(
-                //                 child: Align(
-                //                 alignment: Alignment.topRight,
-                //                 child: Column(
-                //                   children: [
-                //                     Container(
-                //                       padding: const EdgeInsets.fromLTRB(
-                //                           0.0, 120.33, 20, 27),
-                //                       child: GestureDetector(
-                //                         child: !switchSpeaker
-                //                             ? SvgPicture.asset(
-                //                                 'assets/VolumnOn.svg')
-                //                             : SvgPicture.asset(
-                //                                 'assets/VolumeOff.svg'),
-                //                         onTap: () {
-                //                           signalingClient
-                //                               .switchSpeaker(switchSpeaker);
-                //                           setState(() {
-                //                             switchSpeaker = !switchSpeaker;
-                //                           });
-                //                         },
-                //                       ),
-                //                     ),
-                //                   ],
-                //                 ),
-                //               ))
-                //         : SizedBox(),
-                //     Container(
-                //       padding: EdgeInsets.only(
-                //         bottom: 56,
-                //       ),
-                //       alignment: Alignment.bottomCenter,
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           GestureDetector(
-                //             child: SvgPicture.asset(
-                //               'assets/end.svg',
-                //             ),
-                //             onTap: () {
-                //               remoteVideoFlag = true;
-                //               stopCall();
-                //             },
-                //           ),
-                //         ],
-                //       ),
-                //     )
-                //   ]))
-                : Container(
-                    child: Stack(children: <Widget>[
-                      meidaType == MediaType.video
-                          ? enableCamera
-                              ? RTCVideoView(localRenderer,
-                                  key: forsmallView,
-                                  mirror: false,
-                                  objectFit: RTCVideoViewObjectFit
-                                      .RTCVideoViewObjectFitCover)
-                              : Container(color: Colors.red)
-                          : Container(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                colors: [
-                                  backgroundAudioCallDark,
-                                  backgroundAudioCallLight,
-                                  backgroundAudioCallLight,
-                                  backgroundAudioCallLight,
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment(0.0, 0.0),
-                              )),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'assets/userIconCall.svg',
+                          ),
+                    Container(
+                      padding: EdgeInsets.only(top: 55, left: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            (meidaType == MediaType.video)
+                                ? 'You are video calling with'
+                                : 'You are audio calling with',
+                            style: TextStyle(
+                                fontSize: 14,
+                                decoration: TextDecoration.none,
+                                fontFamily: secondaryFontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                                color: darkBlackColor),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                              right: 25,
+                            ),
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                // Text(
+                                //     callTo,
+                                //     style: TextStyle(
+                                //         fontFamily: primaryFontFamily,
+                                //         // background: Paint()..color = yellowColor,
+                                //         color: darkBlackColor,
+                                //         decoration: TextDecoration.none,
+                                //         fontWeight: FontWeight.w700,
+                                //         fontStyle: FontStyle.normal,
+                                //         fontSize: 24),
+                                //   ),
+                                Text(
+                                  pressDuration,
+                                  style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontSize: 14,
+                                      fontFamily: secondaryFontFamily,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                      color: darkBlackColor),
                                 ),
-                              ),
+                              ],
                             ),
-                      Container(
-                        padding: EdgeInsets.only(top: 55, left: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              (meidaType == MediaType.video)
-                                  ? 'You are video calling with'
-                                  : 'You are audio calling with',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  decoration: TextDecoration.none,
-                                  fontFamily: secondaryFontFamily,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                  color: darkBlackColor),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                right: 25,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  // Text(
-                                  //     callTo,
-                                  //     style: TextStyle(
-                                  //         fontFamily: primaryFontFamily,
-                                  //         // background: Paint()..color = yellowColor,
-                                  //         color: darkBlackColor,
-                                  //         decoration: TextDecoration.none,
-                                  //         fontWeight: FontWeight.w700,
-                                  //         fontStyle: FontStyle.normal,
-                                  //         fontSize: 24),
-                                  //   ),
-                                  Text(
-                                    pressDuration,
-                                    style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontSize: 14,
-                                        fontFamily: secondaryFontFamily,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                        color: darkBlackColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Row(
-                            //   children: [
-                            //     //SizedBox(width: 10),
-                            //     number != null
-                            //         ? Text(
-                            //             "DownStream $number UpStream $nummm",
-                            //             style: TextStyle(
-                            //                 decoration: TextDecoration.none,
-                            //                 fontSize: 14,
-                            //                 fontFamily: secondaryFontFamily,
-                            //                 fontWeight: FontWeight.w400,
-                            //                 fontStyle: FontStyle.normal,
-                            //                 color: darkBlackColor),
-                            //           )
-                            //         : Text(
-                            //             "DownStream 0   UpStream 0",
-                            //             style: TextStyle(
-                            //                 decoration: TextDecoration.none,
-                            //                 fontSize: 14,
-                            //                 fontFamily: secondaryFontFamily,
-                            //                 fontWeight: FontWeight.w400,
-                            //                 fontStyle: FontStyle.normal,
-                            //                 color: darkBlackColor),
-                            //           ),
-                            //   ],
-                            //),
-                          ],
-                        ),
+                          ),
+                          // Row(
+                          //   children: [
+                          //     //SizedBox(width: 10),
+                          //     number != null
+                          //         ? Text(
+                          //             "DownStream $number UpStream $nummm",
+                          //             style: TextStyle(
+                          //                 decoration: TextDecoration.none,
+                          //                 fontSize: 14,
+                          //                 fontFamily: secondaryFontFamily,
+                          //                 fontWeight: FontWeight.w400,
+                          //                 fontStyle: FontStyle.normal,
+                          //                 color: darkBlackColor),
+                          //           )
+                          //         : Text(
+                          //             "DownStream 0   UpStream 0",
+                          //             style: TextStyle(
+                          //                 decoration: TextDecoration.none,
+                          //                 fontSize: 14,
+                          //                 fontFamily: secondaryFontFamily,
+                          //                 fontWeight: FontWeight.w400,
+                          //                 fontStyle: FontStyle.normal,
+                          //                 color: darkBlackColor),
+                          //           ),
+                          //   ],
+                          //),
+                        ],
                       ),
-                      !kIsWeb
-                          ? meidaType == MediaType.video
-                              ? Container(
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0.0, 120.33, 20, 27),
-                                          child: GestureDetector(
-                                            child: SvgPicture.asset(
-                                              'assets/switch_camera.svg',
-                                            ),
-                                            onTap: () {
-                                              signalingClient.switchCamera();
-                                            },
-                                          ),
-                                        ),
-
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              child: Icon(
-                                                Icons.person_add_alt_1_outlined,
-                                                color: participantcolor,
-                                              ),
-                                            ),
-                                            Container(
-                                              padding: const EdgeInsets.only(
-                                                  right: 20),
-                                              child: Text(
-                                                "$participantcount",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    decoration:
-                                                        TextDecoration.none,
-                                                    fontFamily:
-                                                        secondaryFontFamily,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontStyle: FontStyle.normal,
-                                                    color: participantcolor),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  // color: Colors.red,
-                                  child: Align(
+                    ),
+                    !kIsWeb
+                        ? meidaType == MediaType.video
+                            ? Container(
+                                child: Align(
                                   alignment: Alignment.topRight,
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.end,
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.fromLTRB(
                                             0.0, 120.33, 20, 27),
                                         child: GestureDetector(
-                                          child: !switchSpeaker
-                                              ? SvgPicture.asset(
-                                                  'assets/VolumnOn.svg')
-                                              : SvgPicture.asset(
-                                                  'assets/VolumeOff.svg'),
+                                          child: SvgPicture.asset(
+                                            'assets/switch_camera.svg',
+                                          ),
                                           onTap: () {
-                                            signalingClient
-                                                .switchSpeaker(switchSpeaker);
-                                            setState(() {
-                                              switchSpeaker = !switchSpeaker;
-                                            });
+                                            signalingClient.switchCamera();
                                           },
                                         ),
                                       ),
+
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            child: Icon(
+                                              Icons.person_add_alt_1_outlined,
+                                              color: participantcolor,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                right: 20),
+                                            child: Text(
+                                              "$participantcount",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                  fontFamily:
+                                                      secondaryFontFamily,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                  color: participantcolor),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      // ),
                                     ],
                                   ),
-                                ))
-                          : SizedBox(),
-                      //),
-
-                      // /////////////// this is local stream
-                      // meidaType == MediaType.video
-                      //     ? Positioned(
-                      //         left: 225.0,
-                      //         bottom: 145.0,
-                      //         right: 20,
-                      //         child: Align(
-                      //           alignment: Alignment.bottomRight,
-                      //           child: Container(
-                      //             height: 170,
-                      //             width: 130,
-                      //             decoration: BoxDecoration(
-                      //               borderRadius: BorderRadius.circular(10.0),
-                      //             ),
-                      //             child: ClipRRect(
-                      //               borderRadius: BorderRadius.circular(10.0),
-                      //               child: enableCamera
-                      //                   ? RTCVideoView(localRenderer,
-                      //                       key: forsmallView,
-                      //                       mirror: false,
-                      //                       objectFit: RTCVideoViewObjectFit
-                      //                           .RTCVideoViewObjectFitCover)
-                      //                   : Container(),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       )
-                      //     : Container(),
-
-                      Container(
-                        padding: EdgeInsets.only(
-                          bottom: 56,
-                        ),
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            meidaType == MediaType.video
-                                ? Row(
-                                    children: [
-                                      GestureDetector(
-                                        child: !enableCamera
+                                ),
+                              )
+                            : Container(
+                                // color: Colors.red,
+                                child: Align(
+                                alignment: Alignment.topRight,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 120.33, 20, 27),
+                                      child: GestureDetector(
+                                        child: !switchSpeaker
                                             ? SvgPicture.asset(
-                                                'assets/video_off.svg')
+                                                'assets/VolumnOn.svg')
                                             : SvgPicture.asset(
-                                                'assets/video.svg'),
+                                                'assets/VolumeOff.svg'),
                                         onTap: () {
-                                          setState(() {
-                                            enableCamera = !enableCamera;
-                                          });
-                                          signalingClient.audioVideoState(
-                                              audioFlag: switchMute ? 1 : 0,
-                                              videoFlag: enableCamera ? 1 : 0,
-                                              mcToken: registerRes["mcToken"]);
                                           signalingClient
-                                              .enableCamera(enableCamera);
+                                              .switchSpeaker(switchSpeaker);
+                                          setState(() {
+                                            switchSpeaker = !switchSpeaker;
+                                          });
                                         },
                                       ),
-                                      SizedBox(
-                                        width: 20,
-                                      )
-                                    ],
-                                  )
-                                : SizedBox(),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                        : SizedBox(),
+                    //),
 
-                            GestureDetector(
-                              child: SvgPicture.asset(
-                                'assets/end.svg',
-                              ),
-                              onTap: () {
-                                remoteVideoFlag = true;
-                                stopCall();
-                                // inCall = false;
+                    // /////////////// this is local stream
+                    // meidaType == MediaType.video
+                    //     ? Positioned(
+                    //         left: 225.0,
+                    //         bottom: 145.0,
+                    //         right: 20,
+                    //         child: Align(
+                    //           alignment: Alignment.bottomRight,
+                    //           child: Container(
+                    //             height: 170,
+                    //             width: 130,
+                    //             decoration: BoxDecoration(
+                    //               borderRadius: BorderRadius.circular(10.0),
+                    //             ),
+                    //             child: ClipRRect(
+                    //               borderRadius: BorderRadius.circular(10.0),
+                    //               child: enableCamera
+                    //                   ? RTCVideoView(localRenderer,
+                    //                       key: forsmallView,
+                    //                       mirror: false,
+                    //                       objectFit: RTCVideoViewObjectFit
+                    //                           .RTCVideoViewObjectFitCover)
+                    //                   : Container(),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : Container(),
 
-                                // setState(() {
-                                //   _isCalling = false;
-                                // });
-                              },
+                    Container(
+                      padding: EdgeInsets.only(
+                        bottom: 56,
+                      ),
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          meidaType == MediaType.video
+                              ? Row(
+                                  children: [
+                                    GestureDetector(
+                                      child: !enableCamera
+                                          ? SvgPicture.asset(
+                                              'assets/video_off.svg')
+                                          : SvgPicture.asset(
+                                              'assets/video.svg'),
+                                      onTap: () {
+                                        setState(() {
+                                          enableCamera = !enableCamera;
+                                        });
+                                        signalingClient.audioVideoState(
+                                            audioFlag: switchMute ? 1 : 0,
+                                            videoFlag: enableCamera ? 1 : 0,
+                                            mcToken: registerRes["mcToken"]);
+                                        signalingClient
+                                            .enableCamera(enableCamera);
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    )
+                                  ],
+                                )
+                              : SizedBox(),
+
+                          GestureDetector(
+                            child: SvgPicture.asset(
+                              'assets/end.svg',
                             ),
+                            onTap: () {
+                              remoteVideoFlag = true;
+                              stopCall();
+                              // inCall = false;
 
-                            // SvgPicture.asset('assets/images/end.svg'),
+                              // setState(() {
+                              //   _isCalling = false;
+                              // });
+                            },
+                          ),
 
-                            SizedBox(width: 20),
-                            GestureDetector(
-                              child: !switchMute
-                                  ? SvgPicture.asset(
-                                      'assets/mute_microphone.svg')
-                                  : SvgPicture.asset('assets/microphone.svg'),
-                              onTap: () {
-                                final bool enabled = signalingClient.muteMic();
-                                print("this is enabled $enabled");
-                                setState(() {
-                                  switchMute = enabled;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ]),
-                  );
-      }),
-    );
+                          // SvgPicture.asset('assets/images/end.svg'),
+
+                          SizedBox(width: 20),
+                          GestureDetector(
+                            child: !switchMute
+                                ? SvgPicture.asset(
+                                    'assets/mute_microphone.svg')
+                                : SvgPicture.asset('assets/microphone.svg'),
+                            onTap: () {
+                              final bool enabled = signalingClient.muteMic();
+                              print("this is enabled $enabled");
+                              setState(() {
+                                switchMute = enabled;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  ]),
+                );
+   // });
   }
 
   Future<void> _showMyDialog(context) async {
