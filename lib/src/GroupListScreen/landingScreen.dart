@@ -171,6 +171,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           // broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": true, "micAudio": true ,};
                           print("i am here in public camera broadcast ");
                           broadcasttype = "camera";
+                             isMultiSession = false;
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -184,6 +185,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             !ismicAudiobuttonSelected &&
                             iscamerabuttonSelected &&
                             broadcast == 1) {
+                               isMultiSession = false;
                           broadcasttype = "camera";
                           widget.grouplistprovider
                               .handleGroupListState(ListStatus.Scussess);
@@ -194,6 +196,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             !iscamerabuttonSelected &&
                             broadcast == 0) {
                           broadcasttype = "appaudio";
+                             isMultiSession = false;
                           //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
                           print("this is app audio with public broadcast");
                           showDialog(
@@ -210,6 +213,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             !ismicAudiobuttonSelected &&
                             !iscamerabuttonSelected &&
                             broadcast == 1) {
+                               isMultiSession = false;
                           broadcasttype = "appaudio";
                           widget.grouplistprovider
                               .handleGroupListState(ListStatus.Scussess);
@@ -221,6 +225,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             !iscamerabuttonSelected &&
                             broadcast == 0) {
                           broadcasttype = "micaudio";
+                             isMultiSession = false;
                           //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
                           print("this is mic audio with public broadcast");
                           showDialog(
@@ -238,47 +243,51 @@ class _LandingScreenState extends State<LandingScreen> {
                             ismicAudiobuttonSelected &&
                             !iscamerabuttonSelected &&
                             broadcast == 1) {
+                               isMultiSession = false;
                           broadcasttype = "micaudio";
                           widget.grouplistprovider
                               .handleGroupListState(ListStatus.Scussess);
                           print("this is screen share with internal audio");
                          } 
-                       // else if (isAppAudiobuttonSelected &&
-                        //     !ismicAudiobuttonSelected &&
-                        //     iscamerabuttonSelected &&
-                        //     broadcast == 1) {
-                        //   broadcasttype = "appaudioandcamera";
-                        //   widget.grouplistprovider
-                        //       .handleGroupListState(ListStatus.Scussess);
-                        //   print(
-                        //       "this is screen share with app audio and camera");
-                        // }
-                        // // else if (isAppAudiobuttonSelected &&
-                        // //     !ismicAudiobuttonSelected &&
-                        // //     iscamerabuttonSelected &&
-                        // //     broadcast == 0) {
-                        // //   broadcasttype = "appaudioandcamera";
-                        // //   showDialog(
-                        // //       context: context,
-                        // //       builder: (BuildContext context) {
-                        // //         return StartBroadcastPopUp(
-                        // //           startCall: widget.startCall,
-                        // //           // broadcastObject: broadcastObject,
-                        // //         );
-                        // //       });
-                        // //   print(
-                        // //       "this is screen share with app audio and camera");
-                        // // }
-                        // else if (!isAppAudiobuttonSelected &&
-                        //     ismicAudiobuttonSelected &&
-                        //     iscamerabuttonSelected &&
-                        //     broadcast == 1) {
-                        //   broadcasttype = "micaudioandcamera";
-                        //   widget.grouplistprovider
-                        //       .handleGroupListState(ListStatus.Scussess);
-                        //   print(
-                        //       "this is screen share with app audio and camera");
-                        // } 
+                       else if (isAppAudiobuttonSelected &&
+                            !ismicAudiobuttonSelected &&
+                            iscamerabuttonSelected &&
+                            broadcast == 1) {
+                          broadcasttype = "appaudioandcamera";
+ isMultiSession = true;
+                          widget.grouplistprovider
+                              .handleGroupListState(ListStatus.Scussess);
+                          print(
+                              "this is screen share with app audio and camera");
+                        }
+                        else if (isAppAudiobuttonSelected &&
+                            !ismicAudiobuttonSelected &&
+                            iscamerabuttonSelected &&
+                            broadcast == 0) {
+                               isMultiSession = true;
+                          broadcasttype = "appaudioandcamera";
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return StartBroadcastPopUp(
+                                  startCall: widget.startCall,
+                                  // broadcastObject: broadcastObject,
+                                );
+                              });
+                          print(
+                              "this is screen share with app audio and camera");
+                        }
+                        else if (!isAppAudiobuttonSelected &&
+                            ismicAudiobuttonSelected &&
+                            iscamerabuttonSelected &&
+                            broadcast == 1) {
+                               isMultiSession = true;
+                          broadcasttype = "micaudioandcamera";
+                          widget.grouplistprovider
+                              .handleGroupListState(ListStatus.Scussess);
+                          print(
+                              "this is screen share with app audio and camera");
+                        } 
                         else {
                           print("i am here in else");
                         }

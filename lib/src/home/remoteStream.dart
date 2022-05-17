@@ -67,12 +67,15 @@ class _RemoteStreamState extends State<RemoteStream> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
+  return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10) // green as background color
+          ),
+      // borderRadius: BorderRadius.circular(10.0),
       child: RTCVideoView(this.widget.remoteRenderer,
           // key: forsmallView,
           mirror: false,
-          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
+          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitContain),
     );
   }
 }

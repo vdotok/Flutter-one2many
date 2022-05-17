@@ -75,6 +75,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:flutter_onetomany/src/GroupListScreen/landingScreen.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
 import 'package:flutter_onetomany/src/home/home.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -122,23 +123,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: IconButton(
-                      onPressed: 
-                      !isConnected
-                              ? (!isRegisteredAlready)
-                                  ? () {
-                                      // buildShowDialog(
-                                      //     context,
-                                      //     "No Internet Connection",
-                                      //     "Make sure your device has internet.");
-                                    }
-                                  : () {}
-                              : isRegisteredAlready
-                                  ? () {}:() {
-                        print("sjhjbfhjdj $isRegisteredAlready");
+                      onPressed: !isConnected
+                          ? (!isRegisteredAlready)
+                              ? () {
+                                  // buildShowDialog(
+                                  //     context,
+                                  //     "No Internet Connection",
+                                  //     "Make sure your device has internet.");
+                                }
+                              : () {}
+                          : isRegisteredAlready
+                              ? () {}
+                              : () {
+                                  print("sjhjbfhjdj $isRegisteredAlready");
 
-                        handlePress(groupProvider.groupListStatus);
-                        // Navigator.pushNamed(context, "/contactList");
-                      },
+                                  handlePress(groupProvider.groupListStatus);
+                                  // Navigator.pushNamed(context, "/contactList");
+                                },
                       icon: SvgPicture.asset(
                         'assets/checkmark.svg',
                       ),
@@ -189,6 +190,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: chatRoomColor),
                 onPressed: () {
+                  iscamerabuttonSelected = false;
+                  ismicAudiobuttonSelected = false;
+                  isAppAudiobuttonSelected = false;
                   groupProvider
                       .handleGroupListState(ListStatus.SelectBroadCast);
                 },
