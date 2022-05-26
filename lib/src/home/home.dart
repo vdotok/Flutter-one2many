@@ -4,7 +4,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_onetomany/noContactsScreen.dart';
 import 'package:flutter_onetomany/src/ContactListScreen/contactList.dart';
 import 'package:flutter_onetomany/src/GroupListScreen/groupListScreen.dart';
 import 'package:flutter_onetomany/src/GroupListScreen/landingScreen.dart';
@@ -15,6 +14,7 @@ import 'package:flutter_onetomany/src/core/models/contact.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
 import 'package:flutter_onetomany/src/home/CreateGroupPopUp.dart';
 import 'package:flutter_onetomany/src/home/remoteStream.dart';
+
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -27,6 +27,7 @@ import 'dart:io' show Platform;
 
 import '../../constant.dart';
 import '../../main.dart';
+import '../../noContactsScreen.dart';
 import '../core/models/contactList.dart';
 import '../core/providers/auth.dart';
 import '../core/providers/call_provider.dart';
@@ -269,10 +270,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     signalingClient.unRegisterSuccessfullyCallBack = () {
       _auth.logout();
     };
-    signalingClient.onAddparticpant = (
-      paticipantcount,
-      //calltype
-    ) {
+    signalingClient.onAddparticpant = (paticipantcount, calltype) {
       print("jdghfjgjsahudoieywe");
       //print("this is participant count ffffff $paticipantcount $calltype ");
       // setState(() {
@@ -309,12 +307,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
           isRegisteredAlready = false;
         });
-//          Future.delayed(Duration(seconds: 5), () {
-//           if (isConnected) {
-//           signalingClient.connect(project_id, _auth.completeAddress);
-//         }
-//   // Do something
-// });
+        //  Future.delayed(Duration(seconds: 5), () {
+        //   if (isConnected) {
+        //   signalingClient.connect(project_id, _auth.completeAddress);
+        // }
+        // Do something
+//});
       } else if (code == 401) {
         print("here in 401");
         setState(() {
@@ -421,21 +419,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       print("this is local stream id ${stream.id}");
       setState(() {
         localRenderer.srcObject = stream;
-        local = stream;
-        print("this is after rendering local stream objectttt $local");
       });
-
-      //   Map<String, dynamic> temp = {
-      //   "rtcVideoRenderer": new RTCVideoRenderer(),
-      //   "remoteVideoFlag": meidaType == MediaType.video ? 1 : 0,
-      //   "remoteAudioFlag": 1
-      // };
-      // await initRenderersRemote(temp["rtcVideoRenderer"]);
-      // setState(() {
-      //   temp["rtcVideoRenderer"].srcObject = stream;
-      //    rendererListWithRefID.add(temp);
-      // });
-      //  print("i am here in local stream list length ....${rendererListWithRefID.length}");
     };
     signalingClient.onRemoteStream = (stream, refid) async {
       print("this is home page on remote stream ${stream.id} $refid");
@@ -451,20 +435,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         temp["rtcVideoRenderer"].srcObject = stream;
         rendererListWithRefID.add(temp);
       });
-      // Map<String, dynamic> temp = {
-      //   "refID": refid,
-      //   "rtcVideoRenderer": new RTCVideoRenderer(),
-      //   "remoteVideoFlag": meidaType == MediaType.video ? 1 : 0,
-      //   "remoteAudioFlag": 1
-      // };
-      //   await initRenderersRemote(temp["rtcVideoRenderer"]);
-      //     rendererListWithRefID.add(temp);
 
       print("this is renderer list length ${rendererListWithRefID.length}");
       setState(() {
-        // temp["rtcVideoRenderer"].srcObject = stream;
-        //remoteRenderer.srcObject = stream;
-        remote = stream;
         print("this is remote ${stream.id}");
         if (isTimer == false) {
           _time = DateTime.now();
@@ -497,14 +470,44 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       });
     };
 
-    signalingClient.onParticipantsLeft = (refID, boolFlag, isReceive) async {
-      print("call callback on call left by participant");
-      if (typeOfCall == "one_to_many" && !boolFlag) {
-        participantcount = participantcount - 1;
+    signalingClient.onParticipantsLeft =
+        (refID, boolFlag, isMultiSession) async {
+      print(
+          "call callback on call hungUpBy User2 ${refID} ${rendererListWithRefID.length} ");
+      //     print("this is participant left reference id $refID");
+      // if (refID == authProvider.getUser.ref_id) {
+      // } else {
+      //   int index = rendererListWithRefID
+      //       .indexWhere((element) => element["refID"] == refID);
+      //   setState(() {
+      //     rendererListWithRefID.removeAt(index);
+      //   });
+      // }
+      if (isMultiSession) {
+        rendererListWithRefID.length = 1;
       }
-      // on participants left
+
       if (refID == _auth.getUser.ref_id) {
-      } else {}
+        print("here in user ref");
+      } else {
+        int index = rendererListWithRefID
+            .indexWhere((element) => element["refID"] == refID);
+
+        setState(() {
+          if (typeOfCall == "one_to_many" && !boolFlag) {
+            participantcount = participantcount - 1;
+          }
+
+          print("here in user ref2 $index");
+          if (index != -1) {
+            rendererListWithRefID.removeAt(index);
+          }
+
+          print(
+              "call callback on call left by participant4 ${rendererListWithRefID.length} ");
+          //v }
+        });
+      }
     };
     signalingClient.onReceiveCallFromUser = (mapData, isMultiSession) async {
       print("incomming call from user ${mapData}");
@@ -572,58 +575,59 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     signalingClient.onCallHungUpByUser = (isLocal) {
       print("call decliend by other user");
 
-      if (inPaused) {
-        print("here in paused");
-        signalingClient.closeSocket();
-      }
-      if(kIsWeb){
-
-      }
-     else{ if (Platform.isIOS) {
-        if (inInactive) {
-          print("here in paused");
-          signalingClient.closeSocket();
-        }
-      }}
+      // if (inPaused) {
+      //   print("here in paused");
+      //   signalingClient.closeSocket();
+      // }
+      // if (kIsWeb) {
+      // } else {
+      //   if (Platform.isIOS) {
+      //     if (inInactive) {
+      //       print("here in paused");
+      //       signalingClient.closeSocket();
+      //     }
+      //   }
+      // }
       if (_callticker != null) {
         _callticker.cancel();
         count = 0;
         iscallAcceptedbyuser = false;
       }
-      //here
-      // _callBloc.add(CallNewEvent());
+
       _callProvider.initial();
-      disposeAllRenderer();
+
       setState(() {
         Wakelock.toggle(enable: false);
         groupBroadcast = false;
         inCall = false;
         isRinging = false;
         isMultiSession = false;
-
+        _ticker.cancel();
         pressDuration = "";
-        if (isDDialer == true) {
-          localRenderer.srcObject = null;
-        }
+        isAppAudiobuttonSelected = false;
+        iscamerabuttonSelected = false;
+        ismicAudiobuttonSelected = false;
         isDDialer = false;
+        _time = null;
         // remoteRenderer.srcObject = null;
         // Navigator.pop(context);
       });
+      disposeAllRenderer();
       stopRinging();
     };
-    signalingClient.onCallDeclineByYou = () {
-      print("this is oncalldeclinebyyou");
-      //here
-      // _callBloc.add(CallNewEvent());
-      _callProvider.initial();
-      setState(() {
-        if (isDDialer == true) {
-          localRenderer.srcObject = null;
-        }
-        //  remoteRenderer.srcObject = null;
-      });
-      stopRinging();
-    };
+    // signalingClient.onCallDeclineByYou = () {
+    //   print("this is oncalldeclinebyyou");
+    //   //here
+    //   // _callBloc.add(CallNewEvent());
+    //   _callProvider.initial();
+    //   setState(() {
+    //     if (isDDialer == true) {
+    //       localRenderer.srcObject = null;
+    //     }
+    //     //  remoteRenderer.srcObject = null;
+    //   });
+    //   stopRinging();
+    // };
     signalingClient.onCallBusyCallback = () {
       print("hey i am here");
       _callProvider.initial();
@@ -631,27 +635,21 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 // Find the Scaffold in the widget tree and use it to show a SnackBar.
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      setState(() {
-        if (isDDialer == true) {
-          localRenderer.srcObject = null;
-        }
-        //  remoteRenderer.srcObject = null;
-      });
     };
-    signalingClient.onCallRejectedByUser = () {
-      print("call decliend by other user");
-      //here
-      // _callBloc.add(CallNewEvent());
-      stopRinging();
-      _callProvider.initial();
+    // signalingClient.onCallRejectedByUser = () {
+    //   print("call decliend by other user");
+    //   //here
+    //   // _callBloc.add(CallNewEvent());
+    //   stopRinging();
+    //   _callProvider.initial();
 
-      setState(() {
-        if (isDDialer == true) {
-          localRenderer.srcObject = null;
-        }
-        //  remoteRenderer.srcObject = null;
-      });
-    };
+    //   setState(() {
+    //     if (isDDialer == true) {
+    //       localRenderer.srcObject = null;
+    //     }
+    //     //  remoteRenderer.srcObject = null;
+    //   });
+    // };
     signalingClient.onReceiveUrlCallback = (url) {
       print("this is url from signalˆng client $url");
       publicbroadcasturl = url;
@@ -675,9 +673,15 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       _callProvider.callStart();
     };
     signalingClient.onAudioVideoStateInfo = (audioFlag, videoFlag, refID) {
+      print("call callback on call audioVideo status $audioFlag, $videoFlag");
+      int index = rendererListWithRefID
+          .indexWhere((element) => element["refID"] == refID);
+      print("this is index $index");
       setState(() {
-        remoteVideoFlag = videoFlag == 0 ? false : true;
-        remoteAudioFlag = audioFlag == 0 ? false : true;
+        if (index != -1) {
+          rendererListWithRefID[index]["remoteVideoFlag"] = videoFlag;
+          rendererListWithRefID[index]["remoteAudioFlag"] = audioFlag;
+        } else {}
       });
     };
   }
@@ -697,15 +701,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           //     //signalingClient.sendPing();
           signalingClient.sendPing(registerRes["mcToken"]);
         }
-        //   if (_auth.loggedInStatus == Status.LoggedOut) {
-        //   } else {
-        //     //signalingClient.sendPing();
-
-        // print("here in resume");
-        //       signalingClient.connect(project_id, _auth.completeAddress);
-        //       signalingClient.register(_auth.getUser.toJson(), project_id);
-
-        //   }
 
         break;
       case AppLifecycleState.inactive:
@@ -859,11 +854,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     // if (_localStream != null) {
     //here
     // _callBloc.add(CallDialEvent());
-    _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
-    print("here in start call");
-    if (to != null) {
+     if (to != null) {
       _callProvider.callDial();
     }
+    _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+    print("here in start call");
+   
 
     // }
   }
@@ -909,7 +905,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     for (int i = 0; i < rendererListWithRefID.length; i++) {
       // if (i == 0) {
       print("this is list length $i....${rendererListWithRefID.length}");
-      rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
+       rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
+     // rendererListWithRefID[i].clear();
       // } else
       // await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
 
@@ -919,33 +916,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       rendererListWithRefID.removeRange(0, (rendererListWithRefID.length));
     }
     print("this is list length....dddd${rendererListWithRefID.length}");
-
-    //  print(" i am here in dispose renderer  ");
-    //  if(rendererListWithRefID.length!=0){
-
-    //    await rendererListWithRefID[0]["rtcVideoRenderer"].dispose();
-    //    await rendererListWithRefID[1]["rtcVideoRenderer"].dispose();
-    //    rendererListWithRefID.removeAt(1);
-    //    rendererListWithRefID.removeAt(0);
-    //     print("this is renderlist length    ${rendererListWithRefID.length}");
-    //    rendererListWithRefID=[];
-    //  }
-
-    //   if (i == 0) {
-    //     rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
-    //   } else
-    //     await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
-    // }
-    // if (rendererListWithRefID.length > 1) {
-    //   rendererListWithRefID.removeRange(1, (rendererListWithRefID.length));
-    //  }
   }
 
   stopRinging() {
     if (kIsWeb) {
     } else {
       print("this is on rejected ");
-      startRinging();
+      // startRinging();
       vibrationList.clear();
       // });
       Vibration.cancel();
@@ -1057,16 +1034,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   dispose() {
-    // localRenderer.dispose();
-    // remoteRenderer.dispose();
-    if (_ticker != null) {
-      _ticker.cancel();
-    }
-    // FlutterRingtonePlayer.stop();
-    // Vibration.cancel();
-    // sdpController.dispose();
     print("i am here in disposeeeeeee ");
-    //signalingClient.appDetached();
+
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -1147,15 +1116,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       _ticker.cancel();
     }
 
-    //disposeAllRenderer();
     setState(() {
       ispublicbroadcast = false;
 
       inCall = false;
       pressDuration = "";
-      if (isDDialer == true) {
-        localRenderer.srcObject = null;
-      }
+
       isDDialer = false;
       // remoteRenderer.srcObject = null;
     });
@@ -1282,6 +1248,60 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   Scaffold callReceive() {
+    // return Scaffold(
+    //      body: Stack(
+    //                 children:<Widget>[ Container(
+    //          height: 788,
+    //          width:849,
+    //          color:Colors.blue,
+    //     child: Text("receiber screen")),
+
+    //     GestureDetector(
+    //             child: SvgPicture.asset(
+    //               'assets/end.svg',
+    //             ),
+    //             onTap: () {
+    //               stopRinging();
+    //               signalingClient.onDeclineCall(
+    //                   _auth.getUser.ref_id, registerRes["mcToken"]);
+
+    //               // _callBloc.add(CallNewEvent());
+    //               _callProvider.initial();
+    //               //  inCall = false;
+    //               // signalingClient.onDeclineCall(widget.registerUser);
+    //               // setState(() {
+    //               //   _isCalling = false;
+    //               // });
+    //             },
+    //           ),
+    //           SizedBox(width: 64),
+    //           GestureDetector(
+    //             child: SvgPicture.asset(
+    //               'assets/Accept.svg',
+    //             ),
+    //             onTap: () {
+    //               print("this is pressed accept");
+    //               stopRinging();
+    //               signalingClient.createAnswer(incomingfrom);
+
+    //               // setState(() {
+    //               //   inCall = true;
+    //               // });
+
+    //               // setState(() {
+    //               //   _isCalling = true;
+    //               //   incomingfrom = null;
+    //               // });
+    //               // FlutterRingtonePlayer.stop();
+    //               // Vibration.cancel();
+    //             },
+    //           ),
+    //                 ],
+                    
+                    
+                    
+    //                 )
+    // );
     return Scaffold(body: OrientationBuilder(builder: (context, orientation) {
       return Stack(children: <Widget>[
         kIsWeb
@@ -1289,11 +1309,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             : meidaType == MediaType.video
                 ? Container(
                     /////////////////////////////this is code comment for screen
-                    // child: RTCVideoView(localRenderer,
-                    //     key: forlargView,
-                    //     mirror: false,
-                    //     objectFit:
-                    //         RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
+                    child: RTCVideoView(localRenderer,
+                        key: forlargView,
+                        mirror: false,
+          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitContain),
                     )
                 : Container(
                     decoration: BoxDecoration(
@@ -1438,14 +1457,31 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   Scaffold callDial() {
-    // return Scaffold(
-    //       body: Container(height: 70,
-    //       width:70,
-    //     child: Text("hello")),
-    // );
+   
     print("remoteVideoFlag is $localRenderer");
     print("this is call to in call dial111111 $callTo");
     print("ths is width cjvddddddvv $meidaType");
+    // return Scaffold(
+    //      body: Stack(
+    //        children: [
+    //          Container(
+    //            height: 788,
+    //            width:849,
+    //            color:Colors.black,
+    //     child: Text("dialer screen")),
+    //     GestureDetector(
+    //             child: SvgPicture.asset(
+    //               'assets/end.svg',
+    //             ),
+    //             onTap: () {
+    //               signalingClient.onCancelbytheCaller(registerRes["mcToken"]);
+    //               _callProvider.initial();
+    //               // inCall = false;
+    //             },
+    //           ),
+    //        ],
+    //      ),
+    // );
     return Scaffold(
       body: OrientationBuilder(builder: (context, orientation) {
         return Stack(
@@ -1487,16 +1523,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     //     ],
                     // ):Container()
                     Container(
-                        // color: Colors.red,
-                        //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                        //////////////////////////////////////////////this is code comment in for camera
-                        // width: MediaQuery.of(context).size.width,
-                        // height: MediaQuery.of(context).size.height,
-                        // child: RTCVideoView(localRenderer,
-                        //     key: forDialView,
-                        //     mirror: false,
-                        //     objectFit: RTCVideoViewObjectFit
-                        //         .RTCVideoViewObjectFitCover)
+                       
+                        child: RTCVideoView(localRenderer,
+                            key: forDialView,
+                            mirror: false,
+          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitContain)
                         )
                     : Container(
                         decoration: BoxDecoration(
@@ -1591,8 +1622,39 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   ///.//////////////////
   Container callStart() {
     //  inCall = true;
-    print("this is media type $isMultiSession $broadcasttype $pressDuration ");
+    print("this is media type ${rendererListWithRefID.length}");
+    // return Container(
+    //     color: Colors.red, height: 350, width: 400, 
+        
+        
+        
+    //     child: Stack(
+    //       children: [
+    //         Text("idfyguurt"),
+    //            GestureDetector(
+    //                 child: SvgPicture.asset(
+    //                   'assets/end.svg',
+    //                 ),
+    //                 onTap: () {
+    //                   remoteVideoFlag = true;
+    //                   stopCall();
+    //                   setState(() {
+    //                     isAppAudiobuttonSelected = false;
+    //                     iscamerabuttonSelected = false;
+    //                     ismicAudiobuttonSelected = false;
+    //                     participantcount = 0;
+    //                   });
+    //                   // inCall = false;
 
+    //                   // setState(() {
+    //                   //   _isCalling = false;
+    //                   // });
+    //                 },
+    //               ),
+
+
+    //       ],
+    //     ));
     return ispublicbroadcast
         ? Container(
             child: Stack(children: <Widget>[
@@ -1751,7 +1813,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     ? SizedBox()
                     : Center(
                         child: Text(
-                          '''You are sharing your 
+                          '''You are sharing your
 screen at the moment..''',
                           style: TextStyle(
                               fontSize: 20,
@@ -1823,97 +1885,100 @@ screen at the moment..''',
                   // meidaType == MediaType.video
                   //     ?
 
-                  isMultiSession
-                      ? Row(
-                          children: [
-                            GestureDetector(
-                                child: !enableCamera2
-                                    ? SvgPicture.asset(
-                                        'assets/screenshareon.svg')
-                                    : SvgPicture.asset(
-                                        'assets/screenshareoff.svg'),
-                                onTap: participantcount >= 1
-                                    ? () {
-                                        setState(() {
-                                          enableCamera2 = !enableCamera2;
-                                        });
-                                        signalingClient.audioVideoState(
-                                            audioFlag: switchMute ? 1 : 0,
-                                            videoFlag: enableCamera2 ? 1 : 0,
-                                            mcToken: registerRes["mcToken"]);
-                                        signalingClient
-                                            .enableScreen(enableCamera2);
-                                      }
-                                    : null),
+                isMultiSession
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                          child: !enableCamera2
+                                              ? SvgPicture.asset(
+                                                  'assets/screenshareon.svg')
+                                              : SvgPicture.asset(
+                                                  'assets/screenshareoff.svg'),
+                                          onTap: participantcount >= 1
+                                              ? () {
+                                                  setState(() {
+                                                    print("9586706");
+                                                    enableCamera2 =
+                                                        !enableCamera2;
+                                                  });
+                                                  signalingClient
+                                                      .audioVideoState(
+                                                          audioFlag: switchMute
+                                                              ? 1
+                                                              : 0,
+                                                          videoFlag:
+                                                              enableCamera2
+                                                                  ? 1
+                                                                  : 0,
+                                                          mcToken: registerRes[
+                                                              "mcToken"]);
+                                                  signalingClient.enableScreen(
+                                                      enableCamera2);
+                                                }
+                                              : null),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      GestureDetector(
+                                          child: !enableCamera
+                                              ? SvgPicture.asset(
+                                                  'assets/video_off.svg')
+                                              : SvgPicture.asset(
+                                                  'assets/video.svg'),
+                                          onTap: participantcount >= 1
+                                              ? () {
+                                                  print("jhdgutgyurer");
+                                                  setState(() {
+                                                    enableCamera =
+                                                        !enableCamera;
+                                                  });
+                                                  signalingClient
+                                                      .audioVideoState(
+                                                          audioFlag: switchMute
+                                                              ? 1
+                                                              : 0,
+                                                          videoFlag:
+                                                              enableCamera
+                                                                  ? 1
+                                                                  : 0,
+                                                          mcToken: registerRes[
+                                                              "mcToken"]);
+                                                  signalingClient.enableCamera(
+                                                      enableCamera);
+                                                }
+                                              : null)
+                                    ],
+                                  )
+                                : GestureDetector(
+                                    child: !enableCamera
+                                        ? broadcasttype == "camera"
+                                            ? SvgPicture.asset(
+                                                'assets/video_off.svg')
+                                            : SvgPicture.asset(
+                                                'assets/screenshareon.svg')
+                                        : broadcasttype == "camera"
+                                            ? SvgPicture.asset(
+                                                'assets/video.svg')
+                                            : SvgPicture.asset(
+                                                'assets/screenshareoff.svg'),
+                                    onTap: participantcount >= 1
+                                        ? () {
+                                            setState(() {
+                                              enableCamera = !enableCamera;
+                                            });
+                                            signalingClient.audioVideoState(
+                                                audioFlag: switchMute ? 1 : 0,
+                                                videoFlag: enableCamera ? 1 : 0,
+                                                mcToken:
+                                                    registerRes["mcToken"]);
+                                            signalingClient
+                                                .enableCamera(enableCamera);
+                                          }
+                                        : null),
                             SizedBox(
                               width: 10,
                             ),
-                            GestureDetector(
-                                child: !enableCamera
-                                    ? SvgPicture.asset('assets/video_off.svg')
-                                    : SvgPicture.asset('assets/video.svg'),
-                                onTap: participantcount >= 1
-                                    ? () {
-                                        setState(() {
-                                          enableCamera = !enableCamera;
-                                        });
-                                        signalingClient.audioVideoState(
-                                            audioFlag: switchMute ? 1 : 0,
-                                            videoFlag: enableCamera ? 1 : 0,
-                                            mcToken: registerRes["mcToken"]);
-                                        signalingClient
-                                            .enableCamera(enableCamera);
-                                      }
-                                    : null)
-                          ],
-                        )
-                      : GestureDetector(
-                          child: enableCamera2
-                              ? SvgPicture.asset('assets/screenshareoff.svg')
-                              : SvgPicture.asset('assets/screenshareon.svg'),
-                          onTap: participantcount >= 1
-                              ? () {
-                                  setState(() {
-                                    print("hdgfhghjdsagss");
-
-                                    enableCamera2 = !enableCamera2;
-                                  });
-                                }
-                              : null),
-                  GestureDetector(
-                      child: broadcasttype == "camera"
-                          ? !enableCamera
-                              ? SvgPicture.asset('assets/video_off.svg')
-                              : SvgPicture.asset('assets/video.svg')
-                          : enableCamera2
-                              ? SvgPicture.asset('assets/screenshareoff.svg')
-                              : SvgPicture.asset('assets/screenshareon.svg'),
-                      onTap: participantcount >= 1
-                          ? () {
-                              setState(() {
-                                print("hdgfhghjdsagss");
-                                broadcasttype == "camera"
-                                    ? enableCamera = !enableCamera
-                                    : enableCamera2 = !enableCamera2;
-                              });
-                              signalingClient.audioVideoState(
-                                  audioFlag: switchMute ? 1 : 0,
-                                  videoFlag: broadcasttype == "camera"
-                                      ? enableCamera
-                                          ? 1
-                                          : 0
-                                      : enableCamera2
-                                          ? 1
-                                          : 0,
-                                  mcToken: registerRes["mcToken"]);
-                              broadcasttype == "camera"
-                                  ? signalingClient.enableCamera(enableCamera)
-                                  : signalingClient.enableScreen(enableCamera2);
-                            }
-                          : null),
-                  SizedBox(
-                    width: 10,
-                  ),
 
                   // : SizedBox(),
 
@@ -1940,111 +2005,137 @@ screen at the moment..''',
 
                   // SvgPicture.asset('assets/images/end.svg'),
 
-                  SizedBox(width: 10),
-                  isMultiSession
-                      ? broadcasttype == "appaudioandcamera"
-                          ? Row(
-                              children: [
-                                GestureDetector(
-                                    child: !switchMute2
-                                        ? SvgPicture.asset(
-                                            'assets/appaudioon.svg')
-                                        : SvgPicture.asset(
-                                            'assets/appaudiooff.svg'),
-                                    onTap: participantcount >= 1
-                                        ? () {
-                                            final bool enabled = signalingClient
-                                                .muteInternalMic();
-                                            print(
-                                                "this is enabled3236 $enabled");
-                                            setState(() {
-                                              switchMute2 = enabled;
-                                            });
-                                          }
-                                        : null),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                GestureDetector(
+                 SizedBox(width: 10),
+                            isMultiSession
+                                ? broadcasttype == "appaudioandcamera"
+                                    ? Row(
+                                        children: [
+                                          GestureDetector(
+                                              child: !switchMute2
+                                                  ? SvgPicture.asset(
+                                                      'assets/appaudioon.svg')
+                                                  : SvgPicture.asset(
+                                                      'assets/appaudiooff.svg'),
+                                              onTap: participantcount >= 1
+                                                  ? () {
+                                                      final bool enabled =
+                                                          signalingClient
+                                                              .muteInternalMic();
+                                                      print(
+                                                          "this is enabled3236 $enabled");
+                                                      setState(() {
+                                                        switchMute2 = enabled;
+                                                      });
+                                                    }
+                                                  : null),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                              child: !switchMute
+                                                  ? SvgPicture.asset(
+                                                      'assets/mute_microphone.svg')
+                                                  : SvgPicture.asset(
+                                                      'assets/microphone.svg'),
+                                              onTap: participantcount >= 1
+                                                  ? () {
+                                                      final bool enabled =
+                                                          signalingClient
+                                                              .muteMic();
+                                                      print(
+                                                          "this is enabled7465 $enabled");
+                                                      setState(() {
+                                                        switchMute = enabled;
+                                                      });
+                                                    }
+                                                  : null)
+                                        ],
+                                      )
+                                    : GestureDetector(
+                                        child: !switchMute
+                                            ? SvgPicture.asset(
+                                                'assets/mute_microphone.svg')
+                                            : SvgPicture.asset(
+                                                'assets/microphone.svg'),
+                                        onTap: participantcount >= 1
+                                            ? () {
+                                                final bool enabled =
+                                                    signalingClient.muteMic();
+                                                print(
+                                                    "this is enabled-000 $enabled");
+                                                setState(() {
+                                                  switchMute = enabled;
+                                                });
+                                              }
+                                            : null)
+                                : GestureDetector(
                                     child: !switchMute
-                                        ? SvgPicture.asset(
-                                            'assets/mute_microphone.svg')
-                                        : SvgPicture.asset(
-                                            'assets/microphone.svg'),
+                                        ? broadcasttype == "camera" ||
+                                                broadcasttype == "micaudio"
+                                            ? SvgPicture.asset(
+                                                'assets/mute_microphone.svg')
+                                            : SvgPicture.asset(
+                                                'assets/appaudioon.svg')
+                                        : broadcasttype == "camera" ||
+                                                broadcasttype == "micaudio"
+                                            ? SvgPicture.asset(
+                                                'assets/microphone.svg')
+                                            : SvgPicture.asset(
+                                                'assets/appaudiooff.svg'),
                                     onTap: participantcount >= 1
                                         ? () {
+                                            // print("this is enabled9797 $enabled");
                                             final bool enabled =
                                                 signalingClient.muteMic();
                                             print(
-                                                "this is enabled7465 $enabled");
+                                                "this is enabled9797 $enabled");
                                             setState(() {
                                               switchMute = enabled;
                                             });
                                           }
-                                        : null)
-                              ],
-                            )
-                          : GestureDetector(
-                              child: !switchMute
-                                  ? SvgPicture.asset(
-                                      'assets/mute_microphone.svg')
-                                  : SvgPicture.asset('assets/microphone.svg'),
-                              onTap: participantcount >= 1
-                                  ? () {
-                                      final bool enabled =
-                                          signalingClient.muteMic();
-                                      print("this is enabled-000 $enabled");
-                                      setState(() {
-                                        switchMute = enabled;
-                                      });
-                                    }
-                                  : null)
-                      : GestureDetector(
-                          child: broadcasttype == "camera" ||
-                                  broadcasttype == "micaudio"
-                              ? !switchMute
-                                  ? SvgPicture.asset(
-                                      'assets/mute_microphone.svg')
-                                  : SvgPicture.asset('assets/microphone.svg')
-                              : !switchMute2
-                                  ? SvgPicture.asset('assets/appaudioon.svg')
-                                  : SvgPicture.asset('assets/appaudiooff.svg'),
-                          onTap: participantcount >= 1
-                              ? () {
-                                  bool enabled;
-                                  if (broadcasttype == "camera" ||
-                                      broadcasttype == "micaudio") {
-                                    enabled = signalingClient.muteMic();
-                                  } else {
-                                    enabled = signalingClient.muteInternalMic();
-                                    print("98yrei $enabled");
-                                  }
-                                  print("this is enabled $enabled");
-                                  setState(() {
-                                    broadcasttype == "camera" ||
-                                            broadcasttype == "micaudio"
-                                        ? switchMute = enabled
-                                        : switchMute2 = enabled;
-                                  });
-                                }
-                              : null),
+                                        : null),
                 ]))
           ]))
         //public broad cast case enddddd
         : isDDialer == false
-            ? Container(
-                child: Stack(children: <Widget>[
-                  meidaType == MediaType.video
-                      ? remoteVideoFlag
-                          ? rendererListWithRefID.length == 1
-                              ? RemoteStream(
-                                  remoteRenderer: rendererListWithRefID[0]
-                                      ["rtcVideoRenderer"])
-                              : rendererListWithRefID.length == 2
+            ? rendererListWithRefID.length == 0
+                ? Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(chatRoomColor),
+                    ),
+                  )
+                : Container(
+                    child: Stack(children: <Widget>[
+                      meidaType == MediaType.video
+                          ? remoteVideoFlag
+                              ? rendererListWithRefID.length == 1
                                   ? RemoteStream(
-                                      remoteRenderer: rendererListWithRefID[1]
+                                      remoteRenderer: rendererListWithRefID[0]
                                           ["rtcVideoRenderer"])
-                                  : Container()
+                                  : rendererListWithRefID.length == 2
+                                      ? RemoteStream(
+                                          remoteRenderer:
+                                              rendererListWithRefID[1]
+                                                  ["rtcVideoRenderer"])
+                                      : Container()
+                              : Container(
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                    colors: [
+                                      backgroundAudioCallDark,
+                                      backgroundAudioCallLight,
+                                      backgroundAudioCallLight,
+                                      backgroundAudioCallLight,
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment(0.0, 0.0),
+                                  )),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      'assets/userIconCall.svg',
+                                    ),
+                                  ),
+                                )
                           : Container(
                               decoration: BoxDecoration(
                                   gradient: LinearGradient(
@@ -2062,130 +2153,120 @@ screen at the moment..''',
                                   'assets/userIconCall.svg',
                                 ),
                               ),
-                            )
-                      : Container(
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                            colors: [
-                              backgroundAudioCallDark,
-                              backgroundAudioCallLight,
-                              backgroundAudioCallLight,
-                              backgroundAudioCallLight,
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment(0.0, 0.0),
-                          )),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              'assets/userIconCall.svg',
                             ),
-                          ),
+
+                      Container(
+                          // color: Colors.red,
+                          child: Align(
+                        alignment: Alignment.topRight,
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(
+                                  0.0, 120.33, 20, 27),
+                              child: GestureDetector(
+                                child: !switchSpeaker
+                                    ? SvgPicture.asset('assets/VolumnOn.svg')
+                                    : SvgPicture.asset('assets/VolumeOff.svg'),
+                                onTap: () {
+                                  signalingClient.switchSpeaker(switchSpeaker);
+                                  setState(() {
+                                    switchSpeaker = !switchSpeaker;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
+                      )),
 
-                  Container(
-                      // color: Colors.red,
-                      child: Align(
-                    alignment: Alignment.topRight,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 120.33, 20, 27),
-                          child: GestureDetector(
-                            child: !switchSpeaker
-                                ? SvgPicture.asset('assets/VolumnOn.svg')
-                                : SvgPicture.asset('assets/VolumeOff.svg'),
-                            onTap: () {
-                              signalingClient.switchSpeaker(switchSpeaker);
-                              setState(() {
-                                switchSpeaker = !switchSpeaker;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
+                      //),
 
-                  //),
+                      // /////////////// this is local stream
 
-                  // /////////////// this is local stream
-
-                  rendererListWithRefID.length == 2
-                      ? GestureDetector(
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                right: right,
-                                bottom: bottom,
-                                // top: top,
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Container(
-                                    height: 170,
-                                    width: 130,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              10) // green as background color
-                                          ),
-                                      child: enableCamera
-                                          ? RemoteStream(
-                                              remoteRenderer:
-                                                  rendererListWithRefID[0]
-                                                      ["rtcVideoRenderer"])
-                                          : Container(color: Colors.pink),
+                      rendererListWithRefID.length == 2
+                          ? GestureDetector(
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    right: right,
+                                    bottom: bottom,
+                                    // top: top,
+                                    child: Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        height: 170,
+                                        width: 130,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(
+                                                  10) // green as background color
+                                              ),
+                                          child: enableCamera
+                                              ? RemoteStream(
+                                                  remoteRenderer:
+                                                      rendererListWithRefID[0]
+                                                          ["rtcVideoRenderer"])
+                                              : Container(color: Colors.white),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          onVerticalDragUpdate: (DragUpdateDetails dd) {
-                            print(dd);
-                            setState(() {
-                              bottom = dd.localPosition.dy;
-                              right = dd.localPosition.dx;
-                            });
-                          },
-                        )
-                      : Container(),
+                              onVerticalDragUpdate: (DragUpdateDetails dd) {
+                                print(dd);
+                                setState(() {
+                                  bottom = dd.localPosition.dy;
+                                  right = dd.localPosition.dx;
+                                });
+                              },
+                            )
+                          : Container(),
 
-                  Container(
-                    padding: EdgeInsets.only(
-                      bottom: 56,
-                    ),
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          child: SvgPicture.asset(
-                            'assets/end.svg',
-                          ),
-                          onTap: () {
-                            remoteVideoFlag = true;
-                            stopCall();
-                          },
+                      Container(
+                        padding: EdgeInsets.only(
+                          bottom: 56,
                         ),
-                      ],
-                    ),
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              child: SvgPicture.asset(
+                                'assets/end.svg',
+                              ),
+                              onTap: () {
+                                remoteVideoFlag = true;
+                                stopCall();
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ]),
                   )
-                ]),
-              )
             : Container(
                 child: Stack(children: <Widget>[
                   meidaType == MediaType.video
                       ? enableCamera
-                          ? RTCVideoView(localRenderer,
-                              key: forsmallView,
-                              mirror: false,
-                              objectFit: RTCVideoViewObjectFit
-                                  .RTCVideoViewObjectFitContain)
-                          : Container(color: Colors.red)
+                          ? RemoteStream(remoteRenderer: localRenderer)
+
+                          // RTCVideoView(localRenderer,
+                          //     key: forsmallView,
+                          //     mirror: false,
+                          //     objectFit: RTCVideoViewObjectFit
+                          //         .RTCVideoViewObjectFitContain)
+                          // RTCVideoView(localRenderer,
+                          //     key: forsmallView,
+                          //     mirror: false,
+                          //     objectFit: RTCVideoViewObjectFit
+                          //         .RTCVideoViewObjectFitContain)
+                          : Container(color: Colors.white)
                       : Container(
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -2222,19 +2303,19 @@ screen at the moment..''',
                               fontStyle: FontStyle.normal,
                               color: darkBlackColor),
                         ),
-                          Container(
-                               // padding: EdgeInsets.only(left: 50),
-                                child: Text(
-                                  'A Group',
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      decoration: TextDecoration.none,
-                                      fontFamily: primaryFontFamily,
-                                      fontWeight: FontWeight.w700,
-                                      fontStyle: FontStyle.normal,
-                                      color: darkBlackColor),
-                                ),
-                              ),
+                        Container(
+                          // padding: EdgeInsets.only(left: 50),
+                          child: Text(
+                            'A Group',
+                            style: TextStyle(
+                                fontSize: 24,
+                                decoration: TextDecoration.none,
+                                fontFamily: primaryFontFamily,
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.normal,
+                                color: darkBlackColor),
+                          ),
+                        ),
                         Container(
                           padding: EdgeInsets.only(
                             right: 25,
@@ -2278,26 +2359,27 @@ screen at the moment..''',
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                     (broadcasttype == "camera" ||
-                                                  broadcasttype ==
-                                                      "appaudioandcamera" ||
-                                                  broadcasttype ==
-                                                      "micaudioandcamera")?
-                                    Container(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0.0, 120.33, 20, 27),
-                                      child: GestureDetector(
-                                        child: SvgPicture.asset(
-                                          'assets/switch_camera.svg',
-                                        ),
-                                        onTap: () {
-                                          signalingClient.switchCamera();
-                                        },
-                                      ),
-                                    ):Container(
-                                                 padding: const EdgeInsets.fromLTRB(
-                                          0.0, 120.33, 20, 27),
-                                                ),
+                                    (broadcasttype == "camera" ||
+                                            broadcasttype ==
+                                                "appaudioandcamera" ||
+                                            broadcasttype ==
+                                                "micaudioandcamera")
+                                        ? Container(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0.0, 120.33, 20, 27),
+                                            child: GestureDetector(
+                                              child: SvgPicture.asset(
+                                                'assets/switch_camera.svg',
+                                              ),
+                                              onTap: () {
+                                                signalingClient.switchCamera();
+                                              },
+                                            ),
+                                          )
+                                        : Container(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0.0, 120.33, 20, 27),
+                                          ),
 
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -2381,6 +2463,7 @@ screen at the moment..''',
                                           onTap: participantcount >= 1
                                               ? () {
                                                   setState(() {
+                                                    print("9586706");
                                                     enableCamera2 =
                                                         !enableCamera2;
                                                   });
@@ -2410,6 +2493,7 @@ screen at the moment..''',
                                                   'assets/video.svg'),
                                           onTap: participantcount >= 1
                                               ? () {
+                                                  print("jhdgutgyurer");
                                                   setState(() {
                                                     enableCamera =
                                                         !enableCamera;
@@ -2432,43 +2516,29 @@ screen at the moment..''',
                                     ],
                                   )
                                 : GestureDetector(
-                                    child: broadcasttype == "camera"
-                                        ? !enableCamera
+                                    child: !enableCamera
+                                        ? broadcasttype == "camera"
                                             ? SvgPicture.asset(
                                                 'assets/video_off.svg')
                                             : SvgPicture.asset(
-                                                'assets/video.svg')
-                                        : enableCamera2
+                                                'assets/screenshareon.svg')
+                                        : broadcasttype == "camera"
                                             ? SvgPicture.asset(
-                                                'assets/screenshareoff.svg')
+                                                'assets/video.svg')
                                             : SvgPicture.asset(
-                                                'assets/screenshareon.svg'),
+                                                'assets/screenshareoff.svg'),
                                     onTap: participantcount >= 1
                                         ? () {
                                             setState(() {
-                                              print("hdgfhghjdsagss");
-                                              broadcasttype == "camera"
-                                                  ? enableCamera = !enableCamera
-                                                  : enableCamera2 =
-                                                      !enableCamera2;
+                                              enableCamera = !enableCamera;
                                             });
                                             signalingClient.audioVideoState(
                                                 audioFlag: switchMute ? 1 : 0,
-                                                videoFlag:
-                                                    broadcasttype == "camera"
-                                                        ? enableCamera
-                                                            ? 1
-                                                            : 0
-                                                        : enableCamera2
-                                                            ? 1
-                                                            : 0,
+                                                videoFlag: enableCamera ? 1 : 0,
                                                 mcToken:
                                                     registerRes["mcToken"]);
-                                            broadcasttype == "camera"
-                                                ? signalingClient
-                                                    .enableCamera(enableCamera)
-                                                : signalingClient.enableScreen(
-                                                    enableCamera2);
+                                            signalingClient
+                                                .enableCamera(enableCamera);
                                           }
                                         : null),
                             SizedBox(
@@ -2563,40 +2633,28 @@ screen at the moment..''',
                                               }
                                             : null)
                                 : GestureDetector(
-                                    child: broadcasttype == "camera" ||
-                                            broadcasttype == "micaudio"
-                                        ? !switchMute
+                                    child: !switchMute
+                                        ? broadcasttype == "camera" ||
+                                                broadcasttype == "micaudio"
                                             ? SvgPicture.asset(
                                                 'assets/mute_microphone.svg')
                                             : SvgPicture.asset(
-                                                'assets/microphone.svg')
-                                        : !switchMute2
-                                            ? SvgPicture.asset(
                                                 'assets/appaudioon.svg')
+                                        : broadcasttype == "camera" ||
+                                                broadcasttype == "micaudio"
+                                            ? SvgPicture.asset(
+                                                'assets/microphone.svg')
                                             : SvgPicture.asset(
                                                 'assets/appaudiooff.svg'),
                                     onTap: participantcount >= 1
                                         ? () {
+                                            // print("this is enabled9797 $enabled");
+                                            final bool enabled =
+                                                signalingClient.muteMic();
                                             print(
-                                                "0000724647364 ${switchMute} ${switchMute2}");
-                                            bool enabled;
-                                            if (broadcasttype == "camera" ||
-                                                broadcasttype == "micaudio") {
-                                              enabled =
-                                                  signalingClient.muteMic();
-                                            } else {
-                                              // print("hfhfgdgfu");
-                                              enabled = signalingClient
-                                                  .muteInternalMic();
-                                              print("hfhfgdgfu $enabled");
-                                            }
-                                            print("this is enabled $enabled");
+                                                "this is enabled9797 $enabled");
                                             setState(() {
-                                              broadcasttype == "camera" ||
-                                                      broadcasttype ==
-                                                          "micaudio"
-                                                  ? switchMute = enabled
-                                                  : switchMute2 = enabled;
+                                              switchMute = enabled;
                                             });
                                           }
                                         : null),

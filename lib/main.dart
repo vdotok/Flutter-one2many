@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_onetomany/src/core/providers/call_provider.dart';
-import 'package:flutter_onetomany/src/core/providers/contact_provider.dart';
-import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
+
 import 'package:vdotok_stream/vdotok_stream.dart';
 import 'src/core/providers/auth.dart';
+import 'src/core/providers/call_provider.dart';
+import 'src/core/providers/contact_provider.dart';
+import 'src/core/providers/groupListProvider.dart';
 import 'src/home/homeIndex.dart';
 import 'src/login/SignInScreen.dart';
 
@@ -73,8 +74,8 @@ class _MyAppState extends State<MyApp> {
               return HomeIndex();
               return Test();
             } else
-              return SignInScreen();
-            return Test();
+               return SignInScreen();
+              return Test();
           },
         ),
       ),
@@ -131,12 +132,12 @@ class _TestState extends State<Test> {
   void initState() {
     // TODO: implement initState
 
-    // initRenderers();
+    initRenderers();
 
     signalingClient = SignalingClient.instance;
     // signalingClient.methodInvoke();
     super.initState();
-    initRenderers();
+    // initRenderers();
 
     signalingClient?.onLocalStream = (stream) {
       print("this is local stream ${stream}");
@@ -171,16 +172,20 @@ class _TestState extends State<Test> {
             Container(
               width: 200,
               height: 200,
-              child: _localRenderer.srcObject == null
+              child: _localRenderer == null
                   ? Text("camera")
-                  : RTCVideoView(_localRenderer, mirror: false),
+                  : _localRenderer.srcObject == null
+                      ? Text("camera")
+                      : RTCVideoView(_localRenderer, mirror: false),
             ),
             Container(
               width: 200,
               height: 200,
-              child: _screenShareRenderer.srcObject == null
-                  ? Text("screen")
-                  : RTCVideoView(_screenShareRenderer, mirror: false),
+              child: _localRenderer == null
+                  ? Text("camera")
+                  : _screenShareRenderer.srcObject == null
+                      ? Text("screen")
+                      : RTCVideoView(_screenShareRenderer, mirror: false),
             ),
             RaisedButton(
               onPressed: () {
@@ -209,7 +214,7 @@ class _TestState extends State<Test> {
             RaisedButton(
               onPressed: () {
                 signalingClient?.connect(
-                    "176GK5IN", "wss://vtk1.vdotok.dev:8443/call");
+                    "176GK5IN", "wss://q-signalling.vdotok.dev:8443/call");
               },
               child: Text("connect"),
             )

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onetomany/src/GroupListScreen/landingScreen.dart';
 import 'package:flutter_onetomany/src/core/providers/auth.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
-import 'package:flutter_onetomany/src/home/home.dart';
+
 import 'package:flutter_svg/svg.dart';
 
 import '../../../constant.dart';
+import 'src/home/home.dart';
 
 class NoContactsScreen extends StatelessWidget {
   final registerRes;
@@ -129,7 +131,9 @@ class NoContactsScreen extends StatelessWidget {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         isRegisteredAlready = false;
                       }
-
+  isAppAudiobuttonSelected = false;
+                        iscamerabuttonSelected = false;
+                        ismicAudiobuttonSelected = false;
                       signalingClient.unRegister(registerRes["mcToken"]);
                     },
                     child: Text(

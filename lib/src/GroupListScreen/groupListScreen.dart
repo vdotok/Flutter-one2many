@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onetomany/constant.dart';
 import 'package:flutter_onetomany/src/core/models/GroupListModel.dart';
 import 'package:flutter_onetomany/src/core/models/GroupModel.dart';
 import 'package:flutter_onetomany/src/core/providers/auth.dart';
 import 'package:flutter_onetomany/src/core/providers/groupListProvider.dart';
 import 'package:flutter_onetomany/src/home/CreateGroupPopUp.dart';
 import 'package:flutter_onetomany/src/home/home.dart';
+
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+import '../../constant.dart';
+import 'landingScreen.dart';
 
 class GroupListScreen extends StatefulWidget {
   GroupListModel state;
@@ -448,7 +452,9 @@ class _GroupListScreenState extends State<GroupListScreen> {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         isRegisteredAlready = false;
                       }
-                                  
+                                    isAppAudiobuttonSelected = false;
+                        iscamerabuttonSelected = false;
+                        ismicAudiobuttonSelected = false;
                                   signalingClient.unRegister(
                                       widget.registerRes["mcToken"]);
                                 },

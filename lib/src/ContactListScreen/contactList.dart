@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onetomany/constant.dart';
 import 'package:flutter_onetomany/src/core/models/contact.dart';
 import 'package:flutter_onetomany/src/core/providers/contact_provider.dart';
+
+
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../constant.dart';
 
 class ContactListScreen extends StatefulWidget {
   ContactProvider state;
