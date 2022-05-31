@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_one2many/src/Screeens/CreateGroupScreen/CreateGroupPopUp.dart';
-import 'package:flutter_one2many/src/Screeens/callScreens/StreamBar.dart';
 import 'package:flutter_one2many/src/Screeens/home/CustomAppBar.dart';
 import 'package:flutter_one2many/src/Screeens/home/home.dart';
 import 'package:flutter_one2many/src/constants/constant.dart';
@@ -61,32 +60,7 @@ class GroupListScreen extends StatefulWidget {
 }
 
 class _GroupListScreenState extends State<GroupListScreen> {
-  handleSeenStatus(index) {
-    if (widget.groupListProvider.groupList.groups[index].chatList != null) {
-      widget.groupListProvider.groupList.groups[index].chatList
-          .forEach((element) {
-        if (element.status != ReceiptType.delivered &&
-            widget.authProvider.getUser.ref_id != element.from) {
-          // ChatModel notseenMsg = element;
-          // notseenMsg.type = "RECEIPTS";
-          // notseenMsg.receiptType = 3;
-
-          Map<String, dynamic> tempData = {
-            "date": ((new DateTime.now()).millisecondsSinceEpoch).round(),
-            "from": widget.authProvider.getUser.ref_id,
-            "key": element.key,
-            "messageId": element.id,
-            "receiptType": ReceiptType.seen,
-            "to": widget.groupListProvider.groupList.groups[index].channel_name
-          };
-          emitter.publish(
-              widget.groupListProvider.groupList.groups[index].channel_key,
-              widget.groupListProvider.groupList.groups[index].channel_name,
-              tempData);
-        }
-      });
-    }
-  }
+ 
 
   showSnakbar(msg) {
     final snackBar = SnackBar(
@@ -508,7 +482,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
 
                                 signalingClient
                                     .unRegister(widget.registerRes["mcToken"]);
-                                emitter.disconnect();
+                               
                               },
                               child: Text(
                                 "LOG OUT",
@@ -522,17 +496,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
                               ),
                             ),
                           ),
-                          Container(
-                            height: 25,
-                            width: 25,
-                            child: SvgPicture.asset(
-                              'assets/messageicon.svg',
-                              color:
-                                  widget.isInternet && widget.chatSocket == true
-                                      ? Colors.green
-                                      : Colors.red,
-                            ),
-                          ),
+                         
                           // Container(
                           //   height: 10,
                           //   width: 10,

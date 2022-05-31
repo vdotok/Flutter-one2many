@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_one2many/src/Screeens/ContactListScreen/ContactListScreen.dart';
 import 'package:flutter_one2many/src/Screeens/CreateGroupScreen/CreateGroupChatScreen.dart';
 import 'package:flutter_one2many/src/Screeens/home/home.dart';
 import 'package:flutter_one2many/src/core/models/GroupModel.dart';
@@ -237,14 +236,14 @@ class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
                                             //  selectedContacts = [];
                                             //widget..handleGroupListState(ListStatus.Scussess);
                                             // _groupNameController.clear();
-                                          
+
                                             grouplistp.handleGroupListState(
                                                 ListStatus.Scussess);
                                             widget.mainprovider
                                                 .groupListScreen();
                                             strArr.remove("CreateGroupChat");
+                                            selectedContacts.clear();
 
-                                            
                                             Navigator.pop(context);
 
                                             // Navigator.pushNamed(

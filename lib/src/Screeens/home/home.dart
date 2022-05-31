@@ -1,16 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_one2many/src/Screeens/ContactListScreen/ContactListIndex.dart';
 import 'package:flutter_one2many/src/Screeens/CreateGroupScreen/CreateGroupChatIndex.dart';
 import 'package:flutter_one2many/src/Screeens/callScreens/CallStartOnetoMany.dart';
-import 'package:flutter_one2many/src/Screeens/groupChatScreen/ChatScreenIndex.dart';
 import 'package:flutter_one2many/src/Screeens/home/CustomAppBar.dart';
 import 'package:flutter_one2many/src/core/config/config.dart';
 import 'package:flutter_one2many/src/core/models/GroupModel.dart';
@@ -21,27 +17,24 @@ import 'package:flutter_one2many/src/core/providers/main_provider.dart';
 import 'package:flutter_one2many/src/grouplist/GroupListScreen.dart';
 import 'package:flutter_one2many/src/shared_preference/shared_preference.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:move_to_background/move_to_background.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:vdotok_connect/vdotok_connect.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock/wakelock.dart';
 import '../../../main.dart';
-import '../callScreens/CallStartScreen.dart';
+
 import '../callScreens/CallDialScreen.dart';
 import '../callScreens/CallReceiveScreen.dart';
 import '../splash/splash.dart';
 import '../../constants/constant.dart';
 import '../../core/providers/auth.dart';
 import '../../core/providers/groupListProvider.dart';
-import '../../jsManager/jsManager.dart';
+
 import '../../Screeens/home/NoChatScreen.dart';
 import 'landingScreen.dart';
 
 GlobalKey<ScaffoldState> scaffoldKey;
-Emitter emitter;
+
 bool enableCamera = true;
 bool enableCamera2 = true;
 String typeOfCall = "";
@@ -410,8 +403,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
         onRemoteStream = true;
 
-        groupListProvider.callProgress(true);
-
         forLargStream = rendererListWithRefID[1];
         if (_callticker != null) {
           _callticker.cancel();
@@ -573,7 +564,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         }
         _updateTimer();
         _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
-        groupListProvider.callProgress(true);
 
         iscallAcceptedbyuser = true;
 
@@ -606,8 +596,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       }
       _updateTimer();
       _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
-      groupListProvider.callProgress(true);
-      //  _audioPlayer.stop();
+
       _mainProvider.callStart();
     };
     signalingClient.onCallHungUpByUser = (isLocal) {
@@ -702,7 +691,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
       time = null;
 
-      groupListProvider.callProgress(false);
       disposeAllRenderer();
       // if (isLocal == false) {
       print("hfgxf");
@@ -796,28 +784,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         inInactive = false;
         if (authProvider.loggedInStatus == Status.LoggedOut) {
         } else {
-          //for chat
-          if (chatSocket == true) {
-          } else if (isInternetConnect && chatSocket == false) {
-            print("here in resume");
-
-            emitter.connect(
-                clientId: authProvider.getUser.user_id.toString(),
-                reconnectivity: true,
-                refID: authProvider.getUser.ref_id,
-                authorization_token: authProvider.getUser.authorization_token,
-                project_id: project_id,
-                host: authProvider.host,
-                port: authProvider.port
-
-//response: sharedPref.read("authUser");
-
-                );
-          }
-          // else {
-          //   print("this is variable for resume $sockett $isConnected");
-
-          // }
           try {
             signalingClient.sendPing(registerRes["mcToken"]);
           } catch (e) {}
@@ -897,8 +863,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       pressDuration = newDuration;
       print(
           "IN SET STATE SINGNALING CLIENT>PRESS DURATIONnnnnn $pressDuration");
-      groupListProvider.duration(pressDuration);
-      //sharedPref.save("Duration", pressDuration);
     });
     //}
     //  setState(() {
@@ -994,7 +958,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           ispublicbroadcast: ispublicbroadcast,
           broadcastype: broadcasttype,
           authorizationToken: authProvider.getUser.authorization_token);
-    } 
+    }
 
     if (to != null) {
       _mainProvider.callDial();
@@ -1096,45 +1060,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       pressDuration = "";
       onRemoteStream = false;
     });
-    if (strArr.last == "ChatScreen") {
-      print("here in oncallhungup index 66$listIndex");
-      //  _mainProvider.inActiveCall();
-      _mainProvider.chatScreen(index: listIndex);
-    } else if (strArr.last == "CreateIndividualGroup") {
-      _mainProvider.createIndividualGroupScreen();
-    } else if (strArr.last == "CreateGroupChat") {
+    if (strArr.last == "CreateGroupChat") {
       _mainProvider.createGroupChatScreen();
     } else if (strArr.last == "GroupList") {
       _mainProvider.homeScreen();
-    } else if (strArr.last == "GroupListActiveCall") {
-      print("here in grouolistc");
-      // _mainProvider.initial();
-      _mainProvider.inActiveCall();
-      _mainProvider.homeScreen();
-
-      strArr.remove("GroupListActiveCall");
     } else if (strArr.last == "NoChat") {
       _mainProvider.inActiveCall();
       _mainProvider.homeScreen();
       strArr.remove("NoChat");
-    } else if (strArr.last == "NoChatActiveBroadcast") {
-      _mainProvider.inActiveCall();
-      _mainProvider.homeScreen();
-      strArr.remove("NoChatActiveBroadcast");
-    } else if (strArr.last == "CreateIndividualGroupActiveCall") {
-      _mainProvider.inActiveCall();
-      _mainProvider.createIndividualGroupScreen();
-      strArr.remove("CreateIndividualGroupActiveCall");
-    } else if (strArr.last == "CreateGroupChatActiveCall") {
-      _mainProvider.inActiveCall();
-      _mainProvider.createGroupChatScreen();
-      strArr.remove("CreateGroupChatActiveCall");
-    } else if (strArr.last == "ChatScreenWithActiveCall") {
-      _mainProvider.inActiveCall();
-      _mainProvider.chatScreen(index: listIndex);
-      strArr.remove("ChatScreenWithActiveCall");
     }
-    groupListProvider.callProgress(false);
+
     if (!kIsWeb) stopRinging();
   }
 
@@ -1169,43 +1104,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       statusBarBrightness: Brightness.light, //status bar brigtness
       statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
     ));
-    Future<bool> _onWillPop() async {
-      // // _groupListProvider.handlBacktoGroupList(index);
-      // if (strArr.last == "CreateGroupChat") {
-      //   _mainProvider.createIndividualGroupScreen();
-      //   strArr.remove("CreateGroupChat");
-      // }  else if (strArr.last == "GroupList") {
-      //   return true;
-      //   // SystemNavigator.pop();
-
-      // } else if (strArr.last == "NoChatActiveBroadcast") {
-      //   print("hsghas $inCall");
-      //   MoveToBackground.moveTaskToBack();
-
-      //   //return false;
-
-      //   // return false;
-      //   // sharedPref.savebool("inCall", inCall);
-      //   //sharedPref.readInteger(key)
-      //   //  SystemNavigator.pop();
-      // } else if (strArr.last == "NoChat") {
-      //   return true;
-      //   // SystemNavigator.pop();
-
-      // } else if (strArr.last == "GroupListActiveCall") {
-      //   print("hsghas $inCall");
-      //   MoveToBackground.moveTaskToBack();
-
-      //   //return false;
-
-      //   // return false;
-      //   // sharedPref.savebool("inCall", inCall);
-      //   //sharedPref.readInteger(key)
-      //   //  SystemNavigator.pop();
-      // }
-
-      // return false;
-    }
+    Future<bool> _onWillPop() async {}
 
     return WillPopScope(
         onWillPop: _onWillPop,
@@ -1307,7 +1206,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   registerRes: registerRes,
                   isConnect: isInternetConnect,
                   groupListProvider: groupListProvider,
-                  emitter: emitter,
                   refreshList: refreshList,
                   authProvider: authProvider,
                   handlePress: handleCreateGroup,
@@ -1327,7 +1225,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   // handlePublicBroadcastButton: PublicBroadCastPopUp,
                   // handleSeenStatus:handleSeenStatus,
                   activeCall: false,
-                    state: groupListProvider.groupList,
+                  state: groupListProvider.groupList,
                   groupListProvider: groupListProvider,
                   mainProvider: _mainProvider,
                   authProvider: authProvider,
@@ -1357,25 +1255,26 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   handlePress: handleCreateGroup);
             }
           } else {
-            return Scaffold(
-              appBar: CustomAppBar(
-                groupListProvider: groupListProvider,
-                title: "Chat Rooms",
-                lead: false,
-                funct: _startCall,
-                mainProvider: _mainProvider,
-                succeedingIcon: 'assets/plus.svg',
-                ischatscreen: false,
-                handlePress: handleCreateGroup,
-                isPublicBroadcast: true,
-              ),
-              body: Center(
-                  child: Text(
-                "${listProvider.errorMsg}",
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-              )),
-            );
+            return LandingScreen();
+            // return Scaffold(
+            //   appBar: CustomAppBar(
+            //     groupListProvider: groupListProvider,
+            //     title: "",
+            //     lead: false,
+            //     funct: _startCall,
+            //     mainProvider: _mainProvider,
+            //     succeedingIcon: 'assets/plus.svg',
+            //     ischatscreen: false,
+            //     handlePress: handleCreateGroup,
+            //     isPublicBroadcast: true,
+            //   ),
+            //   body: Center(
+            //       child: Text(
+            //     "${listProvider.errorMsg}",
+            //     style:
+            //         TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            //   )),
+            // );
           }
         }));
   }

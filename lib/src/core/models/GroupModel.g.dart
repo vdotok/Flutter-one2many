@@ -17,10 +17,6 @@ GroupModel _$GroupModelFromJson(Map<String, dynamic> json) {
     typingstatus: json['typingstatus'],
     id: json['id'],
     counter: json['counter'],
-    chatList: (json['chatList'] as List)
-        ?.map((e) =>
-            e == null ? null : ChatModel.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
     participants: (json['participants'] as List)
         ?.map((e) => e == null
             ? null
@@ -41,5 +37,4 @@ Map<String, dynamic> _$GroupModelToJson(GroupModel instance) =>
       'counter': instance.counter,
       'typingstatus': instance.typingstatus,
       'participants': instance.participants,
-      'chatList': instance.chatList,
     };

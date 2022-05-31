@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import '../../core/models/ParticipantsModel.dart';
-import '../models/ChatModel.dart';
 part 'GroupModel.g.dart';
 
 @JsonSerializable()
@@ -15,7 +14,7 @@ class GroupModel {
   dynamic counter;
   dynamic typingstatus;
   List<ParticipantsModel> participants = [];
-  List<ChatModel> chatList = [];
+  
 
   GroupModel(
       {this.admin_id,
@@ -27,7 +26,6 @@ class GroupModel {
       this.typingstatus,
       this.id,
       this.counter,
-      this.chatList,
       this.participants});
 
   factory GroupModel.fromJson(Map<String, dynamic> json) =>

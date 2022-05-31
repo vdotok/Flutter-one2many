@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_one2many/src/Screeens/callScreens/StreamBar.dart';
 import 'package:flutter_one2many/src/core/providers/main_provider.dart';
 
 import 'package:flutter_svg/svg.dart';
-import 'package:vdotok_connect/vdotok_connect.dart';
 import '../../core/providers/auth.dart';
 import '../../core/providers/groupListProvider.dart';
 import '../../constants/constant.dart';
@@ -20,12 +18,11 @@ class NoChatScreen extends StatelessWidget {
   final callSocket;
   final chatSocket;
   final startCall;
-   final activeCall;
+  final activeCall;
 
   NoChatScreen(
       {Key key,
       @required this.groupListProvider,
-      @required this.emitter,
       this.refreshList,
       this.authProvider,
       @required this.presentCheck,
@@ -36,13 +33,15 @@ class NoChatScreen extends StatelessWidget {
       this.registerRes,
       this.funct,
       this.callSocket,
-      this.chatSocket, this.startCall, this.activeCall})
+      this.chatSocket,
+      this.startCall,
+      this.activeCall})
       : super(key: key);
 
   final GroupListProvider groupListProvider;
   final AuthProvider authProvider;
   final MainProvider mainProvider;
-  final Emitter emitter;
+
   final refreshList;
 
   @override
@@ -66,18 +65,6 @@ class NoChatScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                activeCall
-                
-                      ? 
-                     
-                   
-                      StreamBar(
-                          mainProvider: mainProvider,
-                          groupListProvider:groupListProvider,
-                          isActive: true,
-                          meidaType: meidaType,
-                        )
-                      : SizedBox(height: 0),
                 SizedBox(
                   height: 128,
                 ),
@@ -90,7 +77,7 @@ class NoChatScreen extends StatelessWidget {
                     )),
                 SizedBox(height: 43),
                 Text(
-                  "No Conversation Yet",
+                  "No Groups Yet",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: chatRoomColor,
@@ -135,25 +122,10 @@ class NoChatScreen extends StatelessWidget {
                               ),
                               child: FlatButton(
                                 onPressed: () {
-                                  // mainProvider.
-                                  //mainProvider.inActiveCallCreateGroup(
-                                  //startCall: widget.funct,
-                                  // );
-                                  mainProvider.createIndividualGroupScreen();
-                                  // handlePress(HomeStatus.CreateIndividualGroup);
-                                  // mainProvider.inActiveCallCreateGroup(
-                                  //   startCall: funct,
-                                  // );
-                                  //  newChatHandler();
-                                  // Navigator.pushNamed(context, '/contactlist',
-                                  //     arguments: {
-                                  //       "groupListProvider": groupListProvider,
-                                  //       "funct": funct,
-                                  //       "mainProvider": mainProvider
-                                  //     });
+                                  mainProvider.createGroupChatScreen();
                                 },
                                 child: Text(
-                                  "New Chat",
+                                  "New Group",
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontFamily: primaryFontFamily,
@@ -207,13 +179,13 @@ class NoChatScreen extends StatelessWidget {
                         width: 105,
                         child: FlatButton(
                           onPressed: () {
-                             if (isRegisteredAlready) {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                           isRegisteredAlready = false;
-                        }
-                           
+                            if (isRegisteredAlready) {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              isRegisteredAlready = false;
+                            }
+
                             signalingClient.unRegister(registerRes["mcToken"]);
-                             emitter.disconnect();
                           },
                           child: Text(
                             "LOG OUT",
@@ -226,16 +198,6 @@ class NoChatScreen extends StatelessWidget {
                                 letterSpacing: 0.90),
                           ),
                         )),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      child: SvgPicture.asset(
-                        'assets/messageicon.svg',
-                        color: isConnect && chatSocket == true
-                            ? Colors.green
-                            : Colors.red,
-                      ),
-                    ),
                     SizedBox(width: 13),
                     Container(
                       height: 18,

@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_one2many/src/Screeens/home/home.dart';
-import '../models/ChatModel.dart';
 import '../models/GroupListModel.dart';
 import '../models/GroupModel.dart';
 import '../services/server.dart';
-import 'package:vdotok_connect/vdotok_connect.dart';
 
 enum ListStatus {
   Scussess,
@@ -65,9 +62,7 @@ class GroupListProvider with ChangeNotifier {
   int _status;
   int get status => _status;
 
-  // set readmodelList(List<ReadModel> myList) {
-  //   _readmodelList = myList;
-  // }
+ 
   handleGroupListState(ListStatus state) {
     print("This is handle group list state $state");
     _groupListStatus = state;
@@ -117,65 +112,15 @@ class GroupListProvider with ChangeNotifier {
   changeState() {
     _groupListStatus = ListStatus.Scussess;
     notifyListeners();
-    for (int i = 0; i < _groupList.groups.length; i++) {
-      emitter.subscribePresence(_groupList.groups[i].channel_key,
-          _groupList.groups[i].channel_name, true, true);
-    }
+   
   }
 
  
 
-  statsValue(double stats) {
-    print("this is stats value in grouplist provider $stats");
-    _statsValue = stats;
-    notifyListeners();
-  }
+ 
+ 
 
-  callProgress(bool isCall) {
-    // print("KLLLLLLLLL $isCall");
-    _callProgress = isCall;
-    // _callStatus=CallStatus.CallDial;
-    notifyListeners();
-  }
-
-  duration(String timer) {
-    print("This is timer $timer");
-    _timerDuration = timer;
-
-    notifyListeners();
-  }
-
-  recevieMsg(message) {
-    print("this is group list ${_groupList.groups.length}");
-
-    //find the index of channel... does it exist in grouplist?
-    var index = _groupList.groups
-        .indexWhere((element) => element.channel_key == message["key"]);
-    if (index != -1) {
-      print("thi is index $index");
-      if (_groupList.groups[index].chatList == null) {
-        _groupList.groups[index].chatList = [];
-        _groupList.groups[index].counter = 1;
-        print("i am here in null");
-        _groupList.groups[index].chatList.add(ChatModel.fromJson(message));
-        if (_currentOpenedChat == null) {
-          GroupModel element = _groupList.groups.removeAt(index);
-          _groupList.groups.insert(0, element);
-          print("i am here in current chat null");
-        }
-      } else {
-        _groupList.groups[index].chatList.add(ChatModel.fromJson(message));
-        _groupList.groups[index].counter++;
-        print("i am here in not null");
-        if (_currentOpenedChat == null) {
-          GroupModel element = _groupList.groups.removeAt(index);
-          _groupList.groups.insert(0, element);
-        }
-      }
-    }
-
-    notifyListeners();
-  }
+ 
 
   deleteGroup(group_id, authtoken) async {
     print("group id is $group_id");
@@ -232,239 +177,10 @@ class GroupListProvider with ChangeNotifier {
     }
   }
 
-  sendMsg(index, msg) {
-    if (_groupList.groups[index].chatList == null) {
-      print("this is send message $index $msg");
-
-      _groupList.groups[index].chatList = [];
-      print("thisis json ${ChatModel.fromJson(msg)}");
-      _groupList.groups[index].chatList.add(ChatModel.fromJson(msg));
-    } else {
-      _groupList.groups[index].chatList.add(ChatModel.fromJson(msg));
-    }
-
-    notifyListeners();
-  }
-
-  changeMsgStatus(msg, status) {
-    print("this is receipt type $msg");
-    var groupindex = _groupList.groups.indexWhere(
-        (element) => element.channel_key == json.decode(msg)["key"].toString());
-
-    var participantIndex = _groupList.groups[groupindex].participants
-        .indexWhere(
-            (element) => element.ref_id == json.decode(msg)["from"].toString());
-    var msgindex = _groupList.groups[groupindex].chatList.indexWhere((element) {
-      return element.id == json.decode(msg)["messageId"].toString();
-      //return element.id == json.decode(msg)["messageId"].toString();
-    });
-    // var chatIndex= _groupList.groups[groupindex].chatList[0].;
-
-    // if(_groupList.groups[groupindex].chatList[participantIndex].
-    print("this is msg --- $participantIndex");
-    if (groupindex != -1) {
-      if (_groupList.groups[groupindex].participants.length > 2) {
-        print(
-            "this is msg idddddddd ${json.decode(msg)["messageId"].toString()}");
-        // print("this is LISTTTTTTTT $_readmodelList");
-        // if (_messageIDD.contains(json.decode(msg)["messageId"].toString())) {
-        print("here oooooooo");
-        int i = 0;
-        while (_groupList.groups[groupindex].chatList[i].id !=
-            json.decode(msg)["messageId"].toString()) {
-          i++;
-        }
-        if (_groupList.groups[groupindex].chatList[i].id ==
-            json.decode(msg)["messageId"].toString()) {
-          print(
-              "thos osdsdjfk counter ${_groupList.groups[groupindex].chatList[i].readCount}");
-          if (_groupList.groups[groupindex].chatList[i].participantsRead ==
-              null) {
-            print("this is nukkk kklkvl");
-            _groupList.groups[groupindex].chatList[i].participantsRead = [];
-            _groupList.groups[groupindex].chatList[i].readCount = 0;
-          }
-          if (_groupList.groups[groupindex].chatList[i].participantsRead
-              .contains(participantIndex)) {
-          } else {
-            _groupList.groups[groupindex].chatList[i].participantsRead
-                .add(participantIndex);
-            _groupList.groups[groupindex].chatList[i].readCount++;
-            print(
-                "thos osdsdjfk counter ${_groupList.groups[groupindex].chatList[i].readCount}");
-            print(
-                "thos osdsdjfk counter ${_groupList.groups[groupindex].chatList[i].participantsRead}");
-          }
-        }
-        _groupList.groups[groupindex].chatList[msgindex].status = status;
-        notifyListeners();
-        // while (_readmodelList[i].msgId !=
-        // json.decode(msg)["messageId"].toString()) {
-        // i++;
-        // print("thid is iiiiiiii $i");
-        // }
-        // if (_readmodelList[i].msgId ==
-        // json.decode(msg)["messageId"].toString()) {
-        // if (_readmodelList[i].participants.contains(participantIndex)) {
-        // } else {
-        // _readmodelList[i].participants.add(participantIndex);
-        // _readmodelList[i].counter++;
-        // print("thos osdsdjfk counter ${_readmodelList[0].counter}");
-        // }
-        // // print("this is chat list ${groupList.groups[i].chatList.length}");
-        // }
-        // } else {
-        // messageIDD.add(json.decode(msg)["messageId"].toString());
-        // model = ReadModel(
-        // counter: 1,
-        // participants: [participantIndex],
-        // msgId: json.decode(msg)["messageId"].toString(),
-        // );
-        // print("model is ${model.msgId}");
-        // _readmodelList.add(model);
-        // for (int i = 0; i < _readmodelList.length; i++) {
-        // print("mesgid is ${_readmodelList[i].msgId}");
-        // print("counter of this mesg is ${_readmodelList[i].counter}");
-        // print(
-        // "participant of this mesg is ${_readmodelList[i].participants}");
-        // // print("this is chat list after ${groupList.groups[i].chatList.length}");
-        // }
-        // }
-        // print("this is LISTTTTTTTT afterrrrrrrr $_readmodelList");
-        // var msgindex =
-        // _groupList.groups[groupindex].chatList.indexWhere((element) {
-        // return element.id == json.decode(msg)["messageId"].toString();
-        // //return element.id == json.decode(msg)["messageId"].toString();
-        // });
-        // print("this is msg index in grouo chat $msgindex");
-        // _groupList.groups[groupindex].chatList[msgindex].status = status;
-
-        // notifyListeners();
-      } else {
-        print("i am in personal chat");
-        var msgindex =
-            _groupList.groups[groupindex].chatList.indexWhere((element) {
-          print("this is id ${json.decode(msg)["messageId"].toString()}");
-          // print("participant index is $participantIndex");
-          print("element is ${element.id}");
-          return element.id == json.decode(msg)["messageId"].toString();
-        });
-        print("this is msg index $msgindex");
-        // print(
-        //     "this is status ${_groupList.groups[groupindex].chatList[msgindex].status}");
-        _groupList.groups[groupindex].chatList[msgindex].status = status;
-
-        notifyListeners();
-      }
-    }
-  }
-
-  changeMsgStatusToDelivered(msg, status) {
-    print("this is message to deliverd $msg");
-    var groupindex = _groupList.groups
-        .indexWhere((element) => element.channel_key == msg["key"]);
-
-    print("this is msg ${_groupList.groups[groupindex].chatList.length}");
-    if (groupindex != -1) {
-      var msgindex = _groupList.groups[groupindex].chatList
-          .indexWhere((element) => element.id == msg["id"]);
-      print("this is msg index $msgindex");
-
-      _groupList.groups[groupindex].chatList[msgindex].status = status;
-
-      notifyListeners();
-    }
-  }
-
-  setCountZero(index) {
-    print("yes this is back");
-    _groupList.groups[index].counter = 0;
-    _currentOpenedChat = _groupList.groups[index];
-    notifyListeners();
-  }
-
   handlBacktoGroupList(index) {
     _groupList.groups[index].counter = 0;
     _currentOpenedChat = null;
     notifyListeners();
   }
 
-  updateTypingStatus(msg) {
-    var index = _groupList.groups.indexWhere(
-        (element) => element.channel_key == json.decode(msg)["key"].toString());
-
-    var participantIndex = _groupList.groups[index].participants.indexWhere(
-        (element) => element.ref_id == json.decode(msg)["from"].toString());
-
-    if (index != -1) {
-      if (_groupList.groups[index].participants.length > 2) {
-        //_typingUserDetail = [];
-        if (_typingUserDetail.length <= 2) {
-          if (_typingUserDetail.contains(_groupList
-              .groups[index].participants[participantIndex].full_name)) {
-            // _typingUserDetail = _typingUserDetail;
-          } else {
-            _typingUserDetail.add(_groupList
-                .groups[index].participants[participantIndex].full_name);
-          }
-        }
-        _groupList.groups[index].typingstatus = _typingUserDetail
-            .toString()
-            .replaceAll("[", "")
-            .replaceAll("]", "");
-        print("this is typing user detail before $_typingUserDetail");
-        notifyListeners();
-        Timer(Duration(seconds: 2), () {
-          if (_currentOpenedChat != null) {
-            print("after delay $index");
-
-            _typingUserDetail.remove(_groupList
-                .groups[index].participants[participantIndex].full_name);
-            if (_typingUserDetail.isNotEmpty) {
-              _groupList.groups[index].typingstatus = _typingUserDetail
-                  .toString()
-                  .replaceAll("[", "")
-                  .replaceAll("]", "");
-            } else {
-              _groupList.groups[index].typingstatus = "";
-            }
-
-            print("this is typing user detail afterrr $_typingUserDetail");
-          } else {
-            var index = _groupList.groups.indexWhere((element) =>
-                element.channel_key == json.decode(msg)["key"].toString());
-
-            _typingUserDetail.remove(_groupList
-                .groups[index].participants[participantIndex].full_name);
-            // _groupList.groups[index].typingstatus = "";
-            if (_typingUserDetail.isNotEmpty) {
-              _groupList.groups[index].typingstatus = _typingUserDetail
-                  .toString()
-                  .replaceAll("[", "")
-                  .replaceAll("]", "");
-            } else {
-              _groupList.groups[index].typingstatus = "";
-            }
-            print("this is typing user detail after  $_typingUserDetail");
-          }
-          notifyListeners();
-        });
-      } else {
-        _groupList.groups[index].typingstatus =
-            _groupList.groups[index].participants[participantIndex].full_name;
-        notifyListeners();
-        Timer(Duration(seconds: 2), () {
-          if (_currentOpenedChat != null) {
-            print("after delay $index");
-            _groupList.groups[index].typingstatus = "";
-          } else {
-            var index = _groupList.groups.indexWhere((element) =>
-                element.channel_key == json.decode(msg)["key"].toString());
-            _groupList.groups[index].typingstatus = "";
-          }
-          notifyListeners();
-        });
-      }
-    }
-  }
 }

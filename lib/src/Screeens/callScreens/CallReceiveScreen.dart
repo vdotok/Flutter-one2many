@@ -177,44 +177,16 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   widget.signalingClient.declineCall(
                       widget.authProvider.getUser.ref_id,
                       widget.registerRes["mcToken"]);
-                  widget.groupListProvider.callProgress(false);
-                  if (strArr.last == "ChatScreen") {
-                    print("here in oncallhungup index $listIndex");
-                    widget.mainProvider.chatScreen(index: listIndex);
-                  } else if (strArr.last == "CreateIndividualGroup") {
-                    widget.mainProvider.createIndividualGroupScreen();
-                  } else if (strArr.last == "CreateGroupChat") {
+                
+                   if (strArr.last == "CreateGroupChat") {
                     widget.mainProvider.createGroupChatScreen();
                   } else if (strArr.last == "GroupList") {
                     widget.mainProvider.homeScreen();
-                  } else if (strArr.last == "GroupListActiveCall") {
-                    print("here in grouolistc");
-                    // _mainProvider.initial();
-                    widget.mainProvider.inActiveCall();
-                    widget.mainProvider.homeScreen();
-
-                    strArr.remove("GroupListActiveCall");
-                  } else if (strArr.last == "NoChat") {
+                  }  else if (strArr.last == "NoChat") {
                     widget.mainProvider.inActiveCall();
                     widget.mainProvider.homeScreen();
                     strArr.remove("NoChat");
-                  } else if (strArr.last == "NoChatActiveBroadcast") {
-                    widget.mainProvider.inActiveCall();
-                    widget.mainProvider.homeScreen();
-                    strArr.remove("NoChatActiveBroadcast");
-                  } else if (strArr.last == "CreateIndividualGroupActiveCall") {
-                    widget.mainProvider.inActiveCall();
-                    widget.mainProvider.createIndividualGroupScreen();
-                    strArr.remove("CreateIndividualGroupActiveCall");
-                  } else if (strArr.last == "CreateGroupChatActiveCall") {
-                    widget.mainProvider.inActiveCall();
-                    widget.mainProvider.createGroupChatScreen();
-                    strArr.remove("CreateGroupChatActiveCall");
-                  } else if (strArr.last == "ChatScreenWithActiveCall") {
-                    widget.mainProvider.inActiveCall();
-                    widget.mainProvider.chatScreen(index: listIndex);
-                    strArr.remove("ChatScreenWithActiveCall");
-                  }
+                  } 
                 },
               ),
               SizedBox(width: 64),

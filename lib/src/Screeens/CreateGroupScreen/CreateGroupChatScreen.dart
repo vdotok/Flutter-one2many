@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_one2many/src/Screeens/callScreens/StreamBar.dart';
 import 'package:flutter_one2many/src/Screeens/home/home.dart';
-import 'package:flutter_one2many/src/Screeens/home/streams/remoteStream.dart';
 import 'package:flutter_one2many/src/core/models/GroupModel.dart';
 import 'package:flutter_one2many/src/core/providers/main_provider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../core/models/contact.dart';
-import 'package:vdotok_connect/vdotok_connect.dart';
 import '../home/CustomAppBar.dart';
 import '../home/NoChatScreen.dart';
 import '../../constants/constant.dart';
@@ -47,7 +44,7 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
   //GroupListProvider groupListProvider;
   MainProvider mainProvider;
   AuthProvider authProvider;
-  Emitter emitter;
+
   int count = 0;
   var changingvaalue;
 
@@ -59,7 +56,6 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
 
   @override
   void initState() {
-    emitter = Emitter.instance;
     contactProvider = Provider.of<ContactProvider>(context, listen: false);
     // groupListProvider = Provider.of<GroupListProvider>(context, listen: false);
     authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -88,12 +84,6 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
         _filteredList = temp;
       }
     });
-  }
-
-  publishMessage(key, channelname, sendmessage) {
-    print("print im here ");
-    print("The key:$key....$channelname...$sendmessage");
-    emitter.publish(key, channelname, sendmessage);
   }
 
   Future buildShowDialog(
@@ -155,9 +145,7 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
       else if (widget.state.contactState == ContactStates.Success) {
         if (widget.state.contactList.users.length == 0)
           return NoChatScreen(
-              groupListProvider: widget.groupListProvider,
-              emitter: emitter,
-              presentCheck: false);
+              groupListProvider: widget.groupListProvider, presentCheck: false);
         else {
           return GestureDetector(
             onTap: () {
@@ -231,14 +219,15 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                                           //     authProvider.getUser.auth_token);
                                           GroupModel groupModel =
                                               GroupModel.fromJson(res["group"]);
-                                          // print(
-                                          //     "this is response of createGroup ${groupModel.channel_key}, ${groupModel.channel_name}");
+                                          print(
+                                              "this is response of createGroup ${res}, ");
                                           int channelIndex = 0;
                                           if (res["is_already_created"]) {
                                             print(
                                                 "here in already created grouup");
                                             buildShowDialog(context, "",
                                                 "You already have a group with this user");
+                                                 selectedContacts.clear();
                                             //   Navigator.pop(context, true);
                                             // Navigator.pop(context, true);
                                           } else {
@@ -246,7 +235,7 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                                                 .addGroup(groupModel);
 
                                             widget.mainProvider
-                                                .chatScreen(index: 0);
+                                                .groupListScreen();
                                             selectedContacts.clear();
 
                                             // Navigator.pop(context, true);
@@ -273,8 +262,6 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                                                                           .handlePress,
                                                                   editGroupName:
                                                                       false,
-                                                                  publishMessage:
-                                                                      publishMessage,
                                                                   groupNameController:
                                                                       _groupNameController,
                                                                   contactProvider:
@@ -291,6 +278,7 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                                                                       authProvider),
                                                         );
                                                       });
+                                                
                                                 }
                                               : () {
                                                   buildShowDialog(
@@ -312,53 +300,6 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                   onRefresh: widget.refreshList,
                   child: Column(
                     children: [
-                      widget.activeCall
-                          ? meidaType == "video" && typeOfCall != "one_to_many"
-                              ? StreamBar(
-                                  mainProvider: widget.mainProvider,
-                                  groupListProvider: widget.groupListProvider,
-                                  isActive: true,
-                                  meidaType: meidaType,
-                                )
-                              : (typeOfCall == "one_to_many")
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        widget.mainProvider.callStart();
-                                      },
-                                      child: new Container(
-                                          height: 40,
-                                          alignment: Alignment.center,
-                                          color: Colors.green,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                21, 0, 11, 0),
-                                            child: Row(
-                                              // mainAxisAlignment: MainAxisAlignment.center,
-                                              // crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(ispublicbroadcast ||
-                                                        isDDialer == true
-                                                    ? "You are sharing you screen"
-                                                    : "You are viewing screen currently"),
-                                                Spacer(),
-                                                Text(
-                                                    "${widget.groupListProvider.timerDuration}"),
-                                              ],
-                                            ),
-                                          )),
-                                    )
-                                  : GestureDetector(
-                                      onTap: () {
-                                        widget.mainProvider.callStart();
-                                      },
-                                      child: new Container(
-                                        height: 40,
-                                        alignment: Alignment.center,
-                                        color: Colors.green,
-                                        child: Text(
-                                            "${widget.groupListProvider.timerDuration}"),
-                                      ))
-                          : SizedBox(height: 0),
                       Container(
                         //height: 50,
                         padding: EdgeInsets.only(left: 21, right: 21),
