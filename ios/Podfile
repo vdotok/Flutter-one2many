@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
- platform :ios, '14.1'
+# platform :ios, '9.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -32,12 +32,6 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-end
-target 'ScreenShare' do
-  use_frameworks!
-  pod 'MMWormhole'
-  # pod 'VdoTokStreaming'
- pod 'VdoTokStreaming', :git => 'https://github.com/vdotok/VdoTokStreaming.git'
 end
 
 post_install do |installer|

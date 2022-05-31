@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../constant.dart';
-
+import '../constants/constant.dart';
 
 class SignInButtonFile extends StatefulWidget {
   String name;

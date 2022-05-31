@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../constant.dart';
-
+import '../constants/constant.dart';
 
 class CustomText extends StatelessWidget {
   final text;
@@ -10,10 +8,6 @@ class CustomText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: 221,
-      //  height: 24,
-     // padding: EdgeInsets.only(top: 32),
-
       child: Text(
         '$text',
         textAlign: TextAlign.center,

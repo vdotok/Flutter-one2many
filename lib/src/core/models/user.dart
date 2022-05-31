@@ -14,9 +14,9 @@ class User {
   final String ref_id;
   final int status;
   final int user_id;
-  final dynamic resgisterRes;
   User(
-      {this.auth_token,
+      {
+      this.auth_token,
       this.authorization_token,
       this.email,
       this.full_name,
@@ -25,7 +25,7 @@ class User {
       this.ref_id,
       this.status,
       this.user_id,
-      this.resgisterRes});
+     });
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }

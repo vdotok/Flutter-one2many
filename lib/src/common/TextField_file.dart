@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../constant.dart';
+import '../constants/constant.dart';
 
 class TextFieldFile extends StatefulWidget {
   String name;
-  bool _autoValidate = true;
   var myController = TextEditingController();
   TextFieldFile({Key key, this.name, this.myController}) : super(key: key);
   @override
@@ -21,19 +20,34 @@ class _WidgetHeaderState extends State<TextFieldFile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(0.0),
+      // padding: EdgeInsets.all(0.0),
       width: 335,
-      height: 54,
+      // height: 54,
       color: textfieldBackgrounColor,
       child: TextFormField(
         controller: myController,
-        validator: (value) => value.isEmpty ? "Field cannot be empty." : null,
+        validator: (value) {
+          if (value.isEmpty) return "Field cannot be empty";
+          if (value.length < 6)
+            return "Entry should be at least 6 characters long";
+          if (value.length > 14) return "Entry should not exceed 14 characters";
+
+          if (value.indexOf(' ') >= 0)
+            return "Field cannot contain blank spaces";
+          else
+            return null;
+        },
         decoration: new InputDecoration(
-          contentPadding: EdgeInsets.only(left: 10),
+          // contentPadding: EdgeInsets.only(left: 10),
           // contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: textfieldBorderColor, width: 1.0),
+          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: primaryColor, width: 1.0),
           ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: redColor, width: 1.0),
+          ),
+
           hintText: "${widget.name}",
           hintStyle: TextStyle(
               fontSize: 14.0,

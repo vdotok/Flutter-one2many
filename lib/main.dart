@@ -1,19 +1,15 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:vdotok_stream/vdotok_stream.dart';
-import 'src/core/providers/auth.dart';
-import 'src/core/providers/call_provider.dart';
-import 'src/core/providers/contact_provider.dart';
-import 'src/core/providers/groupListProvider.dart';
-import 'src/home/homeIndex.dart';
-import 'src/login/SignInScreen.dart';
-
-import 'src/routing/routes.dart';
-import 'src/splash/splash.dart';
+import 'package:flutter_one2many/src/Screeens/login/SignInScreen.dart';
+import 'package:flutter_one2many/src/Screeens/splash/splash.dart';
+import 'package:flutter_one2many/src/core/providers/auth.dart';
+import 'package:flutter_one2many/src/routing/routes.dart';
 import 'package:provider/provider.dart';
-
-import 'constant.dart';
+import 'package:vdotok_stream/vdotok_stream.dart';
+import 'src/Screeens/home/homeIndex.dart';
+import 'src/constants/constant.dart';
 
 GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey;
 
@@ -28,6 +24,7 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -37,84 +34,89 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  StreamSubscription subscription;
+
   @override
   void initState() {
     super.initState();
-
     rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()..isUserLogedIn()),
-        ChangeNotifierProvider(create: (_) => CallProvider()),
-        ChangeNotifierProvider(create: (_) => ContactProvider()),
-        ChangeNotifierProvider(create: (_) => GroupListProvider()),
       ],
       child: MaterialApp(
         scaffoldMessengerKey: rootScaffoldMessengerKey,
         debugShowCheckedModeBanner: false,
-        title: 'Vdotok Video',
+        title: 'Flutter Demo',
         theme: ThemeData(
             accentColor: primaryColor,
             primaryColor: primaryColor,
             scaffoldBackgroundColor: Colors.white,
             textTheme: TextTheme(
               bodyText1: TextStyle(color: secondaryColor),
-              bodyText2: TextStyle(color: secondaryColor),
+              bodyText2: TextStyle(color: secondaryColor), //Text
             )),
         onGenerateRoute: Routers.generateRoute,
-        home: Consumer<AuthProvider>(
-          builder: (context, auth, child) {
-            if (auth.loggedInStatus == Status.Authenticating)
-              return SplashScreen();
-            else if (auth.loggedInStatus == Status.LoggedIn) {
-              return HomeIndex();
-              return Test();
-            } else
-               return SignInScreen();
-              return Test();
-          },
+        home: Scaffold(
+          body: Consumer<AuthProvider>(
+            builder: (context, auth, child) {
+              if (auth.loggedInStatus == Status.Authenticating)
+                return SplashScreen();
+              else if (auth.loggedInStatus == Status.LoggedIn) {
+                // return Test();
+                return HomeIndex();
+                //return Hello();
+              } else
+                // return Test();
+                return SignInScreen();
+              //   return SelecturlScreen();,
+            },
+          ),
         ),
       ),
     );
-    // return MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider(create: (_) => AuthProvider()..isUserLogedIn()),
-    //   ],
-    //   child: MaterialApp(
-    //     scaffoldMessengerKey: rootScaffoldMessengerKey,
-    //     debugShowCheckedModeBanner: false,
-    //     title: 'Vdotok Video',
-    //     theme: ThemeData(
-    //         colorScheme: ColorScheme.fromSwatch(
-    //           primarySwatch: Colors.grey,
-    //         ).copyWith(),
-    //         accentColor: primaryColor,
-    //         primaryColor: primaryColor,
-    //         scaffoldBackgroundColor: Colors.white,
-    //         textTheme: TextTheme(
-    //           bodyText1: TextStyle(color: secondaryColor),
-    //           bodyText2: TextStyle(color: secondaryColor), //Text
-    //         )),
-    //     onGenerateRoute: Routers.generateRoute,
-    //     home: Consumer<AuthProvider>(
-    //       builder: (context, auth, child) {
-    //         if (auth.loggedInStatus == Status.Authenticating)
-    //           return SplashScreen();
-    //         else if (auth.loggedInStatus == Status.LoggedIn) {
-    //          // return Test();
-    //          return HomeIndex();
-    //         } else {
-    //          // return Test();
-    //           return SignInScreen();
-    //         }
-    //       },
-    //     ),
-    //   ),
-    // );
+  }
+}
+
+class Hello extends StatefulWidget {
+  @override
+  _HelloState createState() => _HelloState();
+}
+
+class _HelloState extends State<Hello> {
+  @override
+  Widget build(BuildContext context) {
+    return Draggable(
+      child: Container(
+          height: 100,
+          width: 100,
+          color: Colors.amber,
+          child: Text("fujhfdujf")),
+      //feedback:
+      // Container(),
+      feedback: Container(
+          height: 100,
+          width: 100,
+          color: Colors.amber,
+          child: Text("fujhfdujf")),
+      childWhenDragging: Container(
+          height: 100,
+          width: 100,
+          color: Colors.amber,
+          child: Text("fujhfdujf")),
+    );
   }
 }
 
@@ -156,7 +158,7 @@ class _TestState extends State<Test> {
 
   Future<void> initRenderers() async {
     // if (type == "screen") {
-    await _screenShareRenderer.initialize();
+    // await _screenShareRenderer.initialize();
     // } else {
     await _localRenderer.initialize();
     // }

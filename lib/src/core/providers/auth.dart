@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:device_info/device_info.dart';
+// import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_onetomany/src/core/config/config.dart';
-
-
-import '../../../src/core/services/server.dart';
-
+import 'package:flutter_one2many/src/core/config/config.dart';
 import '../models/user.dart';
+import '../services/server.dart';
 import '../../shared_preference/shared_preference.dart';
 
 enum Status {
@@ -33,18 +30,22 @@ class AuthProvider with ChangeNotifier {
 
   User _user = new User();
   User get getUser => _user;
-
   String _completeAddress;
   String get completeAddress => _completeAddress;
-
   SharedPref _sharedPref = SharedPref();
+
   String _loginErrorMsg;
   String get loginErrorMsg => _loginErrorMsg;
 
   String _registerErrorMsg;
   String get registerErrorMsg => _registerErrorMsg;
+  String _host;
+  String get host => _host;
 
-  Future<bool> register(String email, username, password) async {
+  String _port;
+  String get port => _port;
+
+  Future<bool> register(String username, password, email) async {
     _registeredInStatus = Status.Loading;
     notifyListeners();
 
@@ -70,9 +71,9 @@ class AuthProvider with ChangeNotifier {
       }
     }
     Map<String, dynamic> jsonData = {
-      "email": email,
       "full_name": username,
       "password": password,
+      "email": email,
       "device_type": kIsWeb
           ? "web"
           : Platform.isAndroid
@@ -81,17 +82,21 @@ class AuthProvider with ChangeNotifier {
       "device_model": model,
       "device_os_ver": version,
       "app_version": "1.1.5",
-      "project_id":project_id
+      "project_id": project_id
     };
+
     final response = await callAPI(jsonData, "SignUp", null);
-    print("this is response of sign up $response");
+    print("this is response $response");
     if (response['status'] != 200) {
       _registeredInStatus = Status.Failure;
       _registerErrorMsg = response['message'];
       notifyListeners();
       return false;
     } else {
-      _completeAddress  = response['media_server_map']['complete_address'];
+      _completeAddress = response['media_server_map']['complete_address'];
+
+      _host = response["messaging_server_map"]["host"];
+      _port = response["messaging_server_map"]["port"];
       SharedPref sharedPref = SharedPref();
       sharedPref.save("authUser", response);
       _registeredInStatus = Status.Registered;
@@ -102,27 +107,32 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  login(String username, password) async {
+  login(String email, password) async {
     _loggedInStatus = Status.Loading;
     notifyListeners();
 
     Map<String, dynamic> jsonData = {
-      "email": username,
+      "email": email,
       "password": password,
-      "project_id":project_id
+      "project_id": project_id
     };
+
     final response = await callAPI(jsonData, "Login", null);
-    print("this is response $response");
+    print("this is response of login api $response");
     if (response['status'] != 200) {
       _loggedInStatus = Status.Failure;
       _loginErrorMsg = response['message'];
       notifyListeners();
     } else {
-      _completeAddress  = response['media_server_map']['complete_address'];
-      print("this is complete address ${_completeAddress}");
+      _completeAddress = response['media_server_map']['complete_address'];
+
+      _host = response["messaging_server_map"]["host"];
+      _port = response["messaging_server_map"]["port"];
       SharedPref sharedPref = SharedPref();
       sharedPref.save("authUser", response);
       _loggedInStatus = Status.LoggedIn;
+
+      print("THIS IS COMPLETE ADRESS $_completeAddress");
       _user = User.fromJson(response);
       notifyListeners();
     }
@@ -131,94 +141,11 @@ class AuthProvider with ChangeNotifier {
   logout() {
     SharedPref sharedPref = SharedPref();
     sharedPref.remove("authUser");
+    sharedPref.remove("URL");
     _loggedInStatus = Status.LoggedOut;
     _user = null;
     notifyListeners();
   }
-
-  // Future<Map<String, dynamic>> login(String email, String password) async {
-  //   var result;
-  //
-  //   final Map<String, dynamic> loginData = {
-  //     'user': {'email': email, 'password': password}
-  //   };
-  //
-  //   _loggedInStatus = Status.Authenticating;
-  //   notifyListeners();
-  //
-  //   Response response = await post(
-  //     AppUrl.login,
-  //     body: json.encode(loginData),
-  //     headers: {'Content-Type': 'application/json'},
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseData = json.decode(response.body);
-  //
-  //     var userData = responseData['data'];
-  //
-  //     User authUser = User.fromJson(userData);
-  //
-  //     UserPreferences().saveUser(authUser);
-  //
-  //     _loggedInStatus = Status.LoggedIn;
-  //     notifyListeners();
-  //
-  //     result = {'status': true, 'message': 'Successful', 'user': authUser};
-  //   } else {
-  //     _loggedInStatus = Status.NotLoggedIn;
-  //     notifyListeners();
-  //     result = {
-  //       'status': false,
-  //       'message': json.decode(response.body)['error']
-  //     };
-  //   }
-  //   return result;
-  // }
-
-  // Future<Map<String, dynamic>> register(
-  //     String email, String password, String passwordConfirmation) async {
-  //   final Map<String, dynamic> registrationData = {
-  //     'user': {
-  //       'email': email,
-  //       'password': password,
-  //       'password_confirmation': passwordConfirmation
-  //     }
-  //   };
-  //   return await post(AppUrl.register,
-  //           body: json.encode(registrationData),
-  //           headers: {'Content-Type': 'application/json'})
-  //       .then(onValue)
-  //       .catchError(onError);
-  // }
-
-//   static Future<FutureOr> onValue(Response response) async {
-//     var result;
-//     final Map<String, dynamic> responseData = json.decode(response.body);
-//
-//     print(response.statusCode);
-//     if (response.statusCode == 200) {
-//       var userData = responseData['data'];
-//
-//       User authUser = User.fromJson(userData);
-//
-//       UserPreferences().saveUser(authUser);
-//       result = {
-//         'status': true,
-//         'message': 'Successfully registered',
-//         'data': authUser
-//       };
-//     } else {
-// //      if (response.statusCode == 401) Get.toNamed("/login");
-//       result = {
-//         'status': false,
-//         'message': 'Registration failed',
-//         'data': responseData
-//       };
-//     }
-//
-//     return result;
-//   }
 
   isUserLogedIn() async {
     final authUser = await _sharedPref.read("authUser");
@@ -227,8 +154,10 @@ class AuthProvider with ChangeNotifier {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
     } else {
-       _completeAddress =
+      _completeAddress =
           jsonDecode(authUser)['media_server_map']['complete_address'];
+      _host = jsonDecode(authUser)["messaging_server_map"]["host"];
+      _port = jsonDecode(authUser)["messaging_server_map"]["port"];
       _loggedInStatus = Status.LoggedIn;
       _user = User.fromJson(jsonDecode(authUser));
       notifyListeners();

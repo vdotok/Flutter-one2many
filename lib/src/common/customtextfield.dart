@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import '../../constant.dart';
+import '../constants/constant.dart';
 
 //class customTextField extends
 class CustomTextField extends StatefulWidget {
   final String text;
   final TextEditingController controller;
-  final bool checkFocus;
+  bool checkFocus;
+
   CustomTextField(this.text, this.controller, this.checkFocus);
 
   @override
@@ -20,36 +19,29 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   RegExp emailRegex = new RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  RegExp userNameRegex = new RegExp(r"^[a-zA-Z0-9_]+$");
+RegExp userNameRegex = new RegExp(r"^[a-zA-Z0-9_]+$");
   RegExp allowNumber = new RegExp(r"^[0-9]*$");
+  //RegExp nameRegex = new RegExp(r"^[a-zA-Z]+([_a-zA-Z0-9_]+)*$");
   String email = '';
 
   String password = '';
 
   get myController => widget.controller;
+  get focusnode => widget.checkFocus;
+
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-    print("The height: ${size.height}");
-
     return Container(
+      //   width: 256,
       padding: EdgeInsets.symmetric(horizontal: 17),
-      // width: 260,
       //  height: 38,
       child: TextFormField(
-          // inputFormatters: this.widget.text == "Username"
-          //     ? [
-          //         FilteringTextInputFormatter(RegExp("[0-9a-zA-Z_]"),
-          //             allow: true)
-          //       ]
-          //     : [],
+        
           controller: myController,
-          // maxLines: null,
-          textInputAction: widget.checkFocus == true
-              ? TextInputAction.next
-              : TextInputAction.done,
-          obscureText: (widget.text == "Password") ? true : false,
-          //textInputAction: TextInputAction.next,
+          //   maxLines: null,
+          textInputAction:
+              focusnode == true ? TextInputAction.next : TextInputAction.done,
+          obscureText: widget.text == "Password" ? true : false,
           style: TextStyle(color: textTypeColor),
           decoration: InputDecoration(
               filled: true,
@@ -73,7 +65,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   borderSide: BorderSide(color: focusedBorderColor))),
-          validator: (value) {
+      validator: (value) {
             if (value.isEmpty) {
               print("The value:${value}");
               return "Field cannot be empty";
@@ -97,70 +89,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               return 'Please enter a valid email';
             else
               return null;
-          }),
+          }
+          ),
     );
-    // // return Container(
-    // //   padding: EdgeInsets.symmetric(horizontal: 15),
-    // //   width: 260,
-    // //   height: size.height / 22.7,
-    // //   child: TextFormField(
-    // //       textInputAction: TextInputAction.next,
-    // //       controller: myController,
-    // //       maxLines: 1,
-    // //       autofocus: true,
-    // //       decoration: new InputDecoration(
-    // //         //   errorText: error,
-    // //         hoverColor: greycolor,
-    // //         filled: true,
-    // //         fillColor: greycolor,
-
-    // //         // focusedBorder: OutlineInputBorder(
-    // //         //   borderRadius: BorderRadius.all(Radius.circular(15.0)),
-    // //         //   borderSide: BorderSide(
-    // //         //     color: lightgreycolor,
-    // //         //     width: 1.0,
-    // //         //   ),
-    // //         // ),
-
-    // //         border: OutlineInputBorder(
-    // //           borderRadius: BorderRadius.circular(15.0),
-    // //           borderSide: BorderSide(
-    // //             color: lightgreycolor,
-    // //           ),
-    // //         ),
-    // //         hintText: this.widget.text,
-    // //         contentPadding: const EdgeInsets.only(
-    // //           top: 11.0,
-    // //           left: 15,
-    // //         ),
-    //         hintStyle: TextStyle(
-    //             fontSize: 14.0,
-    //             color: darkIndigoColor,
-    //             fontFamily: secondaryFontFamily),
-    //         enabledBorder: OutlineInputBorder(
-    //           borderRadius: BorderRadius.circular(15.0),
-    //           borderSide: BorderSide(
-    //             color: lightGreyColor,
-    //           ),
-    //         ),
-    //       ),
-    // validator: (value) {
-    //   if (value.isEmpty) return "Field cannot be empty";
-    //   if (widget.text == "Your name" && value.length < 6)
-    //     return "Entry should be at least 6 characters long";
-    //   if (widget.text == "Create Password" && value.length < 6)
-    //     return "Entry should be at least 6 characters long";
-    //   if (widget.text == "Your name" && value.length > 14)
-    //     return "Entry should not exceed 14 characters";
-    //   if (widget.text == "Create Password" && value.length > 14)
-    //     return "Entry should not exceed 14 characters";
-    //   if (value.indexOf(' ') >= 0)
-    //     return "Field cannot contain blank spaces";
-    //   if (this.widget.text == "Your email" && !emailRegex.hasMatch(value))
-    //     return 'Please enter a valid email';
-    //   else
-    //     return null;
-    // }),
-    // );
   }
 }
