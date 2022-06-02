@@ -40,18 +40,7 @@ class ContactProvider with ChangeNotifier {
     }
   }
 
-  // selectGroups(index) {
-  //   if (contactList.users[index].isSelected == false ||
-  //       contactList.users[index].isSelected == null) {
-  //     contactList.users[index].isSelected = true;
-  //     userGroups.add(contactList.users[index]);
-  //   } else {
-  //     contactList.users[index].isSelected = false;
-  //     userGroups.remove(contactList.users[index]);
-  //   }
-  //   print("The user group: $userGroups");
-  //   notifyListeners();
-  // }
+  
 
   Future<dynamic> createGroup(groupName, _selectedContacts, authToken) async {
     List<int> id_List = [];

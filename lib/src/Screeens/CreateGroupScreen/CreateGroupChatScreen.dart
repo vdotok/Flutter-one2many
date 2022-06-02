@@ -125,17 +125,7 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
       statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
     ));
 
-    //   Future<bool> _onWillPop() async {
-    //  // groupListProvider.handlBacktoGroupList(index);
-    //   if (strArr.last == "CreateGroupChat") {
-    //     widget.mainProvider.createGroupChatScreen();
-    //     strArr.remove("CreateGroupChat");
-    //   } else if (strArr.last == "CreateGroupChatithActiveCall") {
-    //    widget.mainProvider.createGroupChatScreen();
-    //     strArr.remove("CreateGroupChatithActiveCall");
-    //   }
-    //   return false;
-    // }
+    
     return WillPopScope(
         // onWillPop: _onWillPop,
         child: Consumer3<ContactProvider, AuthProvider, MainProvider>(builder:

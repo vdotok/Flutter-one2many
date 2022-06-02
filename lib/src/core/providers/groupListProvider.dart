@@ -8,10 +8,7 @@ import '../services/server.dart';
 enum ListStatus {
   Scussess,
   Failure,
-  Loading,
-  CreateIndividualGroup,
-  CreateGroupChat,
-  OpenChat
+  Loading, 
 }
 enum CreateChatStatus { New, Loading }
 enum DeleteGroupStatus { Success, Failure, Loading }
@@ -32,20 +29,8 @@ class GroupListProvider with ChangeNotifier {
 
   GroupListModel _groupList;
   GroupListModel get groupList => _groupList;
-  String _timerDuration = "";
-  String get timerDuration => _timerDuration;
 
-  GroupModel _currentOpenedChat;
-  GroupModel get currentOpendChat => _currentOpenedChat;
 
-  List<String> _presenceList = [];
-  List<String> get presenceList => _presenceList;
-
-  List<String> _typingUserDetail = [];
-  List<String> get typingUserDetail => _typingUserDetail;
-
-  List<int> _readParticipants = [];
-  List<int> get readParticipants => _readParticipants;
 
   String _successMsg;
   String get successMsg => _successMsg;
@@ -115,13 +100,6 @@ class GroupListProvider with ChangeNotifier {
    
   }
 
- 
-
- 
- 
-
- 
-
   deleteGroup(group_id, authtoken) async {
     print("group id is $group_id");
     Map<String, dynamic> jsonData = {"group_id": group_id};
@@ -177,10 +155,6 @@ class GroupListProvider with ChangeNotifier {
     }
   }
 
-  handlBacktoGroupList(index) {
-    _groupList.groups[index].counter = 0;
-    _currentOpenedChat = null;
-    notifyListeners();
-  }
+ 
 
 }

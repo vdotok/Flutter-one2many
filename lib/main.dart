@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_one2many/src/Screeens/login/SignInScreen.dart';
 import 'package:flutter_one2many/src/Screeens/splash/splash.dart';
 import 'package:flutter_one2many/src/core/providers/auth.dart';
-import 'package:flutter_one2many/src/routing/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 import 'src/Screeens/home/homeIndex.dart';
@@ -68,7 +67,7 @@ class _MyAppState extends State<MyApp> {
               bodyText1: TextStyle(color: secondaryColor),
               bodyText2: TextStyle(color: secondaryColor), //Text
             )),
-        onGenerateRoute: Routers.generateRoute,
+    
         home: Scaffold(
           body: Consumer<AuthProvider>(
             builder: (context, auth, child) {

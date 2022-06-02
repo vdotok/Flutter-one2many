@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,16 +72,9 @@ bool isInternetConnect = true;
 GlobalKey forsmallView = new GlobalKey();
 String session_type = "";
 //bool isPushed = false;
-AudioPlayer _audioPlayer = AudioPlayer();
+
 List<Map<String, dynamic>> rendererListWithRefID = [
-  // {
-  //   "i": "k",
-  //   "j": "k",
-  // },
-  // {
-  //   "i": "k",
-  //   "j": "k",
-  // }
+ 
 ];
 int count = 0;
 bool isRinging = false;
@@ -631,46 +623,18 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           print("here in oncallhungup index $listIndex");
           print("utuyy");
           _mainProvider.homeScreen();
-        } else if (strArr.last == "CreateIndividualGroup") {
-          _mainProvider.createIndividualGroupScreen();
-        } else if (strArr.last == "CreateGroupChat") {
+        }  else if (strArr.last == "CreateGroupChat") {
           _mainProvider.createGroupChatScreen();
         } else if (strArr.last == "GroupList") {
           _mainProvider.homeScreen();
-        } else if (strArr.last == "GroupListActiveCall") {
-          print("here in grouolistc");
-          // _mainProvider.initial();
-          _mainProvider.inActiveCall();
-          _mainProvider.homeScreen();
-
-          strArr.remove("GroupListActiveCall");
         } else if (strArr.last == "NoChat") {
           _mainProvider.inActiveCall();
           _mainProvider.homeScreen();
           strArr.remove("NoChat");
-        } else if (strArr.last == "NoChatActiveBroadcast") {
-          _mainProvider.inActiveCall();
-          _mainProvider.homeScreen();
-          strArr.remove("NoChatActiveBroadcast");
-        } else if (strArr.last == "CreateIndividualGroupActiveCall") {
-          _mainProvider.inActiveCall();
-          _mainProvider.createIndividualGroupScreen();
-          strArr.remove("CreateIndividualGroupActiveCall");
-        } else if (strArr.last == "CreateGroupChatActiveCall") {
-          _mainProvider.inActiveCall();
-          _mainProvider.createGroupChatScreen();
-          strArr.remove("CreateGroupChatActiveCall");
-        } else if (strArr.last == "ChatScreenWithActiveCall") {
-          _mainProvider.inActiveCall();
-          _mainProvider.chatScreen(index: listIndex);
-          strArr.remove("ChatScreenWithActiveCall");
-        }
-        // switchMute = true;
-        // enableCamera = true;
-        // switchSpeaker = true;
-        // signalingClient.stopCall(registerRes["mcToken"]);
+        }  
+        
       }
-      // _mainProvider.clearAllRendererList();
+     
       setState(() {
         Wakelock.toggle(enable: false);
         ispublicbroadcast = false;
