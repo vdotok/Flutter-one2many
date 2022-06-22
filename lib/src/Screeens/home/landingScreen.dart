@@ -312,7 +312,25 @@ class _LandingScreenState extends State<LandingScreen> {
                                   widget.mainProvider.groupListScreen();
                               print(
                                   "this is screen share with app audio and camera");
-                            } else {
+                            } 
+                             else if (!isAppAudiobuttonSelected &&
+                                ismicAudiobuttonSelected &&
+                                iscamerabuttonSelected &&
+                                broadcast == 0) {
+                              isMultiSession = true;
+                              broadcasttype = "micaudioandcamera";
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return StartBroadcastPopUp(
+                                      startCall: widget.startCall,
+                                      // broadcastObject: broadcastObject,
+                                    );
+                                  });
+                              print(
+                                  "this is screen share with app audio and camera");
+                            } 
+                            else {
                               print("i am here in else");
                             }
                             // widget.mainProvider.groupListScreen();

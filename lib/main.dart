@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 import 'src/Screeens/home/homeIndex.dart';
 import 'src/constants/constant.dart';
+import 'src/routing/routes.dart';
 
 GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey;
 
@@ -67,7 +68,7 @@ class _MyAppState extends State<MyApp> {
               bodyText1: TextStyle(color: secondaryColor),
               bodyText2: TextStyle(color: secondaryColor), //Text
             )),
-    
+     onGenerateRoute: Routers.generateRoute,
         home: Scaffold(
           body: Consumer<AuthProvider>(
             builder: (context, auth, child) {

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_one2many/src/Screeens/CreateGroupScreen/CreateGroupChatIndex.dart';
 import 'package:flutter_one2many/src/Screeens/callScreens/CallStartOnetoMany.dart';
-import 'package:flutter_one2many/src/Screeens/home/CustomAppBar.dart';
 import 'package:flutter_one2many/src/core/config/config.dart';
 import 'package:flutter_one2many/src/core/models/GroupModel.dart';
 import 'package:flutter_one2many/src/core/models/ParticipantsModel.dart';
@@ -401,8 +400,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           count = 0;
           iscallAcceptedbyuser = true;
         }
-        //  _audioPlayer.stop();
-        // is
+       
         _mainProvider.callStart();
       });
     };
@@ -519,21 +517,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       }
     };
 
-    // signalingClient.onAddparticpant = (paticipantcount) {
-    //   print("this is participant count ffffff $paticipantcount");
-    //   setState(() {
-    //     if (kIsWeb) {
-    //       participantcount = paticipantcount - 1;
-    //     } else {
-    //       if (Platform.isIOS && ispublicbroadcast) {
-    //         participantcount = paticipantcount;
-    //       } else {
-    //         participantcount = paticipantcount - 1;
-    //       }
-    //     }
-    //   });
-    //   // _mainProvider.callStart();
-    // };
     signalingClient.onTargetAlerting = () {
       setState(() {
         isRinging = true;
@@ -821,14 +804,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     print("time value is $time ");
     final duration = time != null ? DateTime.now().difference(time) : null;
     final newDuration = duration != null ? _formatDuration(duration) : null;
-    //if (mounted) {
+    if (mounted) {
     setState(() {
       // Your state change code goes here
       pressDuration = newDuration;
       print(
           "IN SET STATE SINGNALING CLIENT>PRESS DURATIONnnnnn $pressDuration");
     });
-    //}
+    }
     //  setState(() {
 
     //   });
@@ -841,8 +824,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     String sessionType,
   }) async {
     //mmtype=mtype;
-    // print(
-    //     "call callback on call Received incomming2  ${to.group_title} $callType $mtype $isDialer $switchSpeaker");
+    print(
+        "call callback on call Received incomming2  ${to.group_title} $callType $mtype $isDialer $switchSpeaker");
     setState(() {
       Wakelock.toggle(enable: true);
       typeOfCall = callType;
@@ -893,7 +876,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     }
 
     print(
-        "this is signaling client start callllllll $broadcasttype..... $sessionType ${registerRes["mcToken"]}");
+        "this is signaling client start callllllll $ispublicbroadcast $broadcasttype..... $sessionType ${registerRes["mcToken"]}");
     if (callType == "one_to_many") {
       print("here in one2many call start");
       if (to == null) {
@@ -927,10 +910,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     if (to != null) {
       _mainProvider.callDial();
     }
-    // if (_localStream != null) {
-    //here
-    // startRinging();
-    // _callBloc.add(CallDialEvent());
+    
     _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
   }
 
@@ -1114,7 +1094,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 groupListProvider: groupListProvider,
               );
             } else if (mainProvider.homeStatus == HomeStatus.CallStart) {
-              if (typeOfCall == "one_to_many") {
+            //  if (typeOfCall == "one_to_many") {
                 return CallStartOnetoMany(
                   localRenderer: _localRenderer,
                   mainProvider: _mainProvider,
@@ -1122,7 +1102,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   registerRes: registerRes,
                   remoteRenderer: _remoteRenderer,
                 );
-              }
+             // }
             } else if (mainProvider.homeStatus == HomeStatus.CallDial) {
               print("this is call dial screen");
               return CallDialScreen(

@@ -49,7 +49,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
 
   @override
   Widget build(BuildContext context) {
-    print(
+      print(
         "this is index in a onremotestream1 $meidaType $remoteVideoFlag $isDialer $ispublicbroadcast $groupBroadcast $pressDuration $broadcasttype");
 
     return ispublicbroadcast
@@ -75,7 +75,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
                   ),
                   Row(
                     children: [
-                      //backArrow(),
+                    
                       participantcount < 1
                           ? SizedBox()
                           : Text(
@@ -310,79 +310,105 @@ screen at the moment..''',
                     //     ?
 
                     isMultiSession
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                  child: !enableCamera2
-                                      ? SvgPicture.asset(
-                                          'assets/screenshareon.svg')
-                                      : SvgPicture.asset(
-                                          'assets/screenshareoff.svg'),
-                                  onTap: participantcount >= 1
-                                      ? () {
-                                          setState(() {
-                                            print("9586706");
-                                            enableCamera2 = !enableCamera2;
-                                          });
-                                          signalingClient.audioVideoState(
-                                              audioFlag: switchMute ? 1 : 0,
-                                              videoFlag: enableCamera2 ? 1 : 0,
-                                              mcToken: widget
-                                                  .registerRes["mcToken"]);
-                                          signalingClient
-                                              .enableScreen(enableCamera2);
-                                        }
-                                      : null),
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                            child: !enableCamera2
+                                                ? SvgPicture.asset(
+                                                    'assets/screenshareon.svg')
+                                                : SvgPicture.asset(
+                                                    'assets/screenshareoff.svg'),
+                                            onTap: participantcount >= 1
+                                                ? () {
+                                                    setState(() {
+                                                      enableCamera2 =
+                                                          !enableCamera2;
+                                                    });
+                                                    signalingClient
+                                                        .audioVideoState(
+                                                            audioFlag:
+                                                                switchMute
+                                                                    ? 1
+                                                                    : 0,
+                                                            videoFlag:
+                                                                enableCamera2
+                                                                    ? 1
+                                                                    : 0,
+                                                            mcToken: widget
+                                                                    .registerRes[
+                                                                "mcToken"]);
+                                                    signalingClient
+                                                        .enableScreen(
+                                                            enableCamera2);
+                                                  }
+                                                : null),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
+                                            child: !enableCamera
+                                                ? SvgPicture.asset(
+                                                    'assets/video_off.svg')
+                                                : SvgPicture.asset(
+                                                    'assets/video.svg'),
+                                            onTap: participantcount >= 1
+                                                ? () {
+                                                    setState(() {
+                                                      enableCamera =
+                                                          !enableCamera;
+                                                    });
+                                                    signalingClient
+                                                        .audioVideoState(
+                                                            audioFlag:
+                                                                switchMute
+                                                                    ? 1
+                                                                    : 0,
+                                                            videoFlag:
+                                                                enableCamera
+                                                                    ? 1
+                                                                    : 0,
+                                                            mcToken: widget
+                                                                    .registerRes[
+                                                                "mcToken"]);
+                                                    signalingClient
+                                                        .enableCamera(
+                                                            enableCamera);
+                                                  }
+                                                : null)
+                                      ],
+                                    )
+                                  : GestureDetector(
+                                      child: !enableCamera
+                                          ? broadcasttype == "camera"
+                                              ? SvgPicture.asset(
+                                                  'assets/video_off.svg')
+                                              : SvgPicture.asset(
+                                                  'assets/screenshareon.svg')
+                                          : broadcasttype == "camera"
+                                              ? SvgPicture.asset(
+                                                  'assets/video.svg')
+                                              : SvgPicture.asset(
+                                                  'assets/screenshareoff.svg'),
+                                      onTap: participantcount >= 1
+                                          ? () {
+                                              setState(() {
+                                                enableCamera = !enableCamera;
+                                              });
+                                              signalingClient.audioVideoState(
+                                                  audioFlag: switchMute ? 1 : 0,
+                                                  videoFlag:
+                                                      enableCamera ? 1 : 0,
+                                                  mcToken: widget
+                                                      .registerRes["mcToken"]);
+                                              signalingClient
+                                                  .enableCamera(enableCamera);
+                                            }
+                                          : null),
                               SizedBox(
                                 width: 10,
                               ),
-                              GestureDetector(
-                                  child: !enableCamera
-                                      ? SvgPicture.asset('assets/video_off.svg')
-                                      : SvgPicture.asset('assets/video.svg'),
-                                  onTap: participantcount >= 1
-                                      ? () {
-                                          print("jhdgutgyurer");
-                                          setState(() {
-                                            enableCamera = !enableCamera;
-                                          });
-                                          signalingClient.audioVideoState(
-                                              audioFlag: switchMute ? 1 : 0,
-                                              videoFlag: enableCamera ? 1 : 0,
-                                              mcToken: widget
-                                                  .registerRes["mcToken"]);
-                                          signalingClient
-                                              .enableCamera(enableCamera);
-                                        }
-                                      : null)
-                            ],
-                          )
-                        : GestureDetector(
-                            child: !enableCamera
-                                ? broadcasttype == "camera"
-                                    ? SvgPicture.asset('assets/video_off.svg')
-                                    : SvgPicture.asset(
-                                        'assets/screenshareon.svg')
-                                : broadcasttype == "camera"
-                                    ? SvgPicture.asset('assets/video.svg')
-                                    : SvgPicture.asset(
-                                        'assets/screenshareoff.svg'),
-                            onTap: participantcount >= 1
-                                ? () {
-                                    setState(() {
-                                      enableCamera = !enableCamera;
-                                    });
-                                    signalingClient.audioVideoState(
-                                        audioFlag: switchMute ? 1 : 0,
-                                        videoFlag: enableCamera ? 1 : 0,
-                                        mcToken: widget.registerRes["mcToken"]);
-                                    signalingClient.enableCamera(enableCamera);
-                                  }
-                                : null),
-                    SizedBox(
-                      width: 10,
-                    ),
 
                     // : SizedBox(),
 
@@ -410,88 +436,92 @@ screen at the moment..''',
                     // SvgPicture.asset('assets/images/end.svg'),
 
                     SizedBox(width: 10),
-                    isMultiSession
-                        ? broadcasttype == "appaudioandcamera"
-                            ? Row(
-                                children: [
-                                  GestureDetector(
-                                      child: !switchMute2
-                                          ? SvgPicture.asset(
-                                              'assets/appaudioon.svg')
-                                          : SvgPicture.asset(
-                                              'assets/appaudiooff.svg'),
-                                      onTap: participantcount >= 1
-                                          ? () {
-                                              final bool enabled =
-                                                  signalingClient
-                                                      .muteInternalMic();
-                                              print(
-                                                  "this is enabled3236 $enabled");
-                                              setState(() {
-                                                switchMute2 = enabled;
-                                              });
-                                            }
-                                          : null),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  GestureDetector(
+                  isMultiSession
+                                  ? broadcasttype == "appaudioandcamera"
+                                      ? Row(
+                                          children: [
+                                            GestureDetector(
+                                                child: !switchMute2
+                                                    ? SvgPicture.asset(
+                                                        'assets/appaudioon.svg')
+                                                    : SvgPicture.asset(
+                                                        'assets/appaudiooff.svg'),
+                                                onTap: participantcount >= 1
+                                                    ? () {
+                                                        final bool enabled =
+                                                            signalingClient
+                                                                .muteInternalMic();
+                                                        print(
+                                                            "this is enabled3236 $enabled");
+                                                        setState(() {
+                                                          switchMute2 = enabled;
+                                                        });
+                                                      }
+                                                    : null),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            GestureDetector(
+                                                child: !switchMute
+                                                    ? SvgPicture.asset(
+                                                        'assets/mute_microphone.svg')
+                                                    : SvgPicture.asset(
+                                                        'assets/microphone.svg'),
+                                                onTap: participantcount >= 1
+                                                    ? () {
+                                                        final bool enabled =
+                                                            signalingClient
+                                                                .muteMic();
+                                                        print(
+                                                            "this is enabled7465 $enabled");
+                                                        setState(() {
+                                                          switchMute = enabled;
+                                                        });
+                                                      }
+                                                    : null)
+                                          ],
+                                        )
+                                      : GestureDetector(
+                                          child: !switchMute
+                                              ? SvgPicture.asset(
+                                                  'assets/mute_microphone.svg')
+                                              : SvgPicture.asset(
+                                                  'assets/microphone.svg'),
+                                          onTap: participantcount >= 1
+                                              ? () {
+                                                  final bool enabled =
+                                                      signalingClient.muteMic();
+                                                  print(
+                                                      "this is enabled-000 $enabled");
+                                                  setState(() {
+                                                    switchMute = enabled;
+                                                  });
+                                                }
+                                              : null)
+                                  : GestureDetector(
                                       child: !switchMute
-                                          ? SvgPicture.asset(
-                                              'assets/mute_microphone.svg')
-                                          : SvgPicture.asset(
-                                              'assets/microphone.svg'),
+                                          ? broadcasttype == "camera" ||
+                                                  broadcasttype == "micaudio"
+                                              ? SvgPicture.asset(
+                                                  'assets/mute_microphone.svg')
+                                              : SvgPicture.asset(
+                                                  'assets/appaudioon.svg')
+                                          : broadcasttype == "camera" ||
+                                                  broadcasttype == "micaudio"
+                                              ? SvgPicture.asset(
+                                                  'assets/microphone.svg')
+                                              : SvgPicture.asset(
+                                                  'assets/appaudiooff.svg'),
                                       onTap: participantcount >= 1
                                           ? () {
                                               final bool enabled =
                                                   signalingClient.muteMic();
-                                              print(
-                                                  "this is enabled7465 $enabled");
+                                              print("this is enabled $enabled");
                                               setState(() {
                                                 switchMute = enabled;
                                               });
                                             }
-                                          : null)
-                                ],
-                              )
-                            : GestureDetector(
-                                child: !switchMute
-                                    ? SvgPicture.asset(
-                                        'assets/mute_microphone.svg')
-                                    : SvgPicture.asset('assets/microphone.svg'),
-                                onTap: participantcount >= 1
-                                    ? () {
-                                        final bool enabled =
-                                            signalingClient.muteMic();
-                                        print("this is enabled-000 $enabled");
-                                        setState(() {
-                                          switchMute = enabled;
-                                        });
-                                      }
-                                    : null)
-                        : GestureDetector(
-                            child: !switchMute
-                                ? broadcasttype == "camera" ||
-                                        broadcasttype == "micaudio"
-                                    ? SvgPicture.asset(
-                                        'assets/mute_microphone.svg')
-                                    : SvgPicture.asset('assets/appaudioon.svg')
-                                : broadcasttype == "camera" ||
-                                        broadcasttype == "micaudio"
-                                    ? SvgPicture.asset('assets/microphone.svg')
-                                    : SvgPicture.asset(
-                                        'assets/appaudiooff.svg'),
-                            onTap: participantcount >= 1
-                                ? () {
-                                    // print("this is enabled9797 $enabled");
-                                    final bool enabled =
-                                        signalingClient.muteMic();
-                                    print("this is enabled9797 $enabled");
-                                    setState(() {
-                                      switchMute = enabled;
-                                    });
-                                  }
-                                : null),
+                                          : null),
                   ],
                 ),
               )
@@ -597,7 +627,7 @@ screen at the moment..''',
                                     //      mainAxisAlignment: MainAxisAlignment.start,
                                     // crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      // backArrow(),
+                                     
                                       (session_type == "call")
                                           ? Text(
                                               (meidaType == "video")
@@ -787,7 +817,7 @@ screen at the moment..''',
                             children: [
                               Row(
                                 children: [
-                                  //   backArrow(),
+                               
                                   Text(
                                     (meidaType == "video")
                                         ? 'You are video calling with'
@@ -1185,79 +1215,5 @@ screen at the moment..''',
             : SizedBox();
   }
 
-  IconButton backArrow() {
-    return IconButton(
-      icon: const Icon(
-        Icons.arrow_back,
-        size: 24,
-        color: chatRoomColor,
-      ),
-      onPressed: () {
-        if (strArr.last == "GroupList") {
-          print("here in onpress back arrow grouplist");
-          widget.mainProvider.homeScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("GroupList");
-        } else if (strArr.last == "NoChat") {
-          print("here in onpress back arrow nochat");
-          widget.mainProvider.homeScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("NoChat");
-        } else if (strArr.last == "NoChatActiveBroadcast") {
-          print("here in onpress back arrow nochat");
-          widget.mainProvider.homeScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("NoChatActiveBroadcast");
-        } else if (strArr.last == "ChatScreen") {
-          print("here in onpress back arrow chat $listIndex");
-          widget.mainProvider.chatScreen(index: listIndex);
-
-          widget.mainProvider.activeCall();
-          strArr.remove("ChatScreen");
-        } else if (strArr.last == "CreateIndividualGroup") {
-          print("here in onpress back arrow group");
-          widget.mainProvider.createIndividualGroupScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("CreateIndividualGroup");
-        } else if (strArr.last == "CreateGroupChat") {
-          print("here in onpress back arrow");
-          widget.mainProvider.createGroupChatScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("CreateGroupChat");
-        } else if (strArr.last == "GroupListActiveCall") {
-          print("here in onpress back arrow grouplist");
-          widget.mainProvider.homeScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("GroupListActiveCall");
-        } else if (strArr.last == "ChatScreenWithActiveCall") {
-          print("here in onpress back arrow grouplist");
-          widget.mainProvider.chatScreen(index: listIndex);
-
-          widget.mainProvider.activeCall();
-          // widget.handleSeenStatus();
-          strArr.remove("ChatScreenWithActiveCall");
-        } else if (strArr.last == "CreateGroupChatActiveCall") {
-          print("here in onpress back arrow grouplist");
-          widget.mainProvider.createGroupChatScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("CreateGroupChatActiveCall");
-        } else if (strArr.last == "CreateIndividualGroupActiveCall") {
-          print("here in onpress back arrow grouplist");
-          widget.mainProvider.createIndividualGroupScreen();
-
-          widget.mainProvider.activeCall();
-          strArr.remove("CreateIndividualGroupActiveCall");
-        }
-
-        print("this is mesg scrn icon pressed");
-      },
-    );
-  }
+ 
 }
