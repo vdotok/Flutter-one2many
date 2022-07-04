@@ -125,7 +125,6 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
       statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
     ));
 
-    
     return WillPopScope(
         // onWillPop: _onWillPop,
         child: Consumer3<ContactProvider, AuthProvider, MainProvider>(builder:
@@ -207,17 +206,18 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                                                       .getUser.auth_token);
                                           // groupListProvider.getGroupList(
                                           //     authProvider.getUser.auth_token);
+                                          print(
+                                              "this is response of createGroup ${res}");
                                           GroupModel groupModel =
                                               GroupModel.fromJson(res["group"]);
-                                          print(
-                                              "this is response of createGroup ${res}, ");
+
                                           int channelIndex = 0;
                                           if (res["is_already_created"]) {
                                             print(
                                                 "here in already created grouup");
                                             buildShowDialog(context, "",
                                                 "You already have a group with this user");
-                                                 selectedContacts.clear();
+                                            selectedContacts.clear();
                                             //   Navigator.pop(context, true);
                                             // Navigator.pop(context, true);
                                           } else {
@@ -268,7 +268,6 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                                                                       authProvider),
                                                         );
                                                       });
-                                                
                                                 }
                                               : () {
                                                   buildShowDialog(

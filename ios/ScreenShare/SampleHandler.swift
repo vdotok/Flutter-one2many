@@ -103,6 +103,7 @@ class SampleHandler: RPBroadcastSampleHandler {
      let message1 = String(data: jsonData1, encoding: .utf8)!
         print(message1)
      wormhole.passMessageObject(message1 as NSCoding, identifier: "sessionUpdates")
+//    wormhole.passMessageObject(message1 as NSCoding, identifier: "updateScreenState")
         vtokSdk.hangup(session: session)
      
     }
@@ -117,7 +118,7 @@ class SampleHandler: RPBroadcastSampleHandler {
             }
         case .audioApp,.audioMic:
             switch audioState.screenShareAudio {
-            case .passAll:startScreenShare
+            case .passAll:
                 vtokSdk?.processSampleBuffer(sampleBuffer, with: sampleBufferType)
             case .none:
                 break
@@ -135,6 +136,7 @@ extension SampleHandler: SDKConnectionDelegate {
             guard let sdk = vtokSdk, let session = screenShareData else {return}
             self.screenShareData = session
             sdk.initiate(session: session.baseSession, sessionDelegate: self)
+         //   sdk.initiate(session: <#T##VTokBaseSession#>, sessionDelegate: <#T##SessionDelegate?#>)
         case .disconnected(_):
             print("==== screeen failed to registerd ====")
             break

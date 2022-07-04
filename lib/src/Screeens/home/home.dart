@@ -72,9 +72,7 @@ GlobalKey forsmallView = new GlobalKey();
 String session_type = "";
 //bool isPushed = false;
 
-List<Map<String, dynamic>> rendererListWithRefID = [
- 
-];
+List<Map<String, dynamic>> rendererListWithRefID = [];
 int count = 0;
 bool isRinging = false;
 Map<String, dynamic> customData;
@@ -292,7 +290,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       }
     };
     signalingClient.internetConnectivityCallBack = (mesg) {
-      print("this is negsss $mesg");
+      print("this is negsss $mesg $callSocket");
       if (mesg == "Connected") {
         showSnackbar("Internet Connected", whiteColor, Colors.green, false);
 
@@ -322,7 +320,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
         showSnackbar("No Internet Connection", whiteColor, primaryColor, true);
 
-        // signalingClient.closeSocket();
+        signalingClient.closeSocket();
       }
     };
 
@@ -384,14 +382,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           time = DateTime.now();
           _callTime = DateTime.now();
         } else {
-          _ticker.cancel();
+          //  _ticker.cancel();
           time = _callTime;
           isTimer = false;
         }
         print(
             "call callback on call left by participant2 ${rendererListWithRefID.length}");
-        _updateTimer();
-        _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
+        // _updateTimer();
+        // _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
         onRemoteStream = true;
 
         forLargStream = rendererListWithRefID[1];
@@ -400,7 +398,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           count = 0;
           iscallAcceptedbyuser = true;
         }
-       
+
         _mainProvider.callStart();
       });
     };
@@ -477,6 +475,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
         setState(() {
           if (typeOfCall == "one_to_many" && !receive) {
+            print("jdhgdhgd");
             participantcount = participantcount - 1;
           }
 
@@ -502,15 +501,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         participantcount = paticipantcount - 1;
       } else {
         if (Platform.isIOS) {
-          setState(() {
-            participantcount = paticipantcount;
+          //   setState(() {
+          participantcount = paticipantcount;
 
-            typeOfCall = calltype;
+          typeOfCall = calltype;
 
-            // _audioPlayer.stop();
-
+          // _audioPlayer.stop();
+          if (!ispublicbroadcast) {
             _mainProvider.callStart();
-          });
+          }
+          //   });
         } else {
           participantcount = paticipantcount - 1;
         }
@@ -533,12 +533,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           time = DateTime.now();
           _callTime = DateTime.now();
         } else {
-          _ticker.cancel();
+          // _ticker.cancel();
           time = _callTime;
           isTimer = false;
         }
-        _updateTimer();
-        _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
+        // _updateTimer();
+        // _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
 
         iscallAcceptedbyuser = true;
 
@@ -565,12 +565,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         time = DateTime.now();
         _callTime = DateTime.now();
       } else {
-        _ticker.cancel();
+        // _ticker.cancel();
         time = _callTime;
         isTimer = false;
       }
-      _updateTimer();
-      _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
+      // _updateTimer();
+      // _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
 
       _mainProvider.callStart();
     };
@@ -606,7 +606,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           print("here in oncallhungup index $listIndex");
           print("utuyy");
           _mainProvider.homeScreen();
-        }  else if (strArr.last == "CreateGroupChat") {
+        } else if (strArr.last == "CreateGroupChat") {
           _mainProvider.createGroupChatScreen();
         } else if (strArr.last == "GroupList") {
           _mainProvider.homeScreen();
@@ -614,10 +614,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           _mainProvider.inActiveCall();
           _mainProvider.homeScreen();
           strArr.remove("NoChat");
-        }  
-        
+        }
       }
-     
+
       setState(() {
         Wakelock.toggle(enable: false);
         ispublicbroadcast = false;
@@ -805,12 +804,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     final duration = time != null ? DateTime.now().difference(time) : null;
     final newDuration = duration != null ? _formatDuration(duration) : null;
     if (mounted) {
-    setState(() {
-      // Your state change code goes here
-      pressDuration = newDuration;
-      print(
-          "IN SET STATE SINGNALING CLIENT>PRESS DURATIONnnnnn $pressDuration");
-    });
+      setState(() {
+        // Your state change code goes here
+        pressDuration = newDuration;
+        print(
+            "IN SET STATE SINGNALING CLIENT>PRESS DURATIONnnnnn $pressDuration");
+      });
     }
     //  setState(() {
 
@@ -824,8 +823,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     String sessionType,
   }) async {
     //mmtype=mtype;
-    print(
-        "call callback on call Received incomming2  ${to.group_title} $callType $mtype $isDialer $switchSpeaker");
+    // print(
+    //     "call callback on call Received incomming2  ${to.group_title} $callType $mtype $isDialer $switchSpeaker");
     setState(() {
       Wakelock.toggle(enable: true);
       typeOfCall = callType;
@@ -910,7 +909,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     if (to != null) {
       _mainProvider.callDial();
     }
-    
+
     _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
   }
 
@@ -1054,6 +1053,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         onWillPop: _onWillPop,
         child: Consumer4<GroupListProvider, AuthProvider, MainProvider,
                 ContactProvider>(
+            // ignore: missing_return
             builder: (context, listProvider, authProvider, mainProvider,
                 contactProvider1, child) {
           print(
@@ -1094,15 +1094,15 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 groupListProvider: groupListProvider,
               );
             } else if (mainProvider.homeStatus == HomeStatus.CallStart) {
-            //  if (typeOfCall == "one_to_many") {
-                return CallStartOnetoMany(
-                  localRenderer: _localRenderer,
-                  mainProvider: _mainProvider,
-                  stopCall: stopCall,
-                  registerRes: registerRes,
-                  remoteRenderer: _remoteRenderer,
-                );
-             // }
+              //  if (typeOfCall == "one_to_many") {
+              return CallStartOnetoMany(
+                localRenderer: _localRenderer,
+                mainProvider: _mainProvider,
+                stopCall: stopCall,
+                registerRes: registerRes,
+                remoteRenderer: _remoteRenderer,
+              );
+              // }
             } else if (mainProvider.homeStatus == HomeStatus.CallDial) {
               print("this is call dial screen");
               return CallDialScreen(
