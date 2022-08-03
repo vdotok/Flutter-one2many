@@ -59,7 +59,9 @@ class _LandingScreenState extends State<LandingScreen> {
           lead: false,
           succeedingIcon: '',
         ),
-        body: SingleChildScrollView(
+        body: 
+        
+        SingleChildScrollView(
           child: Container(
             child: Column(
               children: [
@@ -401,5 +403,7 @@ class _LandingScreenState extends State<LandingScreen> {
             ),
           ),
         ));
+ 
+  
   }
 }
