@@ -447,7 +447,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       if (isMultiSession) {
         iscallAcceptedbyuser = false;
       } else {
-        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+      _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
       }
     };
     signalingClient.onParticipantsLeft =
@@ -590,11 +590,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       //     }
       //   }
       // }
-      if (_callticker != null) {
-        _callticker.cancel();
-        count = 0;
-        iscallAcceptedbyuser = false;
-      }
+      // if (_callticker != null) {
+      //   _callticker.cancel();
+      //   count = 0;
+      //   iscallAcceptedbyuser = false;
+      // }
       // isReceive = false;
 
       if ((rendererListWithRefID.length == 1 && isDialer) ||
@@ -632,6 +632,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         iscamerabuttonSelected = false;
         ismicAudiobuttonSelected = false;
         _ticker?.cancel();
+         _callticker.cancel();
+        count = 0;
+        iscallAcceptedbyuser = false;
         //   _audioPlayer.stop();
       });
 
@@ -1199,7 +1202,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   handlePress: handleCreateGroup);
             }
           } else {
-            return LandingScreen();
+            return LandingScreen( mainProvider: mainProvider,
+                grouplistprovider: groupListProvider,
+                startCall: _startCall,
+                authprovider: authProvider,
+                registerRes: registerRes,
+                isdev: isInternetConnect,
+                sockett: callSocket,);
             // return Scaffold(
             //   appBar: CustomAppBar(
             //     groupListProvider: groupListProvider,
