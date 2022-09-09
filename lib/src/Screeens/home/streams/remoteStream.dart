@@ -20,7 +20,7 @@ class _RemoteStreamState extends State<RemoteStream> {
       child: RTCVideoView(this.widget.remoteRenderer,
           // key: forsmallView,
           mirror: false,
-          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitContain),
+          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
     );
   }
 }

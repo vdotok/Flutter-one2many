@@ -23,12 +23,17 @@ class _WidgetHeaderState extends State<SignInButtonFile> {
 
   @override
   Widget build(BuildContext context) {
-    return new SizedBox(
+    return  SizedBox(
       width: 300.0,
       height: 48.0,
-      child: RaisedButton(
-        shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(5.0)),
+      child: ElevatedButton(
+            style: ElevatedButton.styleFrom(    shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            
+          ),
+          primary: redColor
+          ),
+      
         onPressed: () async {
           // if (widget.name == "Sign UP")
           //   Navigator.pushNamed(context, "/register");
@@ -39,8 +44,8 @@ class _WidgetHeaderState extends State<SignInButtonFile> {
           // Navigator.pushNamed(context, "/register");
         },
         child: Text(
-          "${widget.name}",
-          style: TextStyle(
+          widget.name,
+          style: const TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w300,
               fontFamily: font_Family,
@@ -48,8 +53,7 @@ class _WidgetHeaderState extends State<SignInButtonFile> {
               color: whiteColor),
           textAlign: TextAlign.center,
         ),
-        textColor: Colors.white,
-        color: redColor,
+       
       ),
     );
   }

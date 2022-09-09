@@ -65,7 +65,6 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -97,9 +96,12 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
                 SizedBox(
                   width: 300.0,
                   height: 48.0,
-                  child: RaisedButton(
-                    shape: new RoundedRectangleBorder(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom( shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0)),
+                         primary: redColor
+                        ),
+                   
                     onPressed: () {
                       Navigator.pushNamed(context, "/signin");
                       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => SignInScreen()));
@@ -114,8 +116,8 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
                           color: whiteColor),
                       textAlign: TextAlign.center,
                     ),
-                    textColor: Colors.white,
-                    color: redColor,
+                    
+                  
                   ),
                 )
               ],

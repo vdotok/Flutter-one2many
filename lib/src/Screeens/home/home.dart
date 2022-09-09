@@ -505,6 +505,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           participantcount = paticipantcount;
 
           typeOfCall = calltype;
+            count = 0;
+            iscallAcceptedbyuser = true;
+            _callticker?.cancel();
 
           // _audioPlayer.stop();
           if (!ispublicbroadcast) {
@@ -632,7 +635,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         iscamerabuttonSelected = false;
         ismicAudiobuttonSelected = false;
         _ticker?.cancel();
-         _callticker.cancel();
+       if(inCall){  _callticker.cancel();}
         count = 0;
         iscallAcceptedbyuser = false;
         //   _audioPlayer.stop();

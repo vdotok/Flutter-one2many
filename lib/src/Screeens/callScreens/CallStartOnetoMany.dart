@@ -123,7 +123,9 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
             child: Container(
                 child: Stack(children: <Widget>[
               participantcount >= 1
-                  ? broadcasttype == "camera"
+                  ? broadcasttype == "camera" ||
+                          broadcasttype == "appaudioandcamera" ||
+                          broadcasttype == "micaudioandcamera"
                       ? RemoteStream(
                           remoteRenderer: rendererListWithRefID[0]
                               ["rtcVideoRenderer"],
@@ -160,7 +162,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
                       participantcount < 1 ? SizedBox() : Spacer(),
                       participantcount < 1
                           ? SizedBox()
-                          : FlatButton(
+                          : TextButton(
                               onPressed: () {
                                 print(
                                     "this is url for public broadcast $publicbroadcasturl");
@@ -301,7 +303,9 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
               //
               //    : Container(),
               participantcount >= 1
-                  ? broadcasttype == "camera"
+                  ? broadcasttype == "camera" ||
+                          broadcasttype == "appaudioandcamera" ||
+                          broadcasttype == "micaudioandcamera"
                       ? SizedBox()
                       : Center(
                           child: Text(
@@ -353,7 +357,7 @@ screen at the moment..''',
                                 color: participantcolor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            child: FlatButton(
+                            child: TextButton(
                               onPressed: () {
                                 print(
                                     "this is url for public broadcast $publicbroadcasturl");
@@ -722,22 +726,22 @@ screen at the moment..''',
                               alignment: Alignment.topRight,
                               child: Column(
                                 children: [
-                                  // Container(
-                                  //   padding: EdgeInsets.fromLTRB(
-                                  //       0.0, 120.33, 20, 27),
-                                  //   child: _pressDuration == null
-                                  //       ? Container()
-                                  //       : Text(
-                                  //           '$_pressDuration',
-                                  //           style: TextStyle(
-                                  //               decoration: TextDecoration.none,
-                                  //               fontSize: 14,
-                                  //               fontFamily: secondaryFontFamily,
-                                  //               fontWeight: FontWeight.w400,
-                                  //               fontStyle: FontStyle.normal,
-                                  //               color: darkBlackColor),
-                                  //         ),
-                                  // ),
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 120.33, 20, 27),
+                                    child: _pressDuration == null
+                                        ? Container()
+                                        : Text(
+                                            '$_pressDuration',
+                                            style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                fontSize: 14,
+                                                fontFamily: secondaryFontFamily,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                                color: darkBlackColor),
+                                          ),
+                                  ),
                                   !kIsWeb
                                       ? Container(
                                           padding: EdgeInsets.fromLTRB(

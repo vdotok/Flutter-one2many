@@ -60,8 +60,6 @@ class GroupListScreen extends StatefulWidget {
 }
 
 class _GroupListScreenState extends State<GroupListScreen> {
- 
-
   showSnakbar(msg) {
     final snackBar = SnackBar(
       content: Text(
@@ -88,14 +86,14 @@ class _GroupListScreenState extends State<GroupListScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  FlatButton(
+                  TextButton(
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text('CANCEL',
                           style: TextStyle(color: chatRoomColor))),
                   // Consumer2<GroupListProvider, AuthProvider>(builder:
                   //     (context, listProvider, authProvider, child) {
                   //   return
-                  FlatButton(
+                  TextButton(
                       onPressed: () async {
                         Navigator.of(context).pop();
                         await widget.groupListProvider.deleteGroup(
@@ -472,7 +470,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
                         children: [
                           Container(
                             // padding: const EdgeInsets.only(bottom: 60),
-                            child: FlatButton(
+                            child: TextButton(
                               onPressed: () {
                                 if (isRegisteredAlready) {
                                   ScaffoldMessenger.of(context)
@@ -482,7 +480,6 @@ class _GroupListScreenState extends State<GroupListScreen> {
 
                                 signalingClient
                                     .unRegister(widget.registerRes["mcToken"]);
-                               
                               },
                               child: Text(
                                 "LOG OUT",
@@ -496,7 +493,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
                               ),
                             ),
                           ),
-                         
+
                           // Container(
                           //   height: 10,
                           //   width: 10,

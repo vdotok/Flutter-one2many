@@ -57,8 +57,16 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
               Container(
                 padding: EdgeInsets.fromLTRB(0, 75, 0, 111.22),
                 child: Center(
-                  child: FlatButton(
-                    color: Colors.green,
+                  child: TextButton(
+                    style: TextButton.styleFrom(backgroundColor:Colors.green,
+                       shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Colors.green,
+                            width: 3,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(10)),
+                    ),
+                  
                     onPressed: () {
                       groupBroadcast = widget.to == null ? false : true;
                       ispublicbroadcast = widget.to == null ? true : false;
@@ -104,12 +112,7 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                     },
                     child: Text('START BROADCAST',
                         style: TextStyle(color: Colors.white)),
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Colors.green,
-                            width: 3,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(10)),
+                 
                   ),
                 ),
               )

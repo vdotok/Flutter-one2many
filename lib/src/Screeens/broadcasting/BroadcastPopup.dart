@@ -90,7 +90,16 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                                 : Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         //child:Text("hellp")
-                        child: FlatButton(
+                        child: TextButton(
+                           style: TextButton.styleFrom(
+   // padding: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: screensharecolor,
+                                  width: 3,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(5)),
+  ),
                           onPressed: () {
                             print(
                                 "here in screen share with app $isAppAudiobuttonSelected");
@@ -106,13 +115,7 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                           child: Text('SCREEN SHARING WITH APP AUDIO',
                               style: TextStyle(
                                   color: screensharecolor, fontSize: 10)),
-                          textColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: screensharecolor,
-                                  width: 3,
-                                  style: BorderStyle.solid),
-                              borderRadius: BorderRadius.circular(5)),
+                    
                         ),
                       ),
                       SizedBox(height: 20),
@@ -124,7 +127,16 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                                 ? Colors.yellow
                                 : Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
-                        child: FlatButton(
+                        child: TextButton(
+                           style: TextButton.styleFrom(
+   // padding: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: screensharecolor,
+                                  width: 3,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(5)),
+  ),
                           onPressed: () {
                             if (isAppAudiobuttonSelected) {
                               isAppAudiobuttonSelected =
@@ -138,13 +150,7 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                           child: Text('SCREEN SHARING WITH MIC AUDIO',
                               style: TextStyle(
                                   color: screensharecolor, fontSize: 10)),
-                          textColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: screensharecolor,
-                                  width: 3,
-                                  style: BorderStyle.solid),
-                              borderRadius: BorderRadius.circular(5)),
+                   
                         ),
                       ),
                       SizedBox(height: 20),
@@ -157,7 +163,16 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               width: 215,
               height: 44,
-              child: FlatButton(
+              child: TextButton(
+                 style: TextButton.styleFrom(
+   // padding: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: screensharecolor,
+                                  width: 3,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(5)),
+  ),
                 onPressed: () {
                   setState(() {
                     iscamerabuttonSelected = !iscamerabuttonSelected;
@@ -165,13 +180,7 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                 },
                 child: Text('CAMERA',
                     style: TextStyle(color: screensharecolor, fontSize: 10)),
-                textColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: screensharecolor,
-                        width: 3,
-                        style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(5)),
+             
               ),
             ),
             SizedBox(height: 26),
@@ -188,7 +197,7 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                                   ? Colors.green
                                   : Colors.grey,
                       borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: isAppAudiobuttonSelected ||
                             ismicAudiobuttonSelected ||
                             iscamerabuttonSelected

@@ -120,7 +120,7 @@ class NoChatScreen extends StatelessWidget {
                                   width: 3,
                                 ),
                               ),
-                              child: FlatButton(
+                              child: TextButton(
                                 onPressed: () {
                                   mainProvider.createGroupChatScreen();
                                 },
@@ -157,7 +157,7 @@ class NoChatScreen extends StatelessWidget {
                         ),
                       ),
                       child: Center(
-                          child: FlatButton(
+                          child: TextButton(
                         onPressed: refreshList,
                         child: Text(
                           "Refresh",
@@ -177,7 +177,7 @@ class NoChatScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                         width: 105,
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: () {
                             if (isRegisteredAlready) {
                               ScaffoldMessenger.of(context)

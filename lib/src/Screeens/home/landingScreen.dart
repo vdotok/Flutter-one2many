@@ -46,6 +46,25 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future buildShowDialog(BuildContext context) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(builder: (context, setState) {
+              Future.delayed(Duration(seconds: 2), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: Text(
+                  "Please select Public/Group Broadcast Button.",
+                  textAlign: TextAlign.center,
+                ),
+                elevation: 0,
+              );
+            });
+          });
+    }
+
     return Scaffold(
         appBar: CustomAppBar(
           //  handlePublicBroadcastButton:widget.handlePublicBroadcastButton,
@@ -59,9 +78,7 @@ class _LandingScreenState extends State<LandingScreen> {
           lead: false,
           succeedingIcon: '',
         ),
-        body: 
-        
-        SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Container(
             child: Column(
               children: [
@@ -92,7 +109,13 @@ class _LandingScreenState extends State<LandingScreen> {
                           ? Colors.yellow
                           : Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(  shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: screensharecolor,
+                            width: 3,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(5)),),
                     onPressed: () {
                       if (ismicAudiobuttonSelected) {
                         ismicAudiobuttonSelected = !ismicAudiobuttonSelected;
@@ -103,13 +126,8 @@ class _LandingScreenState extends State<LandingScreen> {
                     },
                     child: Text('SCREEN SHARING WITH APP AUDIO',
                         style: TextStyle(color: screensharecolor)),
-                    textColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: screensharecolor,
-                            width: 3,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(5)),
+                  
+                  
                   ),
                 ),
                 SizedBox(height: 30),
@@ -121,7 +139,13 @@ class _LandingScreenState extends State<LandingScreen> {
                           ? Colors.yellow
                           : Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: FlatButton(
+                  child: TextButton(
+                     style: TextButton.styleFrom(  shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: screensharecolor,
+                            width: 3,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(5)),),
                     onPressed: () {
                       if (isAppAudiobuttonSelected) {
                         isAppAudiobuttonSelected = !isAppAudiobuttonSelected;
@@ -132,13 +156,8 @@ class _LandingScreenState extends State<LandingScreen> {
                     },
                     child: Text('SCREEN SHARING WITH MIC AUDIO',
                         style: TextStyle(color: screensharecolor)),
-                    textColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: screensharecolor,
-                            width: 3,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(5)),
+                  
+                  
                   ),
                 ),
                 SizedBox(height: 30),
@@ -149,7 +168,14 @@ class _LandingScreenState extends State<LandingScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   width: 265,
                   height: 70,
-                  child: FlatButton(
+                  child: TextButton(
+
+                      style: TextButton.styleFrom(  shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: screensharecolor,
+                            width: 3,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(5)),),
                     onPressed: () {
                       setState(() {
                         iscamerabuttonSelected = !iscamerabuttonSelected;
@@ -157,13 +183,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     },
                     child: Text('CAMERA',
                         style: TextStyle(color: screensharecolor)),
-                    textColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: screensharecolor,
-                            width: 3,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(5)),
+                 
                   ),
                 ),
                 SizedBox(height: 30),
@@ -179,7 +199,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                   ? Colors.green
                                   : Colors.grey,
                       borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: isAppAudiobuttonSelected ||
                             ismicAudiobuttonSelected ||
                             iscamerabuttonSelected
@@ -273,7 +293,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               broadcasttype = "micaudio";
                               widget.grouplistprovider
                                   .handleGroupListState(ListStatus.Scussess);
-                                  widget.mainProvider.groupListScreen();
+                              widget.mainProvider.groupListScreen();
                               print("this is screen share with internal audio");
                             } else if (isAppAudiobuttonSelected &&
                                 !ismicAudiobuttonSelected &&
@@ -284,7 +304,7 @@ class _LandingScreenState extends State<LandingScreen> {
                               print("i am here in appaudio and camera");
                               widget.grouplistprovider
                                   .handleGroupListState(ListStatus.Scussess);
-                                   widget.mainProvider.groupListScreen();
+                              widget.mainProvider.groupListScreen();
                               print(
                                   "this is screen share with app audio and camera");
                             } else if (isAppAudiobuttonSelected &&
@@ -311,11 +331,10 @@ class _LandingScreenState extends State<LandingScreen> {
                               broadcasttype = "micaudioandcamera";
                               widget.grouplistprovider
                                   .handleGroupListState(ListStatus.Scussess);
-                                  widget.mainProvider.groupListScreen();
+                              widget.mainProvider.groupListScreen();
                               print(
                                   "this is screen share with app audio and camera");
-                            } 
-                             else if (!isAppAudiobuttonSelected &&
+                            } else if (!isAppAudiobuttonSelected &&
                                 ismicAudiobuttonSelected &&
                                 iscamerabuttonSelected &&
                                 broadcast == 0) {
@@ -331,13 +350,15 @@ class _LandingScreenState extends State<LandingScreen> {
                                   });
                               print(
                                   "this is screen share with app audio and camera");
-                            } 
-                            else {
+                            } else {
                               print("i am here in else");
+                              buildShowDialog(context);
                             }
                             // widget.mainProvider.groupListScreen();
                           }
-                        : null,
+                        : () {
+                            print("here in bullll");
+                          },
                     child:
                         Text('Continue', style: TextStyle(color: Colors.white)),
 
@@ -358,7 +379,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                child: FlatButton(
+                                child: TextButton(
                                   onPressed: () {
                                     if (isRegisteredAlready) {
                                       ScaffoldMessenger.of(context)
@@ -403,7 +424,5 @@ class _LandingScreenState extends State<LandingScreen> {
             ),
           ),
         ));
- 
-  
   }
 }
