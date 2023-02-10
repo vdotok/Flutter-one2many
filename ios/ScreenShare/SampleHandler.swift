@@ -361,6 +361,8 @@ extension SampleHandler: SessionDelegate {
         case .suspendedByProvider:
             print("bye")
             break
+        default: break
+            
         }
     }
     func didGetPublicUrl(for session: VTokBaseSession, with url: String) {

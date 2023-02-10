@@ -8,10 +8,13 @@ import '../services/server.dart';
 enum ListStatus {
   Scussess,
   Failure,
-  Loading, 
+  Loading,
 }
+
 enum CreateChatStatus { New, Loading }
+
 enum DeleteGroupStatus { Success, Failure, Loading }
+
 enum EditGroupNameStatus { Success, Failure, Loading }
 
 class GroupListProvider with ChangeNotifier {
@@ -30,8 +33,6 @@ class GroupListProvider with ChangeNotifier {
   GroupListModel _groupList;
   GroupListModel get groupList => _groupList;
 
-
-
   String _successMsg;
   String get successMsg => _successMsg;
 
@@ -47,7 +48,6 @@ class GroupListProvider with ChangeNotifier {
   int _status;
   int get status => _status;
 
- 
   handleGroupListState(ListStatus state) {
     print("This is handle group list state $state");
     _groupListStatus = state;
@@ -60,8 +60,11 @@ class GroupListProvider with ChangeNotifier {
     if (_createChatStatusStatus == CreateChatStatus.New) {
       print("this is loading ");
       _createChatStatusStatus = CreateChatStatus.Loading;
-    } else
+    } else {
+    
       _createChatStatusStatus = CreateChatStatus.New;
+        print("here in create chat status $_createChatStatusStatus");
+    }
 
     notifyListeners();
   }
@@ -73,7 +76,7 @@ class GroupListProvider with ChangeNotifier {
     print(
         "this is model list data ########## ${GroupListModel.fromJson(currentData)}");
 
-   if (currentData["status"] != 200) {
+    if (currentData["status"] != 200) {
       print("djghfghdf");
       _groupListStatus = ListStatus.Failure;
       _errorMsg = currentData['message'];
@@ -87,8 +90,6 @@ class GroupListProvider with ChangeNotifier {
     }
   }
 
-  
-
   addGroup(GroupModel groupModel) {
     _groupList.groups.insert(0, groupModel);
     notifyListeners();
@@ -97,7 +98,6 @@ class GroupListProvider with ChangeNotifier {
   changeState() {
     _groupListStatus = ListStatus.Scussess;
     notifyListeners();
-   
   }
 
   deleteGroup(group_id, authtoken) async {
@@ -154,7 +154,4 @@ class GroupListProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
- 
-
 }

@@ -69,49 +69,50 @@ class _CallDialScreenState extends State<CallDialScreen> {
       body: OrientationBuilder(builder: (context, orientation) {
         return Stack(
           children: [
-            widget.mediaType == "video"
-                ? Container(
-                    // color: Colors.red,
-                    //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: rendererListWithRefID.length == 0
-                        ? Container()
-                        : RemoteStream(
-                            remoteRenderer: rendererListWithRefID[0]
-                                ["rtcVideoRenderer"],
-                            // remoteRenderer: rendererListWithRefID[0]
-                            //     ["rtcVideoRenderer"],
-                          )
-// RemoteStream(
-//                       remoteRenderer: rendererListWithRefID[0]
-//                           ["rtcVideoRenderer"],
+//             widget.mediaType == "video"
+//                 ? Container(
+//                     // color: Colors.red,
+//                     //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+//                     width: MediaQuery.of(context).size.width,
+//                     height: MediaQuery.of(context).size.height,
+//                     child: rendererListWithRefID.length == 0
+//                         ? Container()
+//                         : 
+//                         RemoteStream(
+//                             remoteRenderer: rendererListWithRefID[0]
+//                                 ["rtcVideoRenderer"],
+//                             // remoteRenderer: rendererListWithRefID[0]
+//                             //     ["rtcVideoRenderer"],
+//                           )
+// // RemoteStream(
+// //                       remoteRenderer: rendererListWithRefID[0]
+// //                           ["rtcVideoRenderer"],
+// //                     )
+//                     // RTCVideoView(
+//                     //     rendererListWithRefID[0]["rtcVideoRenderer"],
+//                     //     key: forDialView,
+//                     //     mirror: false,
+//                     //     objectFit: RTCVideoViewObjectFit
+//                     //         .RTCVideoViewObjectFitCover),
 //                     )
-                    // RTCVideoView(
-                    //     rendererListWithRefID[0]["rtcVideoRenderer"],
-                    //     key: forDialView,
-                    //     mirror: false,
-                    //     objectFit: RTCVideoViewObjectFit
-                    //         .RTCVideoViewObjectFitCover),
-                    )
-                : Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                      colors: [
-                        backgroundAudioCallDark,
-                        backgroundAudioCallLight,
-                        backgroundAudioCallLight,
-                        backgroundAudioCallLight,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment(0.0, 0.0),
-                    )),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        'assets/userIconCall.svg',
-                      ),
-                    ),
-                  ),
+//                 : Container(
+//                     decoration: BoxDecoration(
+//                         gradient: LinearGradient(
+//                       colors: [
+//                         backgroundAudioCallDark,
+//                         backgroundAudioCallLight,
+//                         backgroundAudioCallLight,
+//                         backgroundAudioCallLight,
+//                       ],
+//                       begin: Alignment.topCenter,
+//                       end: Alignment(0.0, 0.0),
+//                     )),
+//                     child: Center(
+//                       child: SvgPicture.asset(
+//                         'assets/userIconCall.svg',
+//                       ),
+//                     ),
+//                   ),
             Container(
                 padding: EdgeInsets.only(top: 120),
                 alignment: Alignment.center,

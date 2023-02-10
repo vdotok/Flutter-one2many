@@ -16,6 +16,7 @@ class LandingScreen extends StatefulWidget {
   AuthProvider authprovider;
   var registerRes;
   bool sockett;
+  final refreshList;
   bool isdev;
   final handlePress;
   final MainProvider mainProvider;
@@ -27,7 +28,7 @@ class LandingScreen extends StatefulWidget {
       this.isdev,
       this.sockett,
       this.mainProvider,
-      this.handlePress});
+      this.handlePress, this.refreshList});
   @override
   _LandingScreenState createState() => _LandingScreenState();
 }
@@ -78,7 +79,11 @@ class _LandingScreenState extends State<LandingScreen> {
           lead: false,
           succeedingIcon: '',
         ),
-        body: SingleChildScrollView(
+        body:
+        RefreshIndicator(
+          onRefresh: widget.refreshList,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Container(
             child: Column(
               children: [
@@ -188,8 +193,8 @@ class _LandingScreenState extends State<LandingScreen> {
                 ),
                 SizedBox(height: 30),
                 Container(
-                  width: 115,
-                  height: 35,
+                  width: 130,
+                  height: 40,
                   decoration: BoxDecoration(
                       color: isAppAudiobuttonSelected
                           ? Colors.green
@@ -414,6 +419,11 @@ class _LandingScreenState extends State<LandingScreen> {
                                       : Colors.red,
                                 ),
                               ),
+                              errorcode!=""?
+                                 Container(
+                                  height:40,
+                          width: 40,
+                          child:Text('$errorcode')):Container()
                             ]),
                       ),
                       Container(
@@ -423,6 +433,6 @@ class _LandingScreenState extends State<LandingScreen> {
               ],
             ),
           ),
-        ));
+        )));
   }
 }

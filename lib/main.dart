@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_one2many/src/Screeens/login/SignInScreen.dart';
 import 'package:flutter_one2many/src/Screeens/splash/splash.dart';
 import 'package:flutter_one2many/src/core/providers/auth.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 import 'src/Screeens/home/homeIndex.dart';
 import 'src/constants/constant.dart';
 import 'src/routing/routes.dart';
+
 
 GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey;
 
@@ -40,10 +41,30 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+     //_getPermissions();
+  }
+    Future<bool> _getPermissions() async {
+    PermissionStatus cameraStatus;
+    PermissionStatus audioStatus;
+
+   
+      cameraStatus = await Permission.camera.request();
+      audioStatus = await Permission.microphone.request();
+      print(
+          "this is camera dn microphone permission $cameraStatus $audioStatus");
+      if (cameraStatus.isPermanentlyDenied || audioStatus.isPermanentlyDenied) {
+        openAppSettings();
+      }
+      if (cameraStatus.isGranted && audioStatus.isGranted) {
+        return true;
+      } else
+       { return false;}
+    
   }
 
   @override
   void dispose() {
+    print("gejghrejgr");
     subscription.cancel();
     super.dispose();
   }
@@ -76,6 +97,7 @@ class _MyAppState extends State<MyApp> {
                 return SplashScreen();
               else if (auth.loggedInStatus == Status.LoggedIn) {
                 // return Test();
+               
                 return HomeIndex();
                 //return Hello();
               } else
@@ -226,3 +248,9 @@ class _TestState extends State<Test> {
     );
   }
 }
+
+
+
+
+
+

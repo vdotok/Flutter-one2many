@@ -184,7 +184,9 @@ class NoChatScreen extends StatelessWidget {
                                   .hideCurrentSnackBar();
                               isRegisteredAlready = false;
                             }
-
+isAppAudiobuttonSelected = false;
+                                    iscamerabuttonSelected = false;
+                                    ismicAudiobuttonSelected = false;
                             signalingClient.unRegister(registerRes["mcToken"]);
                           },
                           child: Text(
@@ -207,7 +209,11 @@ class NoChatScreen extends StatelessWidget {
                         color:
                             callSocket && isConnect ? Colors.green : Colors.red,
                       ),
-                    )
+                    ),
+                    errorcode!=""?
+                       Container(height:40,
+                          width: 40,
+                          child:Text('$errorcode')):Container()
                   ],
                 ),
                 Container(

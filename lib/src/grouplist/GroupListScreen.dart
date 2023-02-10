@@ -477,7 +477,9 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                       .hideCurrentSnackBar();
                                   isRegisteredAlready = false;
                                 }
-
+isAppAudiobuttonSelected = false;
+                                    iscamerabuttonSelected = false;
+                                    ismicAudiobuttonSelected = false;
                                 signalingClient
                                     .unRegister(widget.registerRes["mcToken"]);
                               },
@@ -523,7 +525,11 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                   ? Colors.green
                                   : Colors.red,
                             ),
-                          )
+                          ),
+errorcode!=""?
+                          Container(height:40,
+                          width: 40,
+                          child:Text('$errorcode')):Container()
                         ],
                       ),
                       Container(
@@ -534,6 +540,8 @@ class _GroupListScreenState extends State<GroupListScreen> {
             ],
           ),
         ),
+     
+     
       ),
       // floatingActionButton: Padding(
       //   padding: EdgeInsets.only(bottom: 40),

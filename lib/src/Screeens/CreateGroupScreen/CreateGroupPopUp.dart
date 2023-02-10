@@ -244,7 +244,7 @@ class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
                                                 .groupListScreen();
                                             strArr.remove("CreateGroupChat");
                                             selectedContacts.clear();
-
+                                             grouplistp.handleCreateChatState();
                                             Navigator.pop(context);
 
                                             // Navigator.pushNamed(

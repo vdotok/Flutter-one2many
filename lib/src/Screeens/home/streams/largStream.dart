@@ -73,7 +73,7 @@ class _LargStreamState extends State<LargStream> {
           ),
       child: RTCVideoView(this.widget.remoteRenderer,
           // key: forsmallView,
-          mirror: false,
+          mirror: true,
           objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
     );
   }

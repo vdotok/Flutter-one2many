@@ -115,7 +115,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
   @override
   Widget build(BuildContext context) {
     print(
-        "this is index in a onremotestream1 $meidaType $remoteVideoFlag $isDialer $ispublicbroadcast $groupBroadcast $pressDuration $broadcasttype");
+        "this is index in a onremotestream1 ${rendererListWithRefID.length} $isDialer");
 
     return ispublicbroadcast
         ? WillPopScope(
@@ -578,10 +578,16 @@ screen at the moment..''',
                 ),
               )
             ])))
-        //groupbroadcast starts from here
+        //groupbroadcast starts from here 
+        
         : groupBroadcast == true
+
             ? isDialer == false
-                ? rendererListWithRefID.length == 1
+            //receiver side
+                ? 
+               
+                rendererListWithRefID.length == 0?Container():
+                rendererListWithRefID.length == 1
                     ? WillPopScope(
                         onWillPop: _onWillPop,
                         child: Center(
@@ -598,17 +604,48 @@ screen at the moment..''',
                             meidaType == "video"
                                 ? remoteVideoFlag
                                     ? rendererListWithRefID.length == 2
-                                        ? RemoteStream(
-                                            remoteRenderer:
-                                                rendererListWithRefID[1]
-                                                    ["rtcVideoRenderer"],
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(
+                                                    10) // green as background color
+                                                ),
+                                            // borderRadius: BorderRadius.circular(10.0),
+                                            child:RTCVideoView(
+                                                    rendererListWithRefID[1]
+                                                        ["rtcVideoRenderer"],
+                                                    // key: forsmallView,
+                                                    mirror: false,
+                                                    objectFit: RTCVideoViewObjectFit
+                                                        .RTCVideoViewObjectFitCover),
                                           )
-                                        : rendererListWithRefID.length == 3
-                                            ? RemoteStream(
-                                                remoteRenderer:
+
+                                        // RemoteStream(
+                                        //     remoteRenderer:
+                                        //         rendererListWithRefID[1]
+                                        //             ["rtcVideoRenderer"],
+                                        //   )
+                                        : rendererListWithRefID.length == 4
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10) // green as background color
+                                                    ),
+                                                // borderRadius: BorderRadius.circular(10.0),
+                                                child: RTCVideoView(
                                                     rendererListWithRefID[2]
                                                         ["rtcVideoRenderer"],
+                                                    // key: forsmallView,
+                                                    mirror: true,
+                                                    objectFit: RTCVideoViewObjectFit
+                                                        .RTCVideoViewObjectFitCover),
                                               )
+
+                                            // RemoteStream(
+                                            //     remoteRenderer:
+                                            //         rendererListWithRefID[2]
+                                            //             ["rtcVideoRenderer"],
+                                            //   )
                                             : Container(
                                                 decoration: BoxDecoration(
                                                     gradient: LinearGradient(
@@ -684,11 +721,14 @@ screen at the moment..''',
                                     //      mainAxisAlignment: MainAxisAlignment.start,
                                     // crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      (session_type == "call")
-                                          ? Text(
-                                              (meidaType == "video")
-                                                  ? 'You are video calling with'
-                                                  : 'You are audio calling with',
+                                      // (session_type == "call")
+                                      //     ?
+                                          Text(
+                                              // (meidaType == "video")
+                                              //     ? 
+                                                  'You are on call with',
+                                                  // :
+                                                  //  'You are audio calling with',
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   decoration:
@@ -699,11 +739,12 @@ screen at the moment..''',
                                                   fontStyle: FontStyle.normal,
                                                   color: darkBlackColor),
                                             )
-                                          : Container(),
+                                        //  : Container(),
                                     ],
                                   ),
-                                  (session_type == "call")
-                                      ? Container(
+                                  // (session_type == "call")
+                                  //     ? 
+                                      Container(
                                           // padding: EdgeInsets.only(left: 50),
                                           child: Text(
                                             'A Group',
@@ -716,7 +757,7 @@ screen at the moment..''',
                                                 color: darkBlackColor),
                                           ),
                                         )
-                                      : Container(),
+                                  //    : Container(),
                                 ],
                               ),
                             ),
@@ -745,7 +786,7 @@ screen at the moment..''',
                                   !kIsWeb
                                       ? Container(
                                           padding: EdgeInsets.fromLTRB(
-                                              0.0, 120.33, 20, 27),
+                                              0.0, 0.33, 20, 27),
                                           child: GestureDetector(
                                             child: switchSpeaker
                                                 ? SvgPicture.asset(
@@ -770,7 +811,7 @@ screen at the moment..''',
 
                             // /////////////// this is local stream
 
-                            rendererListWithRefID.length == 3
+                            rendererListWithRefID.length == 4
                                 ? Positioned(
                                     left: 225.0,
                                     bottom: 145.0,
@@ -789,11 +830,18 @@ screen at the moment..''',
                                               borderRadius: BorderRadius.circular(
                                                   10) // green as background color
                                               ),
-                                          child: enableCamera
-                                              ? RemoteStream(
-                                                  remoteRenderer:
-                                                      rendererListWithRefID[1]
-                                                          ["rtcVideoRenderer"])
+                                          child: enableCamera ?
+                                          RTCVideoView(
+                                                    rendererListWithRefID[3]
+                                                        ["rtcVideoRenderer"],
+                                                    // key: forsmallView,
+                                                    mirror: false,
+                                                    objectFit: RTCVideoViewObjectFit
+                                                        .RTCVideoViewObjectFitCover)
+                                              // ? RemoteStream(
+                                              //     remoteRenderer:
+                                              //         rendererListWithRefID[3]
+                                              //             ["rtcVideoRenderer"])
                                               : Container(color: Colors.pink),
                                         ),
                                       ),
@@ -831,16 +879,27 @@ screen at the moment..''',
                             )
                           ]),
                         ))
+               
+               
+                //dialer side, caller, initiator
                 : WillPopScope(
                     onWillPop: _onWillPop,
                     child: Container(
                       child: Stack(children: <Widget>[
                         meidaType == "video"
                             ? enableCamera
-                                ? RemoteStream(
+                                ? 
+                                isMultiSession?
+                                RemoteStream(
                                     remoteRenderer: rendererListWithRefID[0]
                                         ["rtcVideoRenderer"],
-                                  )
+                                  ):
+                                  broadcasttype=="camera"?
+                                   RemoteStream(
+                                    remoteRenderer: rendererListWithRefID[0]
+                                        ["rtcVideoRenderer"],
+                                  ):
+                                  Container()
                                 : Container()
                             : Container(
                                 decoration: BoxDecoration(
@@ -875,7 +934,7 @@ screen at the moment..''',
                                 children: [
                                   Text(
                                     (meidaType == "video")
-                                        ? 'You are video calling with'
+                                        ? 'You are on screen share calling with'
                                         : 'You are audio calling with',
                                     style: TextStyle(
                                         fontSize: 14,

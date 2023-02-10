@@ -23,7 +23,7 @@ class CallReceiveScreen extends StatefulWidget {
   final GroupListProvider groupListProvider;
   final MainProvider mainProvider;
   final AuthProvider authProvider;
-  final VoidCallback stopRinging;
+ // final VoidCallback stopRinging;
   final SignalingClient signalingClient;
   final ContactList contactList;
   final from;
@@ -34,7 +34,7 @@ class CallReceiveScreen extends StatefulWidget {
     this.localRenderer,
     this.incomingfrom,
     this.registerRes,
-    this.stopRinging,
+    //this.stopRinging,
     this.signalingClient,
     this.authtoken,
     this.mainProvider,
@@ -60,7 +60,7 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
 
     // print("DNVJDNVJDNVJDNVJDVNJDVN ${widget.contactList}");
     // if (widget.contactProvider.contactState == ContactStates.Success) {
-    print("here in success ${widget.contactList}");
+    print("here in success ${widget.contactList} ${groupName}");
     //  }
     if (iscalloneto1) {
       index = widget.contactList.users
@@ -148,7 +148,7 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                     ? callername
                     :
                     // callername,
-                    groupName,
+                    groupName==null?"":groupName,
                 style: TextStyle(
                     fontFamily: primaryFontFamily,
                     color: darkBlackColor,
@@ -173,7 +173,7 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   'assets/end.svg',
                 ),
                 onTap: () {
-                  widget.stopRinging();
+               //   widget.stopRinging();
                   widget.signalingClient.declineCall(
                       widget.authProvider.getUser.ref_id,
                       widget.registerRes["mcToken"]);
@@ -195,7 +195,7 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   'assets/Accept.svg',
                 ),
                 onTap: () {
-                  widget.stopRinging();
+                 // widget.stopRinging();
                   widget.signalingClient.createAnswer(widget.incomingfrom);
                   // Navigator.pop(context);
                   // widget.mainProvider.callStart();
