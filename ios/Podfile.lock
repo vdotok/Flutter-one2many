@@ -14,8 +14,6 @@ PODS:
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_chat_bubble (0.0.1):
-    - Flutter
   - flutter_ringtone_player (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
@@ -91,7 +89,6 @@ DEPENDENCIES:
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
-  - flutter_chat_bubble (from `.symlinks/plugins/flutter_chat_bubble/ios`)
   - flutter_ringtone_player (from `.symlinks/plugins/flutter_ringtone_player/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - MMWormhole
@@ -135,8 +132,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
-  flutter_chat_bubble:
-    :path: ".symlinks/plugins/flutter_chat_bubble/ios"
   flutter_ringtone_player:
     :path: ".symlinks/plugins/flutter_ringtone_player/ios"
   fluttertoast:
@@ -178,7 +173,6 @@ SPEC CHECKSUMS:
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_chat_bubble: cad6265ec611ba0f7bede70eabc26fdfce9bf2b0
   flutter_ringtone_player: 15eba85187230b87b2512f0e1b92225618bc03e7
   fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
   Libyuv: 5f79ced0ee66e60a612ca97de1e6ccacd187a437

@@ -43,25 +43,7 @@ class _MyAppState extends State<MyApp> {
     rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
      //_getPermissions();
   }
-    Future<bool> _getPermissions() async {
-    PermissionStatus cameraStatus;
-    PermissionStatus audioStatus;
-
-   
-      cameraStatus = await Permission.camera.request();
-      audioStatus = await Permission.microphone.request();
-      print(
-          "this is camera dn microphone permission $cameraStatus $audioStatus");
-      if (cameraStatus.isPermanentlyDenied || audioStatus.isPermanentlyDenied) {
-        openAppSettings();
-      }
-      if (cameraStatus.isGranted && audioStatus.isGranted) {
-        return true;
-      } else
-       { return false;}
     
-  }
-
   @override
   void dispose() {
     print("gejghrejgr");
@@ -237,8 +219,8 @@ class _TestState extends State<Test> {
             ),
             ElevatedButton(
               onPressed: () {
-                signalingClient?.connect(
-                    "176GK5IN", "wss://q-signalling.vdotok.dev:8443/call");
+                // signalingClient?.connect(
+                //     "176GK5IN", "wss://q-signalling.vdotok.dev:8443/call");
               },
               child: Text("connect"),
             )
