@@ -743,23 +743,24 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   disposeAllRenderer() async {
     print("this is listlength ${rendererListWithRefID.length}");
     for (int i = 0; i < rendererListWithRefID.length; i++) {
-      if (i == 0) {
+      // if (i == 0) {
         print("here isssssssss ${rendererListWithRefID.length}");
-        rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
-        //  await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
-      } else {
+ rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
         await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
-      }
+       
+       
+    
+     
     }
 
     // setState(() {
-    if (rendererListWithRefID.length > 1) {
-      print("yes i'm here ${rendererListWithRefID.length}");
-      rendererListWithRefID.removeRange(1, (rendererListWithRefID.length));
+    // if (rendererListWithRefID.length > 1) {
+    //   print("yes i'm here ${rendererListWithRefID.length}");
+    //   rendererListWithRefID.removeRange(1, (rendererListWithRefID.length));
 
       rendererListWithRefID.clear();
       print("yes i'm hereeeeee ${rendererListWithRefID.length}");
-    }
+   // }
     // });
   }
 

@@ -178,15 +178,15 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                       widget.authProvider.getUser.ref_id,
                       widget.registerRes["mcToken"]);
                 
-                   if (strArr.last == "CreateGroupChat") {
-                    widget.mainProvider.createGroupChatScreen();
-                  } else if (strArr.last == "GroupList") {
-                    widget.mainProvider.homeScreen();
-                  }  else if (strArr.last == "NoChat") {
-                    widget.mainProvider.inActiveCall();
-                    widget.mainProvider.homeScreen();
-                    strArr.remove("NoChat");
-                  } 
+                  //  if (strArr.last == "CreateGroupChat") {
+                  //   widget.mainProvider.createGroupChatScreen();
+                  // } else if (strArr.last == "GroupList") {
+                  //   widget.mainProvider.homeScreen();
+                  // }  else if (strArr.last == "NoChat") {
+                  //   widget.mainProvider.inActiveCall();
+                  //   widget.mainProvider.homeScreen();
+                  //   strArr.remove("NoChat");
+                  // } 
                 },
               ),
               SizedBox(width: 64),
