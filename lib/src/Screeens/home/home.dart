@@ -903,24 +903,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
     }
   }
-  //   Future<bool> _startVdotokForegroundService() {
-  //   return _startForegroundService(
-  //     holdWakeLock: false,
-  //     onStarted: () {
-  //       print("Foreground on Started");
-  //     },
-  //     onStopped: () {
-  //       print("Foreground on Stopped");
-  //     },
-  //     title: "Tcamera",
-  //     content: "Tcamera sharing your screen.",
-  //     iconName: "ic_stat_mobile_screen_share",
-  //   ).then((value) {
-  //     return true;
-  //   }).catchError((onError) {
-  //     return false;
-  //   });
-  // }
 
   void _updateTimer() {
     print("time value is $time ");

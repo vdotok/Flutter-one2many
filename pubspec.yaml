@@ -50,9 +50,8 @@ dependencies:
   wakelock:
   permission_handler:
   fluttertoast: ^8.1.1
-  vdotok_stream: 
-  #"0.0.18"
-   path: ../vdotok_stream/
+  vdotok_stream: ^0.0.20
+  
   
 
   # The following adds the Cupertino Icons font to your application.
