@@ -220,12 +220,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     print("i am here in  init state of home page ........$inCall");
 
-    //time = null;
+  
 
     scaffoldKey = GlobalKey<ScaffoldState>();
-    //checkStatus();
-    //checkConnectivity();
-    //  rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+   
     contactProvider = Provider.of<ContactProvider>(context, listen: false);
     authProvider = Provider.of<AuthProvider>(context, listen: false);
     groupListProvider = Provider.of<GroupListProvider>(context, listen: false);
@@ -235,10 +233,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     contactProvider.getContacts(authProvider.getUser.auth_token);
     groupListProvider.getGroupList(authProvider.getUser.auth_token);
     signalingClient.connect(
+       authProvider.deviceId,
         project_id,
         authProvider.completeAddress,
         authProvider.getUser.authorization_token.toString(),
-        authProvider.getUser.ref_id.toString());
+        authProvider.getUser.ref_id.toString()
+        
+        );
     // signalingClient.connect(project_id, authProvider.completeAddress);
     signalingClient.onConnect = (res) {
       print("onConnecttttttttttt signalining client $res");
@@ -272,57 +273,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         }
       }
     };
-    // signalingClient.onError = (code, res) async {
-    //   print("onError $code $res");
-    //   setState(() {
-    //     errorcode = code.toString();
-    //     callSocket = false;
-    //     //  isInternetConnect = false;
-    //     isRegisteredAlready = false;
-    //   });
-    //   if (code == 1001 || code == 1002) {
-    //     print("When internet gone due to some reason $callSocket $chatSocket");
-
-    //     bool connectionFlag = await signalingClient.checkInternetConnectivity();
-    //     print("this is connection flag $connectionFlag");
-    //     if (connectionFlag) {
-    //       signalingClient.connect(project_id, authProvider.completeAddress);
-    //     }
-    //     //  isInternetConnect = true;
-    //     // signalingClient.connect(project_id, authProvider.completeAddress);
-
-    //     // signalingClient.sendPing(registerRes["mctoken"]);
-    //   } else if (code == 401) {
-    //     print("when same user login");
-    //     setState(() {
-    //       callSocket = false;
-    //       isRegisteredAlready = true;
-    //       snackBar = SnackBar(
-    //         content: Text('$res'),
-    //         duration: Duration(days: 365),
-    //       );
-    //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    //     });
-    //   } else {
-    //     if (authProvider.loggedInStatus == Status.LoggedOut) {
-    //     } else {
-    //       print("heeeeee");
-    //       setState(() {
-    //         callSocket = false;
-    //         isRegisteredAlready = false;
-    //       });
-    //       if (isResumed) {
-    //         bool connectionFlag =
-    //             await signalingClient.checkInternetConnectivity();
-    //         print("jghfh $connectionFlag $callSocket $isRegisteredAlready ");
-    //         if (connectionFlag && callSocket == false) {
-    //           print("i am in connect in 1005");
-    //           signalingClient.connect(project_id, authProvider.completeAddress);
-    //         } else {}
-    //       } else {}
-    //     }
-    //   }
-    // };
+  
 
      signalingClient.internetConnectivityCallBack = (mesg) {
       if (mesg == "Connected") {
@@ -458,26 +409,26 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
      
 
       setState(() {
-        if (res["call_type"] == "one_to_many") {
+        if (res["callType"] == "one_to_many") {
           groupBroadcast = true;
         }
 
-        session_type = res["session_type"];
-        typeOfCall = res["call_type"];
+        session_type = res["sessionType"];
+        typeOfCall = res["callType"];
         inCall = true;
         Wakelock.toggle(enable: true);
         pressDuration = "";
         iscalloneto1 = typeOfCall == "one_to_one" ? true : false;
         onRemoteStream = false;
         incomingfrom = res["from"];
-        meidaType = res["media_type"];
+        meidaType = res["mediaType"];
         switchMute = true;
         switchMute2 = true;
         enableCamera = true;
         enableCamera2 = true;
         groupName =
-            res["call_type"] != "one_to_one" ? res["data"]["groupName"] : "";
-        switchSpeaker = res["media_type"] == "video" ? true : false;
+            res["callType"] != "one_to_one" ? res["data"]["groupName"] : "";
+        switchSpeaker = res["mediaType"] == "video" ? true : false;
         remoteVideoFlag = true;
         remoteAudioFlag = true;
         isReceive = true;
@@ -495,7 +446,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           _callticker =
               Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
         }
-        // _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+        
       }
     };
     signalingClient.onParticipantsLeft =
@@ -743,24 +694,26 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   disposeAllRenderer() async {
     print("this is listlength ${rendererListWithRefID.length}");
     for (int i = 0; i < rendererListWithRefID.length; i++) {
-      // if (i == 0) {
+       if (i == 0) {
         print("here isssssssss ${rendererListWithRefID.length}");
- rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
+        rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
+       
+      } else {
         await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
        
        
     
-     
+      }
     }
 
     // setState(() {
-    // if (rendererListWithRefID.length > 1) {
-    //   print("yes i'm here ${rendererListWithRefID.length}");
-    //   rendererListWithRefID.removeRange(1, (rendererListWithRefID.length));
+    if (rendererListWithRefID.length > 1) {
+      print("yes i'm here ${rendererListWithRefID.length}");
+      rendererListWithRefID.removeRange(1, (rendererListWithRefID.length));
 
       rendererListWithRefID.clear();
       print("yes i'm hereeeeee ${rendererListWithRefID.length}");
-   // }
+    }
     // });
   }
 
@@ -953,24 +906,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
     }
   }
-  //   Future<bool> _startVdotokForegroundService() {
-  //   return _startForegroundService(
-  //     holdWakeLock: false,
-  //     onStarted: () {
-  //       print("Foreground on Started");
-  //     },
-  //     onStopped: () {
-  //       print("Foreground on Stopped");
-  //     },
-  //     title: "Tcamera",
-  //     content: "Tcamera sharing your screen.",
-  //     iconName: "ic_stat_mobile_screen_share",
-  //   ).then((value) {
-  //     return true;
-  //   }).catchError((onError) {
-  //     return false;
-  //   });
-  // }
 
   void _updateTimer() {
     print("time value is $time ");
@@ -1062,20 +997,20 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           "calleName": "",
           "groupName": groupName,
           "groupAutoCreatedValue": "",
-          "typeOfBroadcast": broadcasttype
+          // "typeOfBroadcast": broadcasttype
         };
       }
-
-      signalingClient.startCallonetomany(
+print("custom data $customData");
+      signalingClient.startCallOneToMany(
           customData: customData,
           from: authProvider.getUser.ref_id,
           to: groupRefIDS,
           mcToken: registerRes["mcToken"],
-          meidaType: mtype,
+          mediaType: mtype,
           callType: callType,
           sessionType: sessionType,
-          ispublicbroadcast: ispublicbroadcast,
-          broadcastype: broadcasttype,
+          isPublicBroadcast: ispublicbroadcast,
+          broadcastType: broadcasttype,
           authorizationToken: authProvider.getUser.authorization_token);
 //  if (to != null) {
 //     //  if (isLocalStream)
@@ -1088,7 +1023,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       } else {
         _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
       }
-      //  _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+    
     }
   }
 
@@ -1226,6 +1161,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     if (callSocket == false && isInternetConnect) {
       print("here in refreshlist connection");
       signalingClient.connect(
+        authProvider.deviceId,
         project_id,
         authProvider.completeAddress,
         authProvider.getUser.authorization_token.toString(),
