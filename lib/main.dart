@@ -11,12 +11,11 @@ import 'src/Screeens/home/homeIndex.dart';
 import 'src/constants/constant.dart';
 import 'src/routing/routes.dart';
 
-
-GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey;
+GlobalKey<ScaffoldMessengerState>? rootScaffoldMessengerKey;
 
 class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext context) {
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
@@ -35,19 +34,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription subscription;
+  StreamSubscription? subscription;
 
   @override
   void initState() {
     super.initState();
     rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-     //_getPermissions();
+    //_getPermissions();
   }
-    
+
   @override
   void dispose() {
     print("gejghrejgr");
-    subscription.cancel();
+    subscription!.cancel();
     super.dispose();
   }
 
@@ -64,7 +63,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-            accentColor: primaryColor,
+            hintColor: primaryColor,
             primaryColor: primaryColor,
             scaffoldBackgroundColor: Colors.white,
             textTheme: TextTheme(
@@ -79,7 +78,7 @@ class _MyAppState extends State<MyApp> {
                 return SplashScreen();
               else if (auth.loggedInStatus == Status.LoggedIn) {
                 // return Test();
-               
+
                 return HomeIndex();
                 //return Hello();
               } else
@@ -130,8 +129,8 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
-  SignalingClient signalingClient;
-  MediaStream _localStream;
+  SignalingClient? signalingClient;
+  MediaStream? _localStream;
   RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
   RTCVideoRenderer _screenShareRenderer = new RTCVideoRenderer();
   @override
@@ -206,7 +205,7 @@ class _TestState extends State<Test> {
               child: Text("createOffer"),
             ),
             ElevatedButton(
-              onPressed: () {             
+              onPressed: () {
                 signalingClient?.getMedia();
               },
               child: Text("getUserMedia"),
@@ -230,9 +229,3 @@ class _TestState extends State<Test> {
     );
   }
 }
-
-
-
-
-
-

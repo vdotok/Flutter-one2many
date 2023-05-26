@@ -26,7 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
   SharedPref _sharedPref = SharedPref();
 
   handlePress() async {
-    if (_loginformkey.currentState.validate()) {
+    if (_loginformkey.currentState!.validate()) {
       AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
       await auth.login(_emailController.text, _passwordController.text);
 
@@ -65,9 +65,9 @@ class _SignInScreenState extends State<SignInScreen> {
       statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
     ));
     size = MediaQuery.of(context).size;
-    print("size ${size.width}");
-    print("width is${size.width / 22}");
-    print("height ${size.height / 18.66} ");
+    print("size ${size!.width}");
+    print("width is${size!.width / 22}");
+    print("height ${size!.height / 18.66} ");
 
     return GestureDetector(
       onTap: () {

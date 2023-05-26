@@ -13,8 +13,7 @@ class GroupModel {
   dynamic created_datetime;
   dynamic counter;
   dynamic typingstatus;
-  List<ParticipantsModel> participants = [];
-  
+  List<ParticipantsModel?>? participants = [];
 
   GroupModel(
       {this.admin_id,

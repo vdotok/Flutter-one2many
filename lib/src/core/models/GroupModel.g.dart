@@ -6,24 +6,22 @@ part of 'GroupModel.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GroupModel _$GroupModelFromJson(Map<String, dynamic> json) {
-  return GroupModel(
-    admin_id: json['admin_id'],
-    auto_created: json['auto_created'],
-    channel_key: json['channel_key'],
-    channel_name: json['channel_name'],
-    group_title: json['group_title'],
-    created_datetime: json['created_datetime'],
-    typingstatus: json['typingstatus'],
-    id: json['id'],
-    counter: json['counter'],
-    participants: (json['participants'] as List)
-        ?.map((e) => e == null
-            ? null
-            : ParticipantsModel.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-  );
-}
+GroupModel _$GroupModelFromJson(Map<String, dynamic> json) => GroupModel(
+      admin_id: json['admin_id'],
+      auto_created: json['auto_created'],
+      channel_key: json['channel_key'],
+      channel_name: json['channel_name'],
+      group_title: json['group_title'],
+      created_datetime: json['created_datetime'],
+      typingstatus: json['typingstatus'],
+      id: json['id'],
+      counter: json['counter'],
+      participants: (json['participants'] as List<dynamic>?)
+          ?.map((e) => e == null
+              ? null
+              : ParticipantsModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$GroupModelToJson(GroupModel instance) =>
     <String, dynamic>{

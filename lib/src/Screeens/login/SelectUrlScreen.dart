@@ -20,14 +20,14 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
   bool _autoValidate = false;
   final _emailController = new TextEditingController();
   final _passwordController = new TextEditingController();
-  String _genderRadioBtnVal;
+  String? _genderRadioBtnVal;
   @override
   void initState() {
     super.initState();
   }
 
   handlePress() async {
-    if (_loginformkey.currentState.validate()) {
+    if (_loginformkey.currentState!.validate()) {
       AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
       auth.login(_emailController.text, _passwordController.text);
       if (auth.getUser.auth_token == null) {
@@ -54,12 +54,12 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
     Navigator.pushNamed(context, "/register");
   }
 
-  void _handleGenderChange(String value) {
+  void _handleGenderChange(String? value) {
     setState(() {
       _genderRadioBtnVal = value;
     });
 
-    URL = _genderRadioBtnVal;
+    URL = _genderRadioBtnVal!;
     print("selected gender is $URL");
   }
 
@@ -97,11 +97,10 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
                   width: 300.0,
                   height: 48.0,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom( shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0)),
-                         primary: redColor
-                        ),
-                   
+                    style: ElevatedButton.styleFrom(
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(5.0)),
+                        primary: redColor),
                     onPressed: () {
                       Navigator.pushNamed(context, "/signin");
                       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => SignInScreen()));
@@ -116,8 +115,6 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
                           color: whiteColor),
                       textAlign: TextAlign.center,
                     ),
-                    
-                  
                   ),
                 )
               ],

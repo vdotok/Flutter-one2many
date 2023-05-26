@@ -8,14 +8,14 @@ enum ContactStates { Loading, Success, Faliure }
 class ContactProvider with ChangeNotifier {
   List<Contact> userGroups = [];
 
-  ContactList _contactList;
-  ContactList get contactList => _contactList;
+  ContactList? _contactList;
+  ContactList? get contactList => _contactList;
 
   ContactStates _contactStates = ContactStates.Loading;
   ContactStates get contactState => _contactStates;
 
-  String _errorMsg;
-  String get errorMsg => _errorMsg;
+  String? _errorMsg;
+  String? get errorMsg => _errorMsg;
 
   getContacts(String authToken) async {
     var dataRequest = {
@@ -34,13 +34,11 @@ class ContactProvider with ChangeNotifier {
     } else {
       final json = {"users": response["users"]};
       _contactList = ContactList.fromJson(json);
-      print("this is contact list ${_contactList.users.length}");
+      print("this is contact list ${_contactList!.users!.length}");
       _contactStates = ContactStates.Success;
       notifyListeners();
     }
   }
-
-  
 
   Future<dynamic> createGroup(groupName, _selectedContacts, authToken) async {
     List<int> id_List = [];

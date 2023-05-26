@@ -11,19 +11,19 @@ import 'home.dart';
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final title;
   final isPublicBroadcast;
-  final bool lead;
+  final bool? lead;
   final succeedingIcon;
-  final bool ischatscreen;
+  final bool? ischatscreen;
   final index;
-  final GroupListProvider groupListProvider;
-  final AuthProvider authProvider;
-  final MainProvider mainProvider;
+  final GroupListProvider? groupListProvider;
+  final AuthProvider? authProvider;
+  final MainProvider? mainProvider;
   final funct;
   final handlePress;
   final handlePublicBroadcastButton;
 
   CustomAppBar(
-      {Key key,
+      {Key? key,
       this.groupListProvider,
       this.title,
       @required this.lead,
@@ -44,14 +44,16 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   // TODO: implement preferredSize
   Size get preferredSize {
-    return ischatscreen ? Size.fromHeight(80) : Size.fromHeight(kToolbarHeight);
+    return ischatscreen!
+        ? Size.fromHeight(80)
+        : Size.fromHeight(kToolbarHeight);
   }
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Size get preferredSize {
-    return widget.ischatscreen
+    return widget.ischatscreen!
         ? Size.fromHeight(80)
         : Size.fromHeight(kToolbarHeight);
   }
@@ -91,8 +93,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
     print("this is index in chat screen ${widget.mainProvider}");
 
     return AppBar(
-      backgroundColor:
-          widget.ischatscreen ? appbarBackgroundColor : chatRoomBackgroundColor,
+      backgroundColor: widget.ischatscreen!
+          ? appbarBackgroundColor
+          : chatRoomBackgroundColor,
       elevation: 0.0,
       centerTitle: false,
       leading: widget.lead == true
@@ -108,9 +111,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   isAppAudiobuttonSelected = false;
                   ismicAudiobuttonSelected = false;
                   iscamerabuttonSelected = false;
-                  if (strArr.last == "GroupList") {
+                  if (strArr!.last == "GroupList") {
                     print("this is grpriiot");
-                    widget.mainProvider.homeScreen();
+                    widget.mainProvider!.homeScreen();
                   }
                 },
               ),
@@ -136,7 +139,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ? () {
                           print(
                               "THSI IS DFFVDFJCJDFBKJD ${widget.mainProvider}");
-                          widget.mainProvider.createGroupChatScreen();
+                          widget.mainProvider!.createGroupChatScreen();
                         }
                       : () {},
                 ),

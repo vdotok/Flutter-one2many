@@ -44,10 +44,10 @@ class MainProvider with ChangeNotifier {
   dynamic get publishMesg => _publishMesg;
   dynamic _startCall;
   dynamic get startCall => startCall;
-  GroupListProvider _groupListProvider;
-  GroupListProvider get groupListProvider => _groupListProvider;
-  ContactProvider _contactProvider;
-  ContactProvider get contactProvider => _contactProvider;
+  GroupListProvider? _groupListProvider;
+  GroupListProvider? get groupListProvider => _groupListProvider;
+  ContactProvider? _contactProvider;
+  ContactProvider? get contactProvider => _contactProvider;
   initial() {
     _homeStatus = HomeStatus.Home;
     print("i am here in initial  notify listener");
@@ -106,18 +106,20 @@ class MainProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  chatScreen({int index, GroupListProvider groupListProvider}) {
-    _index = index;
+  chatScreen({int? index, GroupListProvider? groupListProvider}) {
+    _index = index!;
     _homeStatus = HomeStatus.ChatScreen;
     print("chat screen in main provider $index");
     print("this is homeStatus $_homeStatus");
     notifyListeners();
   }
- groupListScreen(){
+
+  groupListScreen() {
     _homeStatus = HomeStatus.GroupListScreen;
     print("group list screeen");
     notifyListeners();
- }
+  }
+
   createIndividualGroupScreen() {
     _homeStatus = HomeStatus.CreateIndividualGroup;
     print("create individual group");
@@ -150,5 +152,4 @@ class MainProvider with ChangeNotifier {
   //  // _callStatus=CallStatus.CallDial;
   //   notifyListeners();
   // }
-
 }

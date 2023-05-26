@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/constant.dart';
 
 class ReusableButton extends StatefulWidget {
-  final String text;
+  final String? text;
   final handlePress;
 
   ReusableButton({this.text, this.handlePress});
@@ -21,23 +21,20 @@ class _ReusableButtonState extends State<ReusableButton> {
         width: 160,
         // padding: EdgeInsets.symmetric(horizontal: 65),
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(    shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            
-          ),
-          primary: greenColor
-          ),
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              primary: greenColor),
           // elevation: 10.0,
-         
-          onPressed: widget.handlePress,
 
-      
+          onPressed: widget.handlePress,
 
           // child: Container(
           //   constraints: BoxConstraints(maxWidth: 400.0, minHeight: 50.0),
           //   alignment: Alignment.center,
           child: Text(
-            this.widget.text,
+            this.widget.text!,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontStyle: FontStyle.normal,

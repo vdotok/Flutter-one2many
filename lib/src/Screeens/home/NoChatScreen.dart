@@ -9,9 +9,9 @@ import 'CustomAppBar.dart';
 import 'home.dart';
 
 class NoChatScreen extends StatelessWidget {
-  bool presentCheck;
-  final bool isConnect;
-  final bool state;
+  bool? presentCheck;
+  final bool? isConnect;
+  final bool? state;
   final handlePress;
   final registerRes;
   final funct;
@@ -21,7 +21,7 @@ class NoChatScreen extends StatelessWidget {
   final activeCall;
 
   NoChatScreen(
-      {Key key,
+      {Key? key,
       @required this.groupListProvider,
       this.refreshList,
       this.authProvider,
@@ -38,9 +38,9 @@ class NoChatScreen extends StatelessWidget {
       this.activeCall})
       : super(key: key);
 
-  final GroupListProvider groupListProvider;
-  final AuthProvider authProvider;
-  final MainProvider mainProvider;
+  final GroupListProvider? groupListProvider;
+  final AuthProvider? authProvider;
+  final MainProvider? mainProvider;
 
   final refreshList;
 
@@ -51,8 +51,8 @@ class NoChatScreen extends StatelessWidget {
         backgroundColor: chatRoomBackgroundColor,
         appBar: CustomAppBar(
           handlePress: handlePress,
-          mainProvider: mainProvider,
-          groupListProvider: groupListProvider,
+          mainProvider: mainProvider!,
+          groupListProvider: groupListProvider!,
           title: "Chat Rooms",
           lead: false,
           funct: startCall,
@@ -122,7 +122,7 @@ class NoChatScreen extends StatelessWidget {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  mainProvider.createGroupChatScreen();
+                                  mainProvider!.createGroupChatScreen();
                                 },
                                 child: Text(
                                   "New Group",
@@ -179,15 +179,15 @@ class NoChatScreen extends StatelessWidget {
                         width: 105,
                         child: TextButton(
                           onPressed: () {
-                            if (isRegisteredAlready) {
+                            if (isRegisteredAlready!) {
                               ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar();
                               isRegisteredAlready = false;
                             }
-isAppAudiobuttonSelected = false;
-                                    iscamerabuttonSelected = false;
-                                    ismicAudiobuttonSelected = false;
-                            signalingClient.unRegister(registerRes["mcToken"]);
+                            isAppAudiobuttonSelected = false;
+                            iscamerabuttonSelected = false;
+                            ismicAudiobuttonSelected = false;
+                            signalingClient!.unRegister(registerRes["mcToken"]);
                           },
                           child: Text(
                             "LOG OUT",
@@ -206,19 +206,20 @@ isAppAudiobuttonSelected = false;
                       width: 18,
                       child: SvgPicture.asset(
                         'assets/call.svg',
-                        color:
-                            callSocket && isConnect ? Colors.green : Colors.red,
+                        color: callSocket && isConnect!
+                            ? Colors.green
+                            : Colors.red,
                       ),
                     ),
-                    errorcode!=""?
-                       Container(height:40,
-                          width: 40,
-                          child:Text('$errorcode')):Container()
+                    errorcode != ""
+                        ? Container(
+                            height: 40, width: 40, child: Text('$errorcode'))
+                        : Container()
                   ],
                 ),
                 Container(
                     // padding: const EdgeInsets.only(bottom: 60),
-                    child: Text(authProvider.getUser.full_name))
+                    child: Text(authProvider!.getUser.full_name!))
               ],
             ),
           ),

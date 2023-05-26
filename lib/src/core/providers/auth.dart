@@ -22,30 +22,30 @@ enum Status {
 }
 
 class AuthProvider with ChangeNotifier {
-  Status _loggedInStatus = Status.Authenticating;
-  Status _registeredInStatus = Status.NotRegistered;
+  Status? _loggedInStatus = Status.Authenticating;
+  Status? _registeredInStatus = Status.NotRegistered;
 
-  Status get loggedInStatus => _loggedInStatus;
-  Status get registeredInStatus => _registeredInStatus;
+  Status? get loggedInStatus => _loggedInStatus;
+  Status? get registeredInStatus => _registeredInStatus;
 
-  User _user = new User();
-  User get getUser => _user;
-  String _completeAddress;
-  String get completeAddress => _completeAddress;
-  String _deviceId;
-  String get deviceId => _deviceId;
+  User? _user = new User();
+  User get getUser => _user!;
+  String? _completeAddress;
+  String get completeAddress => _completeAddress!;
   SharedPref _sharedPref = SharedPref();
 
-  String _loginErrorMsg;
-  String get loginErrorMsg => _loginErrorMsg;
+  String? _loginErrorMsg;
+  String get loginErrorMsg => _loginErrorMsg!;
 
-  String _registerErrorMsg;
-  String get registerErrorMsg => _registerErrorMsg;
-  String _host;
-  String get host => _host;
+  String? _registerErrorMsg;
+  String get registerErrorMsg => _registerErrorMsg!;
+  String? _host;
+  String get host => _host!;
 
-  String _port;
-  String get port => _port;
+  String? _port;
+  String get port => _port!;
+  String? deviceid;
+  String? get getDeviceid => deviceid;
 
   Future<bool> register(String username, password, email) async {
     _registeredInStatus = Status.Loading;
@@ -62,6 +62,8 @@ class AuthProvider with ChangeNotifier {
         var androidInfo = await DeviceInfoPlugin().androidInfo;
         version = androidInfo.version.release;
         model = androidInfo.model;
+        deviceid = androidInfo.id;
+        print('this is device id ${deviceid}');
         // Android 9 (SDK 28), Xiaomi Redmi Note 7
       }
 
@@ -69,6 +71,8 @@ class AuthProvider with ChangeNotifier {
         var iosInfo = await DeviceInfoPlugin().iosInfo;
         version = iosInfo.systemName;
         model = iosInfo.model;
+        deviceid = iosInfo.identifierForVendor.toString();
+        print('this is device id ${deviceid}');
         // iOS 13.1, iPhone 11 Pro Max iPhone
       }
     }
@@ -95,15 +99,13 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
       return false;
     } else {
-       final now = DateTime.now();
-      _deviceId = now.microsecondsSinceEpoch.toString();
       _completeAddress = response['media_server_map']['complete_address'];
 
       _host = response["messaging_server_map"]["host"];
       _port = response["messaging_server_map"]["port"];
       SharedPref sharedPref = SharedPref();
       sharedPref.save("authUser", response);
-         sharedPref.save("deviceId", _deviceId);
+      sharedPref.save('deviceid', deviceid.toString());
       _registeredInStatus = Status.Registered;
       _loggedInStatus = Status.LoggedIn;
       _user = User.fromJson(response);
@@ -129,16 +131,12 @@ class AuthProvider with ChangeNotifier {
       _loginErrorMsg = response['message'];
       notifyListeners();
     } else {
-      final now = DateTime.now();
-      _deviceId = now.microsecondsSinceEpoch.toString();
-
       _completeAddress = response['media_server_map']['complete_address'];
-      print("this is iddddddd $_deviceId");
+
       _host = response["messaging_server_map"]["host"];
       _port = response["messaging_server_map"]["port"];
       SharedPref sharedPref = SharedPref();
       sharedPref.save("authUser", response);
-      sharedPref.save("deviceId", _deviceId);
       _loggedInStatus = Status.LoggedIn;
 
       print("THIS IS COMPLETE ADRESS $_completeAddress");
@@ -151,7 +149,6 @@ class AuthProvider with ChangeNotifier {
     SharedPref sharedPref = SharedPref();
     sharedPref.remove("authUser");
     sharedPref.remove("URL");
-    sharedPref.remove("deviceId");
     _loggedInStatus = Status.LoggedOut;
     _user = null;
     notifyListeners();
@@ -159,7 +156,7 @@ class AuthProvider with ChangeNotifier {
 
   isUserLogedIn() async {
     final authUser = await _sharedPref.read("authUser");
-    final deviceId = await _sharedPref.read("deviceId");
+    final devid = await _sharedPref.read('deviceid');
     print("this is authUser $authUser");
     if (authUser == null) {
       _loggedInStatus = Status.NotLoggedIn;
@@ -169,7 +166,8 @@ class AuthProvider with ChangeNotifier {
           jsonDecode(authUser)['media_server_map']['complete_address'];
       _host = jsonDecode(authUser)["messaging_server_map"]["host"];
       _port = jsonDecode(authUser)["messaging_server_map"]["port"];
-      _deviceId = deviceId;
+      print('if this is device is ${devid}');
+      deviceid = jsonDecode(devid.toString());
       _loggedInStatus = Status.LoggedIn;
       _user = User.fromJson(jsonDecode(authUser));
       notifyListeners();

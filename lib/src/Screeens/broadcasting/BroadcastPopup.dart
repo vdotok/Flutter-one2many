@@ -9,7 +9,7 @@ class BroadCastPopUp extends StatefulWidget {
   final startCall;
   final text;
   final to;
-  const BroadCastPopUp({Key key, this.startCall, this.text, this.to})
+  const BroadCastPopUp({Key? key, this.startCall, this.text, this.to})
       : super(key: key);
   @override
   _BroadCastPopUpState createState() => _BroadCastPopUpState();
@@ -85,37 +85,36 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                         height: 44,
                         //padding: EdgeInsets.fromLTRB(50, 0, 50, 0),
                         decoration: BoxDecoration(
-                            color: isAppAudiobuttonSelected
+                            color: isAppAudiobuttonSelected!
                                 ? Colors.yellow
                                 : Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         //child:Text("hellp")
                         child: TextButton(
-                           style: TextButton.styleFrom(
-   // padding: const EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: screensharecolor,
-                                  width: 3,
-                                  style: BorderStyle.solid),
-                              borderRadius: BorderRadius.circular(5)),
-  ),
+                          style: TextButton.styleFrom(
+                            // padding: const EdgeInsets.all(0),
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: screensharecolor,
+                                    width: 3,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(5)),
+                          ),
                           onPressed: () {
                             print(
                                 "here in screen share with app $isAppAudiobuttonSelected");
-                            if (ismicAudiobuttonSelected) {
+                            if (ismicAudiobuttonSelected!) {
                               ismicAudiobuttonSelected =
-                                  !ismicAudiobuttonSelected;
+                                  !ismicAudiobuttonSelected!;
                             }
                             setState(() {
                               isAppAudiobuttonSelected =
-                                  !isAppAudiobuttonSelected;
+                                  !isAppAudiobuttonSelected!;
                             });
                           },
                           child: Text('SCREEN SHARING WITH APP AUDIO',
                               style: TextStyle(
                                   color: screensharecolor, fontSize: 10)),
-                    
                         ),
                       ),
                       SizedBox(height: 20),
@@ -123,34 +122,33 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                         width: 215,
                         height: 44,
                         decoration: BoxDecoration(
-                            color: ismicAudiobuttonSelected
+                            color: ismicAudiobuttonSelected!
                                 ? Colors.yellow
                                 : Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: TextButton(
-                           style: TextButton.styleFrom(
-   // padding: const EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: screensharecolor,
-                                  width: 3,
-                                  style: BorderStyle.solid),
-                              borderRadius: BorderRadius.circular(5)),
-  ),
+                          style: TextButton.styleFrom(
+                            // padding: const EdgeInsets.all(0),
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: screensharecolor,
+                                    width: 3,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(5)),
+                          ),
                           onPressed: () {
-                            if (isAppAudiobuttonSelected) {
+                            if (isAppAudiobuttonSelected!) {
                               isAppAudiobuttonSelected =
-                                  !isAppAudiobuttonSelected;
+                                  !isAppAudiobuttonSelected!;
                             }
                             setState(() {
                               ismicAudiobuttonSelected =
-                                  !ismicAudiobuttonSelected;
+                                  !ismicAudiobuttonSelected!;
                             });
                           },
                           child: Text('SCREEN SHARING WITH MIC AUDIO',
                               style: TextStyle(
                                   color: screensharecolor, fontSize: 10)),
-                   
                         ),
                       ),
                       SizedBox(height: 20),
@@ -159,28 +157,27 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
 
             Container(
               decoration: BoxDecoration(
-                  color: iscamerabuttonSelected ? Colors.yellow : Colors.white,
+                  color: iscamerabuttonSelected! ? Colors.yellow : Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               width: 215,
               height: 44,
               child: TextButton(
-                 style: TextButton.styleFrom(
-   // padding: const EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: screensharecolor,
-                                  width: 3,
-                                  style: BorderStyle.solid),
-                              borderRadius: BorderRadius.circular(5)),
-  ),
+                style: TextButton.styleFrom(
+                  // padding: const EdgeInsets.all(0),
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: screensharecolor,
+                          width: 3,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(5)),
+                ),
                 onPressed: () {
                   setState(() {
-                    iscamerabuttonSelected = !iscamerabuttonSelected;
+                    iscamerabuttonSelected = !iscamerabuttonSelected!;
                   });
                 },
                 child: Text('CAMERA',
                     style: TextStyle(color: screensharecolor, fontSize: 10)),
-             
               ),
             ),
             SizedBox(height: 26),
@@ -189,23 +186,23 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                   width: 115,
                   height: 35,
                   decoration: BoxDecoration(
-                      color: isAppAudiobuttonSelected
+                      color: isAppAudiobuttonSelected!
                           ? Colors.green
-                          : ismicAudiobuttonSelected
+                          : ismicAudiobuttonSelected!
                               ? Colors.green
-                              : iscamerabuttonSelected
+                              : iscamerabuttonSelected!
                                   ? Colors.green
                                   : Colors.grey,
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: TextButton(
-                    onPressed: isAppAudiobuttonSelected ||
-                            ismicAudiobuttonSelected ||
-                            iscamerabuttonSelected
+                    onPressed: isAppAudiobuttonSelected! ||
+                            ismicAudiobuttonSelected! ||
+                            iscamerabuttonSelected!
                         ? () {
                             //case of public video call
-                            if (!isAppAudiobuttonSelected &&
-                                !ismicAudiobuttonSelected &&
-                                iscamerabuttonSelected) {
+                            if (!isAppAudiobuttonSelected! &&
+                                !ismicAudiobuttonSelected! &&
+                                iscamerabuttonSelected!) {
                               // broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": true, "micAudio": true ,};
                               print("i am here in public camera broadcast ");
                               broadcasttype = "camera";
@@ -225,9 +222,9 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                             //case of group video call
 
                             //case of app audio with public broadcast
-                            else if (isAppAudiobuttonSelected &&
-                                !ismicAudiobuttonSelected &&
-                                !iscamerabuttonSelected) {
+                            else if (isAppAudiobuttonSelected! &&
+                                !ismicAudiobuttonSelected! &&
+                                !iscamerabuttonSelected!) {
                               broadcasttype = "appaudio";
                               isMultiSession = false;
                               //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
@@ -246,9 +243,9 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                             //case of app audio with group broadcast
 
                             //case of mic audio with public broadcast
-                            else if (!isAppAudiobuttonSelected &&
-                                ismicAudiobuttonSelected &&
-                                !iscamerabuttonSelected) {
+                            else if (!isAppAudiobuttonSelected! &&
+                                ismicAudiobuttonSelected! &&
+                                !iscamerabuttonSelected!) {
                               broadcasttype = "micaudio";
                               isMultiSession = false;
                               //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
@@ -264,9 +261,9 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                                         );
                                   });
                               print("this is screen share with internal audio");
-                            } else if (isAppAudiobuttonSelected &&
-                                !ismicAudiobuttonSelected &&
-                                iscamerabuttonSelected) {
+                            } else if (isAppAudiobuttonSelected! &&
+                                !ismicAudiobuttonSelected! &&
+                                iscamerabuttonSelected!) {
                               broadcasttype = "appaudioandcamera";
                               isMultiSession = true;
                               //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
@@ -282,9 +279,9 @@ class _BroadCastPopUpState extends State<BroadCastPopUp> {
                                         // broadcastObject: broadcastObject,
                                         );
                                   });
-                            } else if (!isAppAudiobuttonSelected &&
-                                ismicAudiobuttonSelected &&
-                                iscamerabuttonSelected) {
+                            } else if (!isAppAudiobuttonSelected! &&
+                                ismicAudiobuttonSelected! &&
+                                iscamerabuttonSelected!) {
                               broadcasttype = "micaudioandcamera";
                               isMultiSession = true;
                               //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};

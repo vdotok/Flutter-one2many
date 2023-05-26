@@ -6,15 +6,13 @@ part of 'contact.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Contact _$ContactFromJson(Map<String, dynamic> json) {
-  return Contact(
-    user_id: json['user_id'] as int,
-    ref_id: json['ref_id'] as String,
-    full_name: json['full_name'] as String,
-    email: json['email'],
-    isSelected: json['isSelected'] as bool,
-  );
-}
+Contact _$ContactFromJson(Map<String, dynamic> json) => Contact(
+      user_id: json['user_id'] as int?,
+      ref_id: json['ref_id'] as String?,
+      full_name: json['full_name'] as String?,
+      email: json['email'],
+      isSelected: json['isSelected'] as bool? ?? false,
+    );
 
 Map<String, dynamic> _$ContactToJson(Contact instance) => <String, dynamic>{
       'user_id': instance.user_id,
