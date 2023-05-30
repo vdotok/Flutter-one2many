@@ -19,18 +19,18 @@ class CallDialScreen extends StatefulWidget {
   final incomingfrom;
   final callingTo;
   //final pressDuration;
-  final MainProvider mainProvider;
-  final AuthProvider authProvider;
-  final ContactProvider contactProvider;
+  final MainProvider? mainProvider;
+  final AuthProvider? authProvider;
+  final ContactProvider? contactProvider;
   final localRenderer;
-  final VoidCallback stopCall;
-  final GroupListProvider groupListProvider;
+  final VoidCallback? stopCall;
+  final GroupListProvider? groupListProvider;
   final registerRes;
 //  final rendererListWithRefID;
   // final remoteVideoFlag;
 
   const CallDialScreen({
-    Key key,
+    Key? key,
     this.mediaType,
     this.remoteRenderer,
     this.callTo,
@@ -77,7 +77,7 @@ class _CallDialScreenState extends State<CallDialScreen> {
 //                     height: MediaQuery.of(context).size.height,
 //                     child: rendererListWithRefID.length == 0
 //                         ? Container()
-//                         : 
+//                         :
 //                         RemoteStream(
 //                             remoteRenderer: rendererListWithRefID[0]
 //                                 ["rtcVideoRenderer"],
@@ -208,8 +208,7 @@ class _CallDialScreenState extends State<CallDialScreen> {
                   'assets/end.svg',
                 ),
                 onTap: () {
-                  signalingClient
-                     .stopCall(widget.registerRes["mcToken"]);
+                  signalingClient.stopCall(widget.registerRes["mcToken"]);
                   // if (strArr.last == "CreateGroupChat") {
                   //   widget.mainProvider.createGroupChatScreen();
                   // } else if (strArr.last == "GroupList") {
@@ -218,7 +217,7 @@ class _CallDialScreenState extends State<CallDialScreen> {
                   //   widget.mainProvider.inActiveCall();
                   //   widget.mainProvider.homeScreen();
                   //   strArr.remove("NoChat");
-                  // } 
+                  // }
                   isAppAudiobuttonSelected = false;
                   iscamerabuttonSelected = false;
                   ismicAudiobuttonSelected = false;

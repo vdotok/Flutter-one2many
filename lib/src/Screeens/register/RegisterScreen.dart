@@ -26,10 +26,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   handlePress() async {
-    if (_registerformkey.currentState.validate()) {
+    if (_registerformkey.currentState!.validate()) {
       AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
-      bool res = await auth.register(_emailController.text, _passwordController.text,"");
-      if (auth.getUser.auth_token == null || auth.getUser.auth_token.isEmpty) {
+      bool res = await auth.register(
+          _emailController.text, _passwordController.text, "");
+      if (auth.getUser!.auth_token == null ||
+          auth.getUser!.auth_token!.isEmpty) {
         setState(() {
           _autoValidate = true;
         });
@@ -54,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           //color: screenbackgroundColor,
           child: Form(
             key: _registerformkey,
-           autovalidateMode: AutovalidateMode.always,
+            autovalidateMode: AutovalidateMode.always,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
@@ -82,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   builder: (context, auth, child) {
                     if (auth.registeredInStatus == Status.Failure)
                       return Text(
-                        auth.registerErrorMsg,
+                        auth.registerErrorMsg!,
                         style: TextStyle(color: Colors.red),
                       );
                     else

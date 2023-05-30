@@ -13,13 +13,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 
 class CallStartOnetoMany extends StatefulWidget {
-  final MainProvider mainProvider;
+  final MainProvider? mainProvider;
   final localRenderer;
   final registerRes;
   final stopCall;
   final remoteRenderer;
   const CallStartOnetoMany(
-      {Key key,
+      {Key? key,
       this.mainProvider,
       this.localRenderer,
       this.registerRes,
@@ -32,8 +32,8 @@ class CallStartOnetoMany extends StatefulWidget {
 }
 
 class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
-  DateTime _time;
-  Timer _ticker;
+  DateTime? _time;
+  Timer? _ticker;
   String _pressDuration = "00:00";
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
 
   void _updateTimer() {
     //_time = DateTime.now();
-    final duration = DateTime.now().difference(_time);
+    final duration = DateTime.now().difference(_time!);
     final newDuration = _formatDuration(duration);
     //if (mounted) {
 
@@ -89,7 +89,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
 
   @override
   dispose() {
-    _ticker.cancel();
+    _ticker!.cancel();
 
     super.dispose();
   }
@@ -97,15 +97,15 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
   Future<bool> _onWillPop() async {
     if (strArr.last == "GroupList") {
       print("here in onpress back arrow grouplist");
-      widget.mainProvider.homeScreen();
+      widget.mainProvider!.homeScreen();
 
-      widget.mainProvider.activeCall();
+      widget.mainProvider!.activeCall();
       strArr.remove("GroupList");
     } else if (strArr.last == "CreateGroupChat") {
       print("here in onpress back arrow");
-      widget.mainProvider.createGroupChatScreen();
+      widget.mainProvider!.createGroupChatScreen();
 
-      widget.mainProvider.activeCall();
+      widget.mainProvider!.activeCall();
       strArr.remove("CreateGroupChat");
     }
 
@@ -478,11 +478,8 @@ screen at the moment..''',
                           ismicAudiobuttonSelected = false;
                           participantcount = 0;
                         });
-                       
                       },
                     ),
-
-               
 
                     SizedBox(width: 10),
                     isMultiSession
@@ -574,53 +571,30 @@ screen at the moment..''',
                 ),
               )
             ])))
-        //groupbroadcast starts from here 
-        
+        //groupbroadcast starts from here
+
         : groupBroadcast == true
-
             ? isDialer == false
-            //receiver side
-                ? 
-               
-                rendererListWithRefID.length == 0?Container():
-                rendererListWithRefID.length == 1
-                    ? WillPopScope(
-                        onWillPop: _onWillPop,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(chatRoomColor),
-                          ),
-                        ))
-                    : WillPopScope(
-                        onWillPop: _onWillPop,
-                        child: Container(
-                          child: Stack(children: <Widget>[
-                            // ignore: unrelated_type_equality_checks
-                            meidaType == "video"
-                                ? remoteVideoFlag
-                                    ? rendererListWithRefID.length == 2
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(
-                                                    10) // green as background color
-                                                ),
-                                            // borderRadius: BorderRadius.circular(10.0),
-                                            child:RTCVideoView(
-                                                    rendererListWithRefID[1]
-                                                        ["rtcVideoRenderer"],
-                                                    // key: forsmallView,
-                                                    mirror: false,
-                                                    objectFit: RTCVideoViewObjectFit
-                                                        .RTCVideoViewObjectFitCover),
-                                          )
-
-                                        // RemoteStream(
-                                        //     remoteRenderer:
-                                        //         rendererListWithRefID[1]
-                                        //             ["rtcVideoRenderer"],
-                                        //   )
-                                        : rendererListWithRefID.length == 4
+                //receiver side
+                ? rendererListWithRefID.length == 0
+                    ? Container()
+                    : rendererListWithRefID.length == 1
+                        ? WillPopScope(
+                            onWillPop: _onWillPop,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    chatRoomColor),
+                              ),
+                            ))
+                        : WillPopScope(
+                            onWillPop: _onWillPop,
+                            child: Container(
+                              child: Stack(children: <Widget>[
+                                // ignore: unrelated_type_equality_checks
+                                meidaType == "video"
+                                    ? remoteVideoFlag
+                                        ? rendererListWithRefID.length == 2
                                             ? Container(
                                                 decoration: BoxDecoration(
                                                     borderRadius:
@@ -629,38 +603,84 @@ screen at the moment..''',
                                                     ),
                                                 // borderRadius: BorderRadius.circular(10.0),
                                                 child: RTCVideoView(
-                                                    rendererListWithRefID[2]
+                                                    rendererListWithRefID[1]
                                                         ["rtcVideoRenderer"],
                                                     // key: forsmallView,
-                                                    mirror: true,
+                                                    mirror: false,
                                                     objectFit: RTCVideoViewObjectFit
                                                         .RTCVideoViewObjectFitCover),
                                               )
 
                                             // RemoteStream(
                                             //     remoteRenderer:
-                                            //         rendererListWithRefID[2]
+                                            //         rendererListWithRefID[1]
                                             //             ["rtcVideoRenderer"],
                                             //   )
-                                            : Container(
-                                                decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                  colors: [
-                                                    backgroundAudioCallDark,
-                                                    backgroundAudioCallLight,
-                                                    backgroundAudioCallLight,
-                                                    backgroundAudioCallLight,
-                                                  ],
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment(0.0, 0.0),
-                                                )),
-                                                child: Center(
-                                                  child: SvgPicture.asset(
-                                                    'assets/userIconCall.svg',
-                                                  ),
-                                                ),
-                                              )
-                                    : Container(
+                                            : rendererListWithRefID.length == 4
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                10) // green as background color
+                                                        ),
+                                                    // borderRadius: BorderRadius.circular(10.0),
+                                                    child: RTCVideoView(
+                                                        rendererListWithRefID[2]
+                                                            [
+                                                            "rtcVideoRenderer"],
+                                                        // key: forsmallView,
+                                                        mirror: true,
+                                                        objectFit:
+                                                            RTCVideoViewObjectFit
+                                                                .RTCVideoViewObjectFitCover),
+                                                  )
+
+                                                // RemoteStream(
+                                                //     remoteRenderer:
+                                                //         rendererListWithRefID[2]
+                                                //             ["rtcVideoRenderer"],
+                                                //   )
+                                                : Container(
+                                                    decoration: BoxDecoration(
+                                                        gradient:
+                                                            LinearGradient(
+                                                      colors: [
+                                                        backgroundAudioCallDark,
+                                                        backgroundAudioCallLight,
+                                                        backgroundAudioCallLight,
+                                                        backgroundAudioCallLight,
+                                                      ],
+                                                      begin:
+                                                          Alignment.topCenter,
+                                                      end: Alignment(0.0, 0.0),
+                                                    )),
+                                                    child: Center(
+                                                      child: SvgPicture.asset(
+                                                        'assets/userIconCall.svg',
+                                                      ),
+                                                    ),
+                                                  )
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                              colors: [
+                                                backgroundAudioCallDark,
+                                                backgroundAudioCallLight,
+                                                backgroundAudioCallLight,
+                                                backgroundAudioCallLight,
+                                              ],
+                                              begin: Alignment.topCenter,
+                                              end: Alignment(0.0, 0.0),
+                                            )),
+                                            child: Center(
+                                              child: SvgPicture.asset(
+                                                'assets/userIconCall.svg',
+                                              ),
+                                            ),
+                                          )
+                                    :
+                                    //Text("bye"),
+                                    Container(
                                         decoration: BoxDecoration(
                                             gradient: LinearGradient(
                                           colors: [
@@ -677,206 +697,190 @@ screen at the moment..''',
                                             'assets/userIconCall.svg',
                                           ),
                                         ),
-                                      )
-                                :
-                                //Text("bye"),
-                                Container(
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                      colors: [
-                                        backgroundAudioCallDark,
-                                        backgroundAudioCallLight,
-                                        backgroundAudioCallLight,
-                                        backgroundAudioCallLight,
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment(0.0, 0.0),
-                                    )),
-                                    child: Center(
-                                      child: SvgPicture.asset(
-                                        'assets/userIconCall.svg',
                                       ),
-                                    ),
+
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(
+                                    10,
+                                    55,
+                                    0,
+                                    0,
                                   ),
+                                  //height: 79,
+                                  //width: MediaQuery.of(context).size.width,
 
-                            Container(
-                              padding: EdgeInsets.fromLTRB(
-                                10,
-                                55,
-                                0,
-                                0,
-                              ),
-                              //height: 79,
-                              //width: MediaQuery.of(context).size.width,
-
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    //      mainAxisAlignment: MainAxisAlignment.start,
-                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      // (session_type == "call")
-                                      //     ?
+                                      Row(
+                                        //      mainAxisAlignment: MainAxisAlignment.start,
+                                        // crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          // (session_type == "call")
+                                          //     ?
                                           Text(
-                                              // (meidaType == "video")
-                                              //     ? 
-                                                  'You are on call with',
-                                                  // :
-                                                  //  'You are audio calling with',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                  fontFamily:
-                                                      secondaryFontFamily,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontStyle: FontStyle.normal,
-                                                  color: darkBlackColor),
-                                            )
-                                        //  : Container(),
-                                    ],
-                                  ),
-                                  // (session_type == "call")
-                                  //     ? 
-                                      Container(
-                                          // padding: EdgeInsets.only(left: 50),
-                                          child: Text(
-                                            'A Group',
+                                            // (meidaType == "video")
+                                            //     ?
+                                            'You are on call with',
+                                            // :
+                                            //  'You are audio calling with',
                                             style: TextStyle(
-                                                fontSize: 24,
-                                                decoration: TextDecoration.none,
-                                                fontFamily: primaryFontFamily,
-                                                fontWeight: FontWeight.w700,
-                                                fontStyle: FontStyle.normal,
-                                                color: darkBlackColor),
-                                          ),
-                                        )
-                                  //    : Container(),
-                                ],
-                              ),
-                            ),
-                            Container(
-                                // color: Colors.red,
-                                child: Align(
-                              alignment: Alignment.topRight,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        0.0, 120.33, 20, 27),
-                                    child: _pressDuration == null
-                                        ? Container()
-                                        : Text(
-                                            '$_pressDuration',
-                                            style: TextStyle(
-                                                decoration: TextDecoration.none,
                                                 fontSize: 14,
+                                                decoration: TextDecoration.none,
                                                 fontFamily: secondaryFontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontStyle: FontStyle.normal,
                                                 color: darkBlackColor),
-                                          ),
-                                  ),
-                                  !kIsWeb
-                                      ? Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0.0, 0.33, 20, 27),
-                                          child: GestureDetector(
-                                            child: switchSpeaker
-                                                ? SvgPicture.asset(
-                                                    'assets/VolumnOn.svg')
-                                                : SvgPicture.asset(
-                                                    'assets/VolumeOff.svg'),
-                                            onTap: () {
-                                              print(
-                                                  "onetomany receriver speaker $switchSpeaker");
-                                              setState(() {
-                                                switchSpeaker = !switchSpeaker;
-                                              });
-                                              signalingClient
-                                                  .switchSpeaker(switchSpeaker);
-                                            },
-                                          ),
-                                        )
-                                      : SizedBox(),
-                                ],
-                              ),
-                            )),
-
-                            // /////////////// this is local stream
-
-                            rendererListWithRefID.length == 4
-                                ? Positioned(
-                                    left: 225.0,
-                                    bottom: 145.0,
-                                    right: 20,
-                                    child: Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Container(
-                                        height: 170,
-                                        width: 130,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(
-                                                  10) // green as background color
-                                              ),
-                                          child: enableCamera ?
-                                          RTCVideoView(
-                                                    rendererListWithRefID[3]
-                                                        ["rtcVideoRenderer"],
-                                                    // key: forsmallView,
-                                                    mirror: false,
-                                                    objectFit: RTCVideoViewObjectFit
-                                                        .RTCVideoViewObjectFitCover)
-                                              // ? RemoteStream(
-                                              //     remoteRenderer:
-                                              //         rendererListWithRefID[3]
-                                              //             ["rtcVideoRenderer"])
-                                              : Container(color: Colors.pink),
-                                        ),
+                                          )
+                                          //  : Container(),
+                                        ],
                                       ),
-                                    ),
-                                  )
-                                : Container(),
-
-                            Container(
-                              padding: EdgeInsets.only(
-                                bottom: 56,
-                              ),
-                              alignment: Alignment.bottomCenter,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    child: SvgPicture.asset(
-                                      'assets/end.svg',
-                                    ),
-                                    onTap: () {
-                                      remoteVideoFlag = true;
-                                      widget.stopCall();
-                                      isAppAudiobuttonSelected = false;
-                                      iscamerabuttonSelected = false;
-                                      ismicAudiobuttonSelected = false;
-                                      // inCall = false;
-
-                                      // setState(() {
-                                      //   _isCalling = false;
-                                      // });
-                                    },
+                                      // (session_type == "call")
+                                      //     ?
+                                      Container(
+                                        // padding: EdgeInsets.only(left: 50),
+                                        child: Text(
+                                          'A Group',
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              decoration: TextDecoration.none,
+                                              fontFamily: primaryFontFamily,
+                                              fontWeight: FontWeight.w700,
+                                              fontStyle: FontStyle.normal,
+                                              color: darkBlackColor),
+                                        ),
+                                      )
+                                      //    : Container(),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            )
-                          ]),
-                        ))
-               
-               
+                                ),
+                                Container(
+                                    // color: Colors.red,
+                                    child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 120.33, 20, 27),
+                                        child: _pressDuration == null
+                                            ? Container()
+                                            : Text(
+                                                '$_pressDuration',
+                                                style: TextStyle(
+                                                    decoration:
+                                                        TextDecoration.none,
+                                                    fontSize: 14,
+                                                    fontFamily:
+                                                        secondaryFontFamily,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontStyle: FontStyle.normal,
+                                                    color: darkBlackColor),
+                                              ),
+                                      ),
+                                      !kIsWeb
+                                          ? Container(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0.0, 0.33, 20, 27),
+                                              child: GestureDetector(
+                                                child: switchSpeaker
+                                                    ? SvgPicture.asset(
+                                                        'assets/VolumnOn.svg')
+                                                    : SvgPicture.asset(
+                                                        'assets/VolumeOff.svg'),
+                                                onTap: () {
+                                                  print(
+                                                      "onetomany receriver speaker $switchSpeaker");
+                                                  setState(() {
+                                                    switchSpeaker =
+                                                        !switchSpeaker;
+                                                  });
+                                                  signalingClient.switchSpeaker(
+                                                      switchSpeaker);
+                                                },
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                )),
+
+                                // /////////////// this is local stream
+
+                                rendererListWithRefID.length == 4
+                                    ? Positioned(
+                                        left: 225.0,
+                                        bottom: 145.0,
+                                        right: 20,
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Container(
+                                            height: 170,
+                                            width: 130,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10) // green as background color
+                                                  ),
+                                              child: enableCamera
+                                                  ? RTCVideoView(
+                                                      rendererListWithRefID[3]
+                                                          ["rtcVideoRenderer"],
+                                                      // key: forsmallView,
+                                                      mirror: false,
+                                                      objectFit:
+                                                          RTCVideoViewObjectFit
+                                                              .RTCVideoViewObjectFitCover)
+                                                  // ? RemoteStream(
+                                                  //     remoteRenderer:
+                                                  //         rendererListWithRefID[3]
+                                                  //             ["rtcVideoRenderer"])
+                                                  : Container(
+                                                      color: Colors.pink),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+
+                                Container(
+                                  padding: EdgeInsets.only(
+                                    bottom: 56,
+                                  ),
+                                  alignment: Alignment.bottomCenter,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        child: SvgPicture.asset(
+                                          'assets/end.svg',
+                                        ),
+                                        onTap: () {
+                                          remoteVideoFlag = true;
+                                          widget.stopCall();
+                                          isAppAudiobuttonSelected = false;
+                                          iscamerabuttonSelected = false;
+                                          ismicAudiobuttonSelected = false;
+                                          // inCall = false;
+
+                                          // setState(() {
+                                          //   _isCalling = false;
+                                          // });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ]),
+                            ))
+
                 //dialer side, caller, initiator
                 : WillPopScope(
                     onWillPop: _onWillPop,
@@ -884,18 +888,18 @@ screen at the moment..''',
                       child: Stack(children: <Widget>[
                         meidaType == "video"
                             ? enableCamera
-                                ? 
-                                isMultiSession?
-                                RemoteStream(
-                                    remoteRenderer: rendererListWithRefID[0]
-                                        ["rtcVideoRenderer"],
-                                  ):
-                                  broadcasttype=="camera"?
-                                   RemoteStream(
-                                    remoteRenderer: rendererListWithRefID[0]
-                                        ["rtcVideoRenderer"],
-                                  ):
-                                  Container()
+                                ? isMultiSession
+                                    ? RemoteStream(
+                                        remoteRenderer: rendererListWithRefID[0]
+                                            ["rtcVideoRenderer"],
+                                      )
+                                    : broadcasttype == "camera"
+                                        ? RemoteStream(
+                                            remoteRenderer:
+                                                rendererListWithRefID[0]
+                                                    ["rtcVideoRenderer"],
+                                          )
+                                        : Container()
                                 : Container()
                             : Container(
                                 decoration: BoxDecoration(
@@ -1239,8 +1243,6 @@ screen at the moment..''',
                                   // });
                                 },
                               ),
-
-                          
 
                               SizedBox(width: 10),
                               isMultiSession

@@ -28,24 +28,24 @@ class AuthProvider with ChangeNotifier {
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
 
-  User _user = new User();
-  User get getUser => _user;
-  String _completeAddress;
-  String get completeAddress => _completeAddress;
-  String _deviceId;
-  String get deviceId => _deviceId;
+  User? _user = new User();
+  User? get getUser => _user;
+  String? _completeAddress;
+  String? get completeAddress => _completeAddress;
+  String? _deviceId;
+  String? get deviceId => _deviceId;
   SharedPref _sharedPref = SharedPref();
 
-  String _loginErrorMsg;
-  String get loginErrorMsg => _loginErrorMsg;
+  String? _loginErrorMsg;
+  String? get loginErrorMsg => _loginErrorMsg;
 
-  String _registerErrorMsg;
-  String get registerErrorMsg => _registerErrorMsg;
-  String _host;
-  String get host => _host;
+  String? _registerErrorMsg;
+  String? get registerErrorMsg => _registerErrorMsg;
+  String? _host;
+  String? get host => _host;
 
-  String _port;
-  String get port => _port;
+  String? _port;
+  String? get port => _port;
 
   Future<bool> register(String username, password, email) async {
     _registeredInStatus = Status.Loading;
@@ -95,7 +95,7 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
       return false;
     } else {
-       final now = DateTime.now();
+      final now = DateTime.now();
       _deviceId = now.microsecondsSinceEpoch.toString();
       _completeAddress = response['media_server_map']['complete_address'];
 
@@ -103,7 +103,7 @@ class AuthProvider with ChangeNotifier {
       _port = response["messaging_server_map"]["port"];
       SharedPref sharedPref = SharedPref();
       sharedPref.save("authUser", response);
-         sharedPref.save("deviceId", _deviceId);
+      sharedPref.save("deviceId", _deviceId);
       _registeredInStatus = Status.Registered;
       _loggedInStatus = Status.LoggedIn;
       _user = User.fromJson(response);

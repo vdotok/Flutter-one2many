@@ -24,10 +24,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   handlePress() async {
-    if (_loginformkey.currentState.validate()) {
+    if (_loginformkey.currentState!.validate()) {
       AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
       auth.login(_emailController.text, _passwordController.text);
-      if (auth.getUser.auth_token == null) {
+      if (auth.getUser!.auth_token == null) {
         setState(() {
           _autoValidate = true;
         });
@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
           //color: screenbackgroundColor,
           child: Form(
             key: _loginformkey,
-          autovalidateMode: AutovalidateMode.always,
+            autovalidateMode: AutovalidateMode.always,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 100),
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   builder: (context, auth, child) {
                     if (auth.loggedInStatus == Status.Failure)
                       return Text(
-                        auth.loginErrorMsg,
+                        auth.loginErrorMsg!,
                         style: TextStyle(color: Colors.red),
                       );
                     else

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import '../constants/constant.dart';
 
 class SignInButtonFile extends StatefulWidget {
-  String name;
+  String? name;
   final handlePress;
   bool _autoValidate = true;
   var myController = TextEditingController();
-  SignInButtonFile({Key key, this.name, this.handlePress}) : super(key: key);
+  SignInButtonFile({Key? key, this.name, this.handlePress}) : super(key: key);
   @override
   _WidgetHeaderState createState() => _WidgetHeaderState();
 }
@@ -23,17 +23,15 @@ class _WidgetHeaderState extends State<SignInButtonFile> {
 
   @override
   Widget build(BuildContext context) {
-    return  SizedBox(
+    return SizedBox(
       width: 300.0,
       height: 48.0,
       child: ElevatedButton(
-            style: ElevatedButton.styleFrom(    shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            
-          ),
-          primary: redColor
-          ),
-      
+        style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            primary: redColor),
         onPressed: () async {
           // if (widget.name == "Sign UP")
           //   Navigator.pushNamed(context, "/register");
@@ -44,7 +42,7 @@ class _WidgetHeaderState extends State<SignInButtonFile> {
           // Navigator.pushNamed(context, "/register");
         },
         child: Text(
-          widget.name,
+          widget.name!,
           style: const TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w300,
@@ -53,7 +51,6 @@ class _WidgetHeaderState extends State<SignInButtonFile> {
               color: whiteColor),
           textAlign: TextAlign.center,
         ),
-       
       ),
     );
   }

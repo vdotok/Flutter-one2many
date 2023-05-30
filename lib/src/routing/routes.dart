@@ -10,8 +10,8 @@ import '../core/providers/groupListProvider.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final args = settings.arguments;
-
+    final Map<String, dynamic>? arguments =
+        settings.arguments as Map<String, dynamic>?;
     print("these are arguments ${settings.arguments}");
     print("these are arguments ${settings.name}");
     switch (settings.name) {
@@ -25,10 +25,7 @@ class Routers {
         break;
       case '/home':
         return PageTransition(
-            child: HomeIndex(
-             
-            ),
-            type: PageTransitionType.rightToLeft);
+            child: HomeIndex(), type: PageTransitionType.rightToLeft);
         break;
       // case '/contactlist':
       //   Map<String, dynamic> params = args;
@@ -41,7 +38,7 @@ class Routers {
       //       type: PageTransitionType.rightToLeft);
       //   break;
       case '/createGroup':
-        Map<String, dynamic> params = args;
+        Map<String, dynamic> params = arguments!;
         return PageTransition(
             child: ListenableProvider<GroupListProvider>.value(
               value: params["groupListProvider"],
@@ -62,9 +59,9 @@ class Routers {
       //               publishMessage: params["publishMessage"],
       //               mainProvider: params["callProvider"],
       //               funct: params["funct"],
-                  
+
       //               contactprovider: params["contactProvider"],
-                
+
       //               // callbackfunction: params["callbackfunction"],
       //               ),
       //         ),

@@ -6,16 +6,15 @@ part of 'ParticipantsModel.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ParticipantsModel _$ParticipantsModelFromJson(Map<String, dynamic> json) {
-  return ParticipantsModel(
-    color_code: json['color_code'],
-    color_id: json['color_id'],
-    email: json['email'],
-    full_name: json['full_name'],
-    ref_id: json['ref_id'],
-    user_id: json['user_id'],
-  );
-}
+ParticipantsModel _$ParticipantsModelFromJson(Map<String, dynamic> json) =>
+    ParticipantsModel(
+      color_code: json['color_code'],
+      color_id: json['color_id'],
+      email: json['email'],
+      full_name: json['full_name'],
+      ref_id: json['ref_id'],
+      user_id: json['user_id'],
+    );
 
 Map<String, dynamic> _$ParticipantsModelToJson(ParticipantsModel instance) =>
     <String, dynamic>{
