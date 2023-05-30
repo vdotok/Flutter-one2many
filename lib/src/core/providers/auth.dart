@@ -32,6 +32,8 @@ class AuthProvider with ChangeNotifier {
   User get getUser => _user;
   String _completeAddress;
   String get completeAddress => _completeAddress;
+  String _deviceId;
+  String get deviceId => _deviceId;
   SharedPref _sharedPref = SharedPref();
 
   String _loginErrorMsg;
@@ -82,7 +84,7 @@ class AuthProvider with ChangeNotifier {
       "device_model": model,
       "device_os_ver": version,
       "app_version": "1.1.5",
-      "project_id": project_id
+      "project_id": projectId
     };
 
     final response = await callAPI(jsonData, "SignUp", null);
@@ -93,12 +95,15 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
       return false;
     } else {
+       final now = DateTime.now();
+      _deviceId = now.microsecondsSinceEpoch.toString();
       _completeAddress = response['media_server_map']['complete_address'];
 
       _host = response["messaging_server_map"]["host"];
       _port = response["messaging_server_map"]["port"];
       SharedPref sharedPref = SharedPref();
       sharedPref.save("authUser", response);
+         sharedPref.save("deviceId", _deviceId);
       _registeredInStatus = Status.Registered;
       _loggedInStatus = Status.LoggedIn;
       _user = User.fromJson(response);
@@ -114,7 +119,7 @@ class AuthProvider with ChangeNotifier {
     Map<String, dynamic> jsonData = {
       "email": email,
       "password": password,
-      "project_id": project_id
+      "project_id": projectId
     };
 
     final response = await callAPI(jsonData, "Login", null);
@@ -124,12 +129,16 @@ class AuthProvider with ChangeNotifier {
       _loginErrorMsg = response['message'];
       notifyListeners();
     } else {
-      _completeAddress = response['media_server_map']['complete_address'];
+      final now = DateTime.now();
+      _deviceId = now.microsecondsSinceEpoch.toString();
 
+      _completeAddress = response['media_server_map']['complete_address'];
+      print("this is iddddddd $_deviceId");
       _host = response["messaging_server_map"]["host"];
       _port = response["messaging_server_map"]["port"];
       SharedPref sharedPref = SharedPref();
       sharedPref.save("authUser", response);
+      sharedPref.save("deviceId", _deviceId);
       _loggedInStatus = Status.LoggedIn;
 
       print("THIS IS COMPLETE ADRESS $_completeAddress");
@@ -142,6 +151,7 @@ class AuthProvider with ChangeNotifier {
     SharedPref sharedPref = SharedPref();
     sharedPref.remove("authUser");
     sharedPref.remove("URL");
+    sharedPref.remove("deviceId");
     _loggedInStatus = Status.LoggedOut;
     _user = null;
     notifyListeners();
@@ -149,6 +159,7 @@ class AuthProvider with ChangeNotifier {
 
   isUserLogedIn() async {
     final authUser = await _sharedPref.read("authUser");
+    final deviceId = await _sharedPref.read("deviceId");
     print("this is authUser $authUser");
     if (authUser == null) {
       _loggedInStatus = Status.NotLoggedIn;
@@ -158,6 +169,7 @@ class AuthProvider with ChangeNotifier {
           jsonDecode(authUser)['media_server_map']['complete_address'];
       _host = jsonDecode(authUser)["messaging_server_map"]["host"];
       _port = jsonDecode(authUser)["messaging_server_map"]["port"];
+      _deviceId = deviceId;
       _loggedInStatus = Status.LoggedIn;
       _user = User.fromJson(jsonDecode(authUser));
       notifyListeners();

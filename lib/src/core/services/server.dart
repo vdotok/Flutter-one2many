@@ -3,16 +3,18 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../core/config/config.dart';
+
+import '../config/config.dart';
+
 
 // The function take will take the user request and verfies it with the api. in this case it will authenticate the user
 Future<dynamic> callAPI(datarequest, myurl, authToken) async {
-  print("thias is url is casll api $URL");
+  print("thias is url is casll api $tenantUrl");
   // SharedPref _sharedPref = SharedPref();
   // URL = await _sharedPref.read("URL");
   // print("this is sssssss ${urll.toString()}");
   //var urll1=urll;
-  final url = URL + version + myurl;
+  final url = tenantUrl + version + myurl;
   print("The my url: $myurl");
   print("this is api call $datarequest $url  $authToken");
   try {
@@ -45,7 +47,7 @@ Future<dynamic> getAPI(myurl, authToken) async {
   // SharedPref _sharedPref = SharedPref();
   // URL = await _sharedPref.read("URL");
 
-  final url = URL + version + myurl;
+  final url = tenantUrl + version + myurl;
   print('this is url $url');
   //print("auth token is ")
   try {

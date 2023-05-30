@@ -71,17 +71,17 @@ class SampleHandler: RPBroadcastSampleHandler {
         guard let screenShareData = screenShareData else {return }
         request = RegisterRequest(type: "request",
                                       requestType: "register",
-                                      referenceID: screenShareData.baseSession.from,
+                                      referenceId: screenShareData.baseSession.from,
                                       authorizationToken: screenShareData.authenticationToken,
                                       socketType: .screenShare,
-                                      requestID: getRequestId(),
-                                      projectID: projectID)
+                                      requestId: getRequestId(),
+                                      projectId: projectID)
         vtokSdk = VTokSDK(url: screenShareData.url, registerRequest: request!, connectionDelegate: self, connectionType: .screenShare)
     }
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
         // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
-        let message : NSString =  "StartScreenSharing"
-        wormhole.passMessageObject(message, identifier: "Command")
+        let meeeeeeee : NSString =  "StartScreenSharing"
+        wormhole.passMessageObject(meeeeeeee, identifier: "Command")
     }
     override func broadcastPaused() {
         // User has requested to pause the broadcast. Samples will stop being delivered.
@@ -164,8 +164,8 @@ extension SampleHandler: SessionDelegate {
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "Calling",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -181,8 +181,8 @@ extension SampleHandler: SessionDelegate {
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "Ringing",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -199,8 +199,8 @@ extension SampleHandler: SessionDelegate {
 //                let message: NSString = "onParticipantAdd"
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "onParticipantAdd",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -218,8 +218,8 @@ extension SampleHandler: SessionDelegate {
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "Rejected",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -237,8 +237,8 @@ extension SampleHandler: SessionDelegate {
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "Busy",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -254,8 +254,8 @@ extension SampleHandler: SessionDelegate {
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "MissedCall",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -273,8 +273,8 @@ extension SampleHandler: SessionDelegate {
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "InValidTarget",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -289,8 +289,8 @@ extension SampleHandler: SessionDelegate {
         case .hangup:
             do {                let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "HungUp",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -306,8 +306,8 @@ extension SampleHandler: SessionDelegate {
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "TryingConnect",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -319,29 +319,29 @@ extension SampleHandler: SessionDelegate {
                 wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
                 }
             break
-        case .reconnect:
-            do {
-                let VTokBaseSessionDictionary : [String : String] = [
-                    "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
-                    "state": "Reconnecting",
-        //            "associatedSessionUUID": session.?associatedSessionUUID ,
-                    "connectedUsers": String(session.connectedUsers.count),
-                    "sessionTime": session.sessionTime
-                ]
-                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
-                let message = String(data: jsonData, encoding: .utf8)!
-                   print(message)
-                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
-                }
-            break
+//        case .reconnect:
+//            do {
+//                let VTokBaseSessionDictionary : [String : String] = [
+//                    "from": session.from,
+//                    "requestID": session.requestID,
+//                    "sessionUUID": session.sessionUUID,
+//                    "state": "Reconnecting",
+//        //            "associatedSessionUUID": session.?associatedSessionUUID ,
+//                    "connectedUsers": String(session.connectedUsers.count),
+//                    "sessionTime": session.sessionTime
+//                ]
+//                let jsonData = try! JSONEncoder().encode(VTokBaseSessionDictionary)
+//                let message = String(data: jsonData, encoding: .utf8)!
+//                   print(message)
+//                wormhole.passMessageObject(message as NSCoding, identifier: "sessionUpdates")
+//                }
+//            break
         case .updateParticipent:
             do {
                 let VTokBaseSessionDictionary : [String : String] = [
                     "from": session.from,
-                    "requestID": session.requestID,
-                    "sessionUUID": session.sessionUUID,
+                    "requestID": session.requestId,
+                    "sessionUUID": session.sessionUuid,
                     "state": "UpdateParticipent",
         //            "associatedSessionUUID": session.?associatedSessionUUID ,
                     "connectedUsers": String(session.connectedUsers.count),
@@ -378,7 +378,7 @@ extension SampleHandler {
         let myTimeInterval = TimeInterval(timestamp)
         let time = Date(timeIntervalSince1970: TimeInterval(myTimeInterval)).stringValue()
         let tenantId = "12345"
-        let requestId = self.request?.referenceID ?? ""
+        let requestId = self.request?.referenceId ?? ""
         let token = generatable.getUUID(string: time + tenantId + requestId)
         return token
     }

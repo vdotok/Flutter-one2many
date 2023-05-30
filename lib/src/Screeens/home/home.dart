@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_one2many/src/Screeens/CreateGroupScreen/CreateGroupChatIndex.dart';
 import 'package:flutter_one2many/src/Screeens/callScreens/CallStartOnetoMany.dart';
@@ -15,12 +14,9 @@ import 'package:flutter_one2many/src/core/providers/contact_provider.dart';
 import 'package:flutter_one2many/src/core/providers/main_provider.dart';
 import 'package:flutter_one2many/src/grouplist/GroupListScreen.dart';
 import 'package:flutter_one2many/src/shared_preference/shared_preference.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
-import 'package:vibration/vibration.dart';
 import 'package:wakelock/wakelock.dart';
 import '../../../main.dart';
 
@@ -44,14 +40,14 @@ bool switchMute = true;
 bool switchMute2 = true;
 DateTime time;
 bool switchSpeaker = true;
-SignalingClient signalingClient = SignalingClient.instance..checkConnectivity();
+SignalingClient signalingClient = SignalingClient.instance;
 bool remoteVideoFlag = true;
 String callTo = "";
 bool groupBroadcast = false;
 String incomingfrom;
 bool onRemoteStream = false;
 String publicbroadcasturl = "";
-String errorcode="";
+String errorcode = "";
 List<String> strArr = [];
 bool iscalloneto1 = false;
 bool isRegisteredAlready = false;
@@ -112,7 +108,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   bool iscallAcceptedbyuser = false;
   bool inInactive = false;
 
-  
   RTCVideoRenderer _remoteRenderer = new RTCVideoRenderer();
   MediaStream _localStream;
 
@@ -221,12 +216,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     print("i am here in  init state of home page ........$inCall");
 
-    //time = null;
+  
 
     scaffoldKey = GlobalKey<ScaffoldState>();
-    //checkStatus();
-    //checkConnectivity();
-    //  rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+   
     contactProvider = Provider.of<ContactProvider>(context, listen: false);
     authProvider = Provider.of<AuthProvider>(context, listen: false);
     groupListProvider = Provider.of<GroupListProvider>(context, listen: false);
@@ -235,168 +228,129 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     print("Hi i am parent class function");
     contactProvider.getContacts(authProvider.getUser.auth_token);
     groupListProvider.getGroupList(authProvider.getUser.auth_token);
-    signalingClient.connect(project_id, authProvider.completeAddress);
+    signalingClient.connect(
+       authProvider.deviceId,
+        projectId,
+        authProvider.completeAddress,
+        authProvider.getUser.authorization_token.toString(),
+        authProvider.getUser.ref_id.toString()
+        
+        );
+    // signalingClient.connect(project_id, authProvider.completeAddress);
     signalingClient.onConnect = (res) {
       print("onConnecttttttttttt signalining client $res");
       if (res == "connected") {
-
         callSocket = true;
-        errorcode="";
+        errorcode = "";
       }
-    
-      signalingClient.register(authProvider.getUser.toJson(), project_id);
-      // signalingClient.register(user);
     };
+    signalingClient.onError = (code, reason) async {
+      print("this is socket error $code $reason");
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+          errorcode = code.toString();
+        callSocket = false;
+      });
 
-    signalingClient.onError = (code, res) async {
-      print("onError $code $res");
-setState(() {
-  errorcode=code.toString();
-          callSocket = false;
-          //  isInternetConnect = false;
-          isRegisteredAlready = false;
-        });
-      if (code == 1001 || code == 1002) {
-        print("When internet gone due to some reason $callSocket $chatSocket");
-        
-        bool connectionFlag = await signalingClient.checkInternetConnectivity();
-        print("this is connection flag $connectionFlag");
-        if (connectionFlag) {
-          signalingClient.connect(project_id, authProvider.completeAddress);
-        }
-        //  isInternetConnect = true;
-        // signalingClient.connect(project_id, authProvider.completeAddress);
-
-        // signalingClient.sendPing(registerRes["mctoken"]);
-
-      } else if (code == 401) {
-        print("when same user login");
-        setState(() {
-          callSocket = false;
-          isRegisteredAlready = true;
-          snackBar = SnackBar(
-            content: Text('$res'),
-            duration: Duration(days: 365),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        });
+      if (authProvider.loggedInStatus == Status.LoggedOut) {
       } else {
-        if (authProvider.loggedInStatus == Status.LoggedOut) {
+        bool status = await signalingClient.getInternetStatus();
+
+        print("this is internet status $status");
+
+        if (callSocket == false && status == true) {
+          print("here in onerrorrrrrr ");
+
+         
         } else {
-          print("heeeeee");
-          setState(() {
-            callSocket = false;
-            isRegisteredAlready = false;
-          });
-          if (isResumed) {
-            bool connectionFlag =
-                await signalingClient.checkInternetConnectivity();
-            print("jghfh $connectionFlag $callSocket $isRegisteredAlready ");
-            if (connectionFlag && callSocket == false ) {
-              print("i am in connect in 1005");
-              signalingClient.connect(project_id, authProvider.completeAddress);
-            } else {}
-          } else {}
+          print("else condition");
         }
       }
     };
-    signalingClient.internetConnectivityCallBack = (mesg) {
-      print("this is negsss $mesg $callSocket");
+  
+
+     signalingClient.internetConnectivityCallBack = (mesg) {
       if (mesg == "Connected") {
-      //  showSnackbar("Internet Connected", whiteColor, Colors.green, false);
-  if(isResumed)
-      {   Fluttertoast.showToast(
-                        msg: "Connected to Internet.",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.TOP_RIGHT,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.white,
-                        fontSize: 14.0);}
+        setState(() {
+          if (inCall == true) {
+            print("fdjhfjd");
+            isTimer = true;
+          }
+          isInternetConnect = true;
+          //  sockett = true;
+        });
+        // if (isResumed) {
+        Fluttertoast.showToast(
+            msg: "Connected to Internet.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP_RIGHT,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 14.0);
+        // }
+        print("khdfjhfj $isTimer");
         if (callSocket == false) {
-          signalingClient.connect(project_id, authProvider.completeAddress);
-          errorcode="";
-          print("I am in Re Reregister");
+          // signalingClient.connect(
+          //     _auth.projectId,
+          //     _auth.completeAddress,
+          //     _auth.getUser.authorization_token.toString(),
+          //     _auth.getUser.ref_id.toString());
+          print("I am in Re Reregister ");
           remoteVideoFlag = true;
           print("here in init state register");
-          // signalingClient.register(authProvider.getUser.toJson(), project_id);
-        }
-        setState(() {
-          isInternetConnect = true;
-          callSocket = true;
-          chatSocket = true;
-        });
-
-        if (inCall == true) {
-          isTimer = true;
         }
       } else {
-        print("no internet connection");
+        print("onError no internet connection");
         setState(() {
-          callSocket = false;
           isInternetConnect = false;
-          chatSocket = false;
+          callSocket = false;
         });
-         if(isResumed)
-        { Fluttertoast.showToast(
-                        msg: "Waiting for Internet.",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.TOP_RIGHT,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.white,
-                        fontSize: 14.0);}
+        //  if (isResumed) {
+        Fluttertoast.showToast(
+            msg: "Waiting for Internet.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP_RIGHT,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 14.0);
+        // }
+        signalingClient.closeSocket();
 
-       // showSnackbar("No Internet Connection", whiteColor, primaryColor, true);
-//signalingClient.connect(project_id, authProvider.completeAddress);
-    //  signalingClient.closeSocket();
+        print("uyututuir");
       }
     };
+
 
     signalingClient.onRegister = (res) {
       print("onRegister  $res");
       setState(() {
-        
         registerRes = res;
       });
       // signalingClient.register(user);
     };
 
-  
-
-    // signalingClient.onCallMissedCallback = () {
-    //   // totalCounter("missedCallCounter", missedCallCount);
-    //   print("this is missed call counter $missedCallCount");
-    // };
-    // signalingClient.onCallWaitingCallback = () {
-    //   print("i am in call waiting call back");
-    //   stopCall();
-
-    //   print("after session timeout call");
-    // };
+    
 
     signalingClient.onLocalStream = (stream) async {
- print("this is local streammmm");
-//RTCVideoRenderer localRenderer = RTCVideoRenderer();
- //print("this is loccll $localRenderer");
-    Map<String, dynamic> temp = {
-      "refID": authProvider.getUser.ref_id,
-      "rtcVideoRenderer": RTCVideoRenderer(),
-      "remoteVideoFlag":meidaType == MediaType.video ? 1 : 0,
-      "remoteAudioFlag": 1
-    };
-   await initRenderers(temp["rtcVideoRenderer"]).then((value) {
-      setState(() {
- rendererListWithRefID.add(temp);
- rendererListWithRefID[0]["rtcVideoRenderer"].srcObject=stream;
-//  isLocalStream=true;
-
-
+      print("this is local streammmm");
+      Map<String, dynamic> temp = {
+        "refID": authProvider.getUser.ref_id,
+        "rtcVideoRenderer": RTCVideoRenderer(),
+        "remoteVideoFlag": meidaType == MediaType.video ? 1 : 0,
+        "remoteAudioFlag": 1
+      };
+      await initRenderers(temp["rtcVideoRenderer"]).then((value) {
+        setState(() {
+          rendererListWithRefID.add(temp);
+          rendererListWithRefID[0]["rtcVideoRenderer"].srcObject = stream;
+        });
+        print("this is onlocalstream length ${rendererListWithRefID.length}");
       });
-      print("this is onlocalstream length ${rendererListWithRefID.length}");
-    });
     };
-    
 
     signalingClient.onRemoteStream = (stream, refid) async {
       print("this is home page on remote stream $refid");
@@ -407,77 +361,70 @@ setState(() {
         "remoteAudioFlag": 1
       };
 
-      await initRenderers(temp["rtcVideoRenderer"]).then((value){
-        if(value)
-    {  setState(() {
-        temp["rtcVideoRenderer"].srcObject = stream;
-        rendererListWithRefID.add(temp);
-        //print("this is remote ${stream.id}");
-        if (isTimer == false) {
-          time = DateTime.now();
-          _callTime = DateTime.now();
-        } else {
-          //  _ticker.cancel();
-          time = _callTime;
-          isTimer = false;
+      await initRenderers(temp["rtcVideoRenderer"]).then((value) {
+        if (value) {
+          setState(() {
+            temp["rtcVideoRenderer"].srcObject = stream;
+            rendererListWithRefID.add(temp);
+            //print("this is remote ${stream.id}");
+            if (isTimer == false) {
+              time = DateTime.now();
+              _callTime = DateTime.now();
+            } else {
+              //  _ticker.cancel();
+              time = _callTime;
+              isTimer = false;
+            }
+            print(
+                "call callback on call left by participant2 ${rendererListWithRefID.length}");
+           
+            onRemoteStream = true;
+
+            forLargStream = rendererListWithRefID[1];
+            if (_callticker != null) {
+              _callticker.cancel();
+              count = 0;
+              iscallAcceptedbyuser = true;
+            }
+
+            _mainProvider.callStart();
+          });
         }
-        print(
-            "call callback on call left by participant2 ${rendererListWithRefID.length}");
-        // _updateTimer();
-        // _ticker = Timer.periodic(Duration(seconds: 1), (_) => _updateTimer());
-        onRemoteStream = true;
-
-        forLargStream = rendererListWithRefID[1];
-        if (_callticker != null) {
-          _callticker.cancel();
-          count = 0;
-          iscallAcceptedbyuser = true;
-        }
-
-        _mainProvider.callStart();
-      });}
-      } );
-
+      });
     };
-     signalingClient.onMissedCall = (mesg) {
+    signalingClient.onMissedCall = (mesg) {
       print("here in onmissedcall");
     };
 
     signalingClient.onReceiveCallFromUser = (res, isMultiSession
-        //receivefrom, type, isonetone, callType, sessionType
+  
 
         ) async {
       print("call callback on call Received incomming ${res} ");
 
-      // if (_mainProvider.rendererListWithRefID.length != null) {
-      //   _mainProvider.rendererListWithRefID.first["remoteVideoFlag"] =
-      //       type == "audio" ? 0 : 1;
-      // }
-
-      //print("renderer listdddd $receivefrom");
-      // startRinging();
+     
 
       setState(() {
-        if (res["call_type"] == "one_to_many") {
+        if (res["callType"] == "one_to_many") {
           groupBroadcast = true;
         }
 
-        session_type = res["session_type"];
-        typeOfCall = res["call_type"];
+        session_type = res["sessionType"];
+        typeOfCall = res["callType"];
         inCall = true;
         Wakelock.toggle(enable: true);
         pressDuration = "";
         iscalloneto1 = typeOfCall == "one_to_one" ? true : false;
         onRemoteStream = false;
         incomingfrom = res["from"];
-        meidaType = res["media_type"];
+        meidaType = res["mediaType"];
         switchMute = true;
         switchMute2 = true;
         enableCamera = true;
         enableCamera2 = true;
         groupName =
-            res["call_type"] != "one_to_one" ? res["data"]["groupName"] : "";
-        switchSpeaker = res["media_type"] == "video" ? true : false;
+            res["callType"] != "one_to_one" ? res["data"]["groupName"] : "";
+        switchSpeaker = res["mediaType"] == "video" ? true : false;
         remoteVideoFlag = true;
         remoteAudioFlag = true;
         isReceive = true;
@@ -487,28 +434,22 @@ setState(() {
       if (isMultiSession) {
         iscallAcceptedbyuser = false;
       } else {
-         if (_callticker != null) {
-        _callticker.cancel();
-        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
-      } else {
-        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
-      }
-       // _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+        if (_callticker != null) {
+          _callticker.cancel();
+          _callticker =
+              Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+        } else {
+          _callticker =
+              Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+        }
+        
       }
     };
     signalingClient.onParticipantsLeft =
         (refID, receive, isMultisession) async {
       print(
           "call callback on call hungUpBy User2 ${refID} ${rendererListWithRefID.length} $callingTo $isDialer $receive");
-      //     print("this is participant left reference id $refID");
-      // if (refID == authProvider.getUser.ref_id) {
-      // } else {
-      //   int index = rendererListWithRefID
-      //       .indexWhere((element) => element["refID"] == refID);
-      //   setState(() {
-      //     rendererListWithRefID.removeAt(index);
-      //   });
-      // }
+     
       if (isMultisession) {
         rendererListWithRefID.length = 1;
       }
@@ -565,11 +506,10 @@ setState(() {
         }
       }
     };
-    signalingClient.onCallDial=(){
-      if(ispublicbroadcast==false){
+    signalingClient.onCallDial = () {
+      if (ispublicbroadcast == false) {
         _mainProvider.callDial();
       }
-
     };
     signalingClient.onTargetAlerting = () {
       setState(() {
@@ -631,15 +571,14 @@ setState(() {
     signalingClient.onCallHungUpByUser = (isLocal) {
       print(
           "call callback on call hungUpBy User ${rendererListWithRefID.length} $isDialer $isReceive $inCall");
-     
 
-      if ((rendererListWithRefID.length == 0||
-        rendererListWithRefID.length == 1 && isDialer) ||
+      if ((rendererListWithRefID.length == 0 ||
+              rendererListWithRefID.length == 1 && isDialer) ||
           (rendererListWithRefID.length == 1 && isReceive) ||
           (rendererListWithRefID.length == 2) ||
           (rendererListWithRefID.length == 3) ||
           ((rendererListWithRefID.length == 4))) {
-            print("sjgdhsjgdhgdshdsgjdhs");
+        print("sjgdhsjgdhgdshdsgjdhs");
         if (strArr.last == "LandingScreen") {
           print("here in oncallhungup index $listIndex");
           print("utuyy");
@@ -660,7 +599,7 @@ setState(() {
         ispublicbroadcast = false;
         isDialer = false;
         isMultiSession = false;
-       // isLocalStream=false;
+        // isLocalStream=false;
         sharedPref.remove("inCall");
         groupBroadcast = false;
         callTo = "";
@@ -672,10 +611,10 @@ setState(() {
         ismicAudiobuttonSelected = false;
         _ticker?.cancel();
         if (inCall) {
-           if (_callticker != null) {
-          _callticker.cancel();
-        }
-        //  _callticker?.cancel();
+          if (_callticker != null) {
+            _callticker.cancel();
+          }
+          //  _callticker?.cancel();
         }
         count = 0;
         iscallAcceptedbyuser = false;
@@ -690,7 +629,7 @@ setState(() {
       //
       //  }
 
-     // stopRinging();
+      // stopRinging();
     };
     signalingClient.insufficientBalance = (res) {
       print("here in insufficient balance");
@@ -747,38 +686,41 @@ setState(() {
         ));
     }
   }
-  
+
   disposeAllRenderer() async {
     print("this is listlength ${rendererListWithRefID.length}");
     for (int i = 0; i < rendererListWithRefID.length; i++) {
        if (i == 0) {
-      print("here isssssssss ${rendererListWithRefID.length}");
-      rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
-     //  await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
-      
-        } else {
-         await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
-       }
+        print("here isssssssss ${rendererListWithRefID.length}");
+        rendererListWithRefID[i]["rtcVideoRenderer"].srcObject = null;
+       
+      } else {
+        await rendererListWithRefID[i]["rtcVideoRenderer"].dispose();
+       
+       
+    
+      }
     }
 
     // setState(() {
     if (rendererListWithRefID.length > 1) {
       print("yes i'm here ${rendererListWithRefID.length}");
       rendererListWithRefID.removeRange(1, (rendererListWithRefID.length));
-       
-        rendererListWithRefID.clear();
-         print("yes i'm hereeeeee ${rendererListWithRefID.length}");
+
+      rendererListWithRefID.clear();
+      print("yes i'm hereeeeee ${rendererListWithRefID.length}");
     }
     // });
   }
-@override
-void deactivate(){
-super.deactivate();
-print("gxhdghsgd");
-}
+
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state)async {
-    print("this is changeapplifecyclestate $state");
+  void deactivate() {
+    super.deactivate();
+    print("gxhdghsgd");
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    print("this is changeapplifecyclestate");
     switch (state) {
       case AppLifecycleState.resumed:
         print("app in resumed");
@@ -787,57 +729,53 @@ print("gxhdghsgd");
         inInactive = false;
         if (authProvider.loggedInStatus == Status.LoggedOut) {
         } else {
-          try {
-             bool status=await signalingClient.checkInternetConnectivity();
-          
-          if(status==false)
-        {  Fluttertoast.showToast(
-                        msg: "Waiting for Internet.",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.TOP_RIGHT,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.white,
-                        fontSize: 14.0);}
-                        else{
-                          Fluttertoast.showToast(
-                        msg: "Connected to Internet.",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.TOP_RIGHT,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.white,
-                        fontSize: 14.0);
-                        }
-            signalingClient.sendPing(registerRes["mcToken"]);
-          } catch (e) {}
+          //print("this is variable for resume $callSocket $isConnected $isResumed");
+          bool connectionFlag = await signalingClient.getInternetStatus();
+          // bool status=await signalingClient.checkInternetConnectivity();
+
+          // if (connectionFlag == false) {
+          //   Fluttertoast.showToast(
+          //       msg: "Waiting for Internet.",
+          //       toastLength: Toast.LENGTH_SHORT,
+          //       gravity: ToastGravity.TOP_RIGHT,
+          //       timeInSecForIosWeb: 1,
+          //       backgroundColor: Colors.black,
+          //       textColor: Colors.white,
+          //       fontSize: 14.0);
+          // } else {
+          //   Fluttertoast.showToast(
+          //       msg: "Connected to Internet.",
+          //       toastLength: Toast.LENGTH_SHORT,
+          //       gravity: ToastGravity.TOP_RIGHT,
+          //       timeInSecForIosWeb: 1,
+          //       backgroundColor: Colors.black,
+          //       textColor: Colors.white,
+          //       fontSize: 14.0);
+          // }
+          // if (connectionFlag && sockett == false) {
+          //   signalingClient.connect(
+          //       _auth.projectId,
+          //       _auth.completeAddress,
+          //       _auth.getUser.authorization_token.toString(),
+          //       _auth.getUser.ref_id.toString());
+          // }
         }
 
         break;
       case AppLifecycleState.inactive:
-        {
-          print("app in inactive");
-          inInactive = true;
-          isResumed = false;
-          inPaused = false;
-          if (kIsWeb) {
+        print("app in inactive");
+        inInactive = true;
+        isResumed = false;
+        inPaused = false;
+        if (Platform.isIOS) {
+          if (inCall == true) {
+            print("incall true");
           } else {
-            // signalingClient.checkInternetConnectivity();
+            print("here in ininactive");
             // signalingClient.closeSocket();
-            // if (Platform.isIOS) {
-            //   if (inCall == true) {
-            //     print("incall true");
-            //   } else {
-            //     // if (inCall == true) {
-            //     //   print("incall true7");
-            //     // } else {
-            //     print("here in ininactive");
-            //     signalingClient.closeSocket();
-            //     // }
-            //   }
-            // }
           }
         }
+
         break;
       case AppLifecycleState.paused:
         print("app in paused");
@@ -848,23 +786,106 @@ print("gxhdghsgd");
           print("incall true");
         } else {
           print("incall false");
-         // signalingClient.closeSocket();
+          //  signalingClient.closeSocket();
         }
         break;
       case AppLifecycleState.detached:
         print("app in detached");
-    // Navigator.pop(context);
-      //   if(Platform.isIOS)
-      //  { if(inCall){
-      //     signalingClient.stopReplayKitLauncher();
-      //   }}
-        // signalingClient.unRegister(registerRes["mcToken"]);
-
         break;
     }
     // super.didChangeAppLifecycleState(state);
     // _isInForeground = state == AppLifecycleState.resumed;
   }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) async {
+  //   print("this is changeapplifecyclestate $state");
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       print("app in resumed");
+  //       isResumed = true;
+  //       inPaused = false;
+  //       inInactive = false;
+  //       if (authProvider.loggedInStatus == Status.LoggedOut) {
+  //       } else {
+  //         try {
+  //           bool status = await signalingClient.checkInternetConnectivity();
+
+  //           if (status == false) {
+  //             Fluttertoast.showToast(
+  //                 msg: "Waiting for Internet.",
+  //                 toastLength: Toast.LENGTH_SHORT,
+  //                 gravity: ToastGravity.TOP_RIGHT,
+  //                 timeInSecForIosWeb: 1,
+  //                 backgroundColor: Colors.black,
+  //                 textColor: Colors.white,
+  //                 fontSize: 14.0);
+  //           } else {
+  //             Fluttertoast.showToast(
+  //                 msg: "Connected to Internet.",
+  //                 toastLength: Toast.LENGTH_SHORT,
+  //                 gravity: ToastGravity.TOP_RIGHT,
+  //                 timeInSecForIosWeb: 1,
+  //                 backgroundColor: Colors.black,
+  //                 textColor: Colors.white,
+  //                 fontSize: 14.0);
+  //           }
+  //           signalingClient.sendPing(registerRes["mcToken"]);
+  //         } catch (e) {}
+  //       }
+
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       {
+  //         print("app in inactive");
+  //         inInactive = true;
+  //         isResumed = false;
+  //         inPaused = false;
+  //         if (kIsWeb) {
+  //         } else {
+  //           // signalingClient.checkInternetConnectivity();
+  //           // signalingClient.closeSocket();
+  //           // if (Platform.isIOS) {
+  //           //   if (inCall == true) {
+  //           //     print("incall true");
+  //           //   } else {
+  //           //     // if (inCall == true) {
+  //           //     //   print("incall true7");
+  //           //     // } else {
+  //           //     print("here in ininactive");
+  //           //     signalingClient.closeSocket();
+  //           //     // }
+  //           //   }
+  //           // }
+  //         }
+  //       }
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       print("app in paused");
+  //       inPaused = true;
+  //       isResumed = false;
+  //       inInactive = false;
+  //       if (inCall == true) {
+  //         print("incall true");
+  //       } else {
+  //         print("incall false");
+  //         // signalingClient.closeSocket();
+  //       }
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       print("app in detached");
+  //       // Navigator.pop(context);
+  //       //   if(Platform.isIOS)
+  //       //  { if(inCall){
+  //       //     signalingClient.stopReplayKitLauncher();
+  //       //   }}
+  //       // signalingClient.unRegister(registerRes["mcToken"]);
+
+  //       break;
+  //   }
+  //   // super.didChangeAppLifecycleState(state);
+  //   // _isInForeground = state == AppLifecycleState.resumed;
+  // }
 
   String _formatDuration(Duration duration) {
     String twoDigits(int n) {
@@ -881,24 +902,6 @@ print("gxhdghsgd");
       return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
     }
   }
-  //   Future<bool> _startVdotokForegroundService() {
-  //   return _startForegroundService(
-  //     holdWakeLock: false,
-  //     onStarted: () {
-  //       print("Foreground on Started");
-  //     },
-  //     onStopped: () {
-  //       print("Foreground on Stopped");
-  //     },
-  //     title: "Tcamera",
-  //     content: "Tcamera sharing your screen.",
-  //     iconName: "ic_stat_mobile_screen_share",
-  //   ).then((value) {
-  //     return true;
-  //   }).catchError((onError) {
-  //     return false;
-  //   });
-  // }
 
   void _updateTimer() {
     print("time value is $time ");
@@ -942,17 +945,6 @@ print("gxhdghsgd");
     });
 
     List<String> groupRefIDS = [];
-// if(Platform.isAndroid)
-//     {final file = new File('${(await getTemporaryDirectory()).path}/music.mp3');
-//     await file.writeAsBytes(
-//         (await rootBundle.load("assets/audio.mp3")).buffer.asUint8List());
-//     // int res = await _audioPlayer.earpieceOrSpeakersToggle();
-//     // print("thogh $res");
-//     // if (res == 1) {
-//     await _audioPlayer.play(file.path, isLocal: true);}
-//     //await _audioPlayer.earpieceOrSpeakersToggle();
-//     //}
-    //int result=
     if (to == null) {
       if (callType == "one_to_one") {
       } else {
@@ -990,37 +982,33 @@ print("gxhdghsgd");
           "calleName": "",
           "groupName": groupName,
           "groupAutoCreatedValue": "",
-          "typeOfBroadcast": broadcasttype
         };
       }
-
-      signalingClient.startCallonetomany(
+print("custom data $customData");
+      signalingClient.startCallOneToMany(
           customData: customData,
           from: authProvider.getUser.ref_id,
           to: groupRefIDS,
           mcToken: registerRes["mcToken"],
-          meidaType: mtype,
+          mediaType: mtype,
           callType: callType,
           sessionType: sessionType,
-          ispublicbroadcast: ispublicbroadcast,
-          broadcastype: broadcasttype,
+          isPublicBroadcast: ispublicbroadcast,
+          broadcastType: broadcasttype,
           authorizationToken: authProvider.getUser.authorization_token);
 //  if (to != null) {
 //     //  if (isLocalStream)
-//     // {  
+//     // {
 //       _mainProvider.callDial();}
-   // }
-if (_callticker != null) {
-      _callticker.cancel();
-      _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
-    } else {
-      _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+      // }
+      if (_callticker != null) {
+        _callticker.cancel();
+        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+      } else {
+        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+      }
+    
     }
-  //  _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
-       
-    }
-
-   
   }
 
   _callcheck() {
@@ -1115,9 +1103,9 @@ if (_callticker != null) {
       onRemoteStream = false;
     });
     if (strArr.last == "LandingScreen") {
-        //  print("here in oncallhungup index $listIndex");
-          print("porierio");
-          _mainProvider.homeScreen();
+      //  print("here in oncallhungup index $listIndex");
+      print("porierio");
+      _mainProvider.homeScreen();
     }
     if (strArr.last == "CreateGroupChat") {
       _mainProvider.createGroupChatScreen();
@@ -1148,15 +1136,20 @@ if (_callticker != null) {
   }
 
   renderList() {
-    if (groupListProvider.groupListStatus == ListStatus.Scussess)
-   {   groupListProvider.getGroupList(authProvider.getUser.auth_token);}
-    else {
+    if (groupListProvider.groupListStatus == ListStatus.Scussess) {
+      groupListProvider.getGroupList(authProvider.getUser.auth_token);
+    } else {
       contactProvider.getContacts(authProvider.getUser.auth_token);
       _selectedContacts.clear();
     }
-    if(callSocket==false && isInternetConnect){
+    if (callSocket == false && isInternetConnect) {
       print("here in refreshlist connection");
-      signalingClient.connect(project_id, authProvider.completeAddress);
+      signalingClient.connect(
+        authProvider.deviceId,
+        projectId,
+        authProvider.completeAddress,
+        authProvider.getUser.authorization_token.toString(),
+        authProvider.getUser.ref_id.toString());
     }
   }
 
@@ -1207,14 +1200,14 @@ if (_callticker != null) {
                 registerRes: registerRes,
                 authProvider: authProvider,
                 from: authProvider.getUser.ref_id,
-             //   stopRinging: stopRinging,
+                //   stopRinging: stopRinging,
                 signalingClient: signalingClient,
                 authtoken: authProvider.getUser.auth_token,
                 contactList: contactProvider1.contactList,
                 groupListProvider: groupListProvider,
               );
             } else if (mainProvider.homeStatus == HomeStatus.CallStart) {
-               print("this is call start screen");
+              print("this is call start screen");
               //  if (typeOfCall == "one_to_many") {
               return CallStartOnetoMany(
                 //localRenderer: _localRenderer,
@@ -1229,7 +1222,7 @@ if (_callticker != null) {
               return CallDialScreen(
                   callingTo: callingTo,
                   mediaType: meidaType,
-                 // localRenderer: _localRenderer,
+                  // localRenderer: _localRenderer,
                   incomingfrom: incomingfrom,
                   mainProvider: _mainProvider,
                   registerRes: registerRes,
@@ -1246,7 +1239,7 @@ if (_callticker != null) {
               return LandingScreen(
                 mainProvider: mainProvider,
                 grouplistprovider: groupListProvider,
-                 refreshList: refreshList,
+                refreshList: refreshList,
                 startCall: _startCall,
                 authprovider: authProvider,
                 registerRes: registerRes,

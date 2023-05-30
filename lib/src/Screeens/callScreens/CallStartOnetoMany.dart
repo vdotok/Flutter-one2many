@@ -478,15 +478,11 @@ screen at the moment..''',
                           ismicAudiobuttonSelected = false;
                           participantcount = 0;
                         });
-                        // inCall = false;
-
-                        // setState(() {
-                        //   _isCalling = false;
-                        // });
+                       
                       },
                     ),
 
-                    // SvgPicture.asset('assets/images/end.svg'),
+               
 
                     SizedBox(width: 10),
                     isMultiSession
@@ -1244,7 +1240,7 @@ screen at the moment..''',
                                 },
                               ),
 
-                              // SvgPicture.asset('assets/images/end.svg'),
+                          
 
                               SizedBox(width: 10),
                               isMultiSession

@@ -3,11 +3,6 @@ import 'package:flutter_one2many/src/constants/constant.dart';
 import 'package:flutter_one2many/src/core/config/config.dart';
 
 import 'package:provider/provider.dart';
-import '../../common/Header_file.dart';
-import '../../common/Passwordfield.dart';
-import '../../common/SignIn_Button.dart';
-import '../../common/TextField_file.dart';
-import '../../common/loadingButton.dart';
 import '../../core/providers/auth.dart';
 
 class SelecturlScreen extends StatefulWidget {
@@ -59,8 +54,8 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
       _genderRadioBtnVal = value;
     });
 
-    URL = _genderRadioBtnVal;
-    print("selected gender is $URL");
+    tenantUrl = _genderRadioBtnVal;
+    print("selected gender is $tenantUrl");
   }
 
   @override
