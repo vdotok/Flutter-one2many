@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_one2many/src/Screeens/login/SignInScreen.dart';
 import 'package:flutter_one2many/src/Screeens/splash/splash.dart';
 import 'package:flutter_one2many/src/core/providers/auth.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 import 'src/Screeens/home/homeIndex.dart';
@@ -177,6 +176,7 @@ class _TestState extends State<Test> {
             Container(
               width: 200,
               height: 200,
+              // ignore: unnecessary_null_comparison
               child: _localRenderer == null
                   ? Text("camera")
                   : _localRenderer.srcObject == null
@@ -186,6 +186,7 @@ class _TestState extends State<Test> {
             Container(
               width: 200,
               height: 200,
+              // ignore: unnecessary_null_comparison
               child: _localRenderer == null
                   ? Text("camera")
                   : _screenShareRenderer.srcObject == null
