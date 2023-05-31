@@ -419,14 +419,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       if (isMultiSession) {
         iscallAcceptedbyuser = false;
       } else {
-        if (_callticker != null) {
-          _callticker!.cancel();
-          _callticker =
-              Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
-        } else {
-          _callticker =
-              Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
-        }
+      if (_callticker != null) {
+        _callticker!.cancel();
+        _callticker =
+            Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
+      } else {
+        _callticker =
+            Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
+      }
       }
     };
     signalingClient.onParticipantsLeft =
@@ -984,47 +984,15 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       // }
       if (_callticker != null) {
         _callticker!.cancel();
-        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+        _callticker = Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
       } else {
-        _callticker = Timer.periodic(Duration(seconds: 1), (_) => _callcheck());
+        _callticker = Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
       }
     }
   }
 
   _callcheck() {
-    print("i am here in call chck function $count");
-
-    count = count + 1;
-
-    if (count == 30 && iscallAcceptedbyuser == false) {
-      print("I am here in stopcall if");
-
-      _callticker!.cancel();
-
-      count = 0;
-
-      signalingClient.stopCall(registerRes["mcToken"]);
-
-      // _mainProvider.initial();
-
-      iscallAcceptedbyuser = false;
-    } else if (count == 30 && iscallAcceptedbyuser == true) {
-      _callticker!.cancel();
-
-      count = 0;
-
-      print("I am here in stopcall call accept true");
-
-      iscallAcceptedbyuser = false;
-    } else if (iscallAcceptedbyuser == true) {
-      _callticker!.cancel();
-
-      print("I am here in emptyyyyyyyyyy stopcall call accept true");
-
-      count = 0;
-
-      iscallAcceptedbyuser = false;
-    } else {}
+   signalingClient.stopCall(registerRes["mcToken"]);
   }
 
   // startRinging() async {
