@@ -975,11 +975,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           isPublicBroadcast: ispublicbroadcast,
           broadcastType: broadcasttype,
           authorizationToken: authProvider!.getUser!.authorization_token);
-//  if (to != null) {
-//     //  if (isLocalStream)
-//     // {
-//       _mainProvider.callDial();}
-      // }
+
       if (_callticker != null) {
         _callticker!.cancel();
         _callticker = Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
@@ -990,44 +986,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   _callcheck() {
-   signalingClient.stopCall(registerRes["mcToken"]);
+    if(iscallAcceptedbyuser==false)
+  { signalingClient.stopCall(registerRes["mcToken"]);}
   }
 
-  // startRinging() async {
-  //   if (kIsWeb) {
-  //   } else {
-  //     if (Platform.isAndroid) {
-  //       if (await Vibration.hasVibrator()) {
-  //         Vibration.vibrate(pattern: vibrationList);
-  //       }
-  //     }
-  //   }
-  //   FlutterRingtonePlayer.play(
-  //     android: AndroidSounds.ringtone,
-  //     ios: IosSounds.glass,
-  //     looping: true, // Android only - API >= 28
-  //     volume: 1.0, // Android only - API >= 28
-  //     asAlarm: false, // Android only - all APIs
-  //   );
-  // }
-
-  // stopRinging() {
-  //   print("this is on rejected ");
-  //   if (kIsWeb) {
-  //   } else {
-  //     vibrationList.clear();
-
-  //     Vibration.cancel();
-  //     FlutterRingtonePlayer.stop();
-  //   }
-  // }
-
+ 
   @override
   dispose() {
-    // _localRenderer.dispose();
-    // _remoteRenderer.dispose();
-    // Connectivity().onConnectivityChanged.cancel();
-    //signalingClient.appDetached();
     print("hoem dispose");
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
