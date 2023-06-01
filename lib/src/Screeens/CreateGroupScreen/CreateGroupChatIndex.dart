@@ -7,15 +7,15 @@ import '../CreateGroupScreen/CreateGroupChatScreen.dart';
 import '../../core/providers/contact_provider.dart';
 
 class CreateGroupChatIndex extends StatefulWidget {
-  final MainProvider mainProvider;
-  final bool activeCall;
+  final MainProvider? mainProvider;
+  final bool? activeCall;
   final handlePress;
   final funct;
   final refreshList;
-  final ContactProvider state;
-  final GroupListProvider groupListProvider;
+  final ContactProvider? state;
+  final GroupListProvider? groupListProvider;
   const CreateGroupChatIndex(
-      {Key key,
+      {Key? key,
       this.funct,
       this.handlePress,
       this.activeCall,
@@ -40,11 +40,11 @@ class _CreateGroupChatIndexState extends State<CreateGroupChatIndex> {
         ],
         child: CreateGroupChatScreen(
             refreshList: widget.refreshList,
-            state: widget.state,
-            mainProvider: widget.mainProvider,
-            activeCall: widget.activeCall,
+            state: widget.state!,
+            mainProvider: widget.mainProvider!,
+            activeCall: widget.activeCall!,
             handlePress: widget.handlePress,
-            groupListProvider: widget.groupListProvider,
+            groupListProvider: widget.groupListProvider!,
             funct: widget.funct));
   }
 }

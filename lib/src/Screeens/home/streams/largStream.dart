@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 
 class LargStream extends StatefulWidget {
-  const LargStream({Key key, this.remoteRenderer}) : super(key: key);
-  final RTCVideoRenderer remoteRenderer;
+  const LargStream({Key? key, this.remoteRenderer}) : super(key: key);
+  final RTCVideoRenderer? remoteRenderer;
 
   @override
   _LargStreamState createState() => _LargStreamState();
@@ -71,7 +71,7 @@ class _LargStreamState extends State<LargStream> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10) // green as background color
           ),
-      child: RTCVideoView(this.widget.remoteRenderer,
+      child: RTCVideoView(this.widget.remoteRenderer!,
           // key: forsmallView,
           mirror: true,
           objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),

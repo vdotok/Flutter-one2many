@@ -30,11 +30,11 @@ class GroupListProvider with ChangeNotifier {
   EditGroupNameStatus _editGroupNameStatus = EditGroupNameStatus.Loading;
   EditGroupNameStatus get editGroupNameStatus => _editGroupNameStatus;
 
-  GroupListModel _groupList;
-  GroupListModel get groupList => _groupList;
+  GroupListModel? _groupList;
+  GroupListModel? get groupList => _groupList;
 
-  String _successMsg;
-  String get successMsg => _successMsg;
+  String? _successMsg;
+  String? get successMsg => _successMsg;
 
   bool _callProgress = false;
   bool get callprogress => _callProgress;
@@ -42,11 +42,11 @@ class GroupListProvider with ChangeNotifier {
   double _statsValue = 0;
   double get statsvalue => _statsValue;
 
-  String _errorMsg;
-  String get errorMsg => _errorMsg;
+  String? _errorMsg;
+  String? get errorMsg => _errorMsg;
 
-  int _status;
-  int get status => _status;
+  int? _status;
+  int? get status => _status;
 
   handleGroupListState(ListStatus state) {
     print("This is handle group list state $state");
@@ -61,9 +61,8 @@ class GroupListProvider with ChangeNotifier {
       print("this is loading ");
       _createChatStatusStatus = CreateChatStatus.Loading;
     } else {
-    
       _createChatStatusStatus = CreateChatStatus.New;
-        print("here in create chat status $_createChatStatusStatus");
+      print("here in create chat status $_createChatStatusStatus");
     }
 
     notifyListeners();
@@ -91,7 +90,7 @@ class GroupListProvider with ChangeNotifier {
   }
 
   addGroup(GroupModel groupModel) {
-    _groupList.groups.insert(0, groupModel);
+    _groupList!.groups!.insert(0, groupModel);
     notifyListeners();
   }
 

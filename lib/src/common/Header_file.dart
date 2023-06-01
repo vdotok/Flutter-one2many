@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../constants/constant.dart';
 
 class HeaderFile extends StatelessWidget {
-  String textname;
-  String headername;
-  HeaderFile({Key key, this.headername, this.textname}) : super(key: key);
+  String? textname;
+  String? headername;
+  HeaderFile({Key? key, this.headername, this.textname}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ class StartBroadcastPopUp extends StatefulWidget {
 }
 
 class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
-  GroupListProvider _groupListProvider;
+  GroupListProvider? _groupListProvider;
   bool loading = false;
   @override
   void initState() {}
@@ -58,20 +58,20 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                 padding: EdgeInsets.fromLTRB(0, 75, 0, 111.22),
                 child: Center(
                   child: TextButton(
-                    style: TextButton.styleFrom(backgroundColor:Colors.green,
-                       shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Colors.green,
-                            width: 3,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(10)),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: Colors.green,
+                              width: 3,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(10)),
                     ),
-                  
                     onPressed: () {
                       groupBroadcast = widget.to == null ? false : true;
                       ispublicbroadcast = widget.to == null ? true : false;
                       Navigator.pop(context);
-                      GroupModel model;
+                      GroupModel? model;
                       if (broadcasttype == "camera") {
                         print(" iam here in pop up camera");
                         widget.to == null
@@ -112,7 +112,6 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                     },
                     child: Text('START BROADCAST',
                         style: TextStyle(color: Colors.white)),
-                 
                   ),
                 ),
               )

@@ -17,12 +17,12 @@ int listIndex = 0;
 TextEditingController _groupNameController = TextEditingController();
 
 class GroupListScreen extends StatefulWidget {
-  final bool activeCall;
-  final GroupListModel state;
-  final GroupListProvider groupListProvider;
-  final AuthProvider authProvider;
-  final MainProvider mainProvider;
-  final ContactProvider contactProvider;
+  final bool? activeCall;
+  final GroupListModel? state;
+  final GroupListProvider? groupListProvider;
+  final AuthProvider? authProvider;
+  final MainProvider? mainProvider;
+  final ContactProvider? contactProvider;
   final handlePress;
   //final handleSeenStatus;
 
@@ -36,7 +36,7 @@ class GroupListScreen extends StatefulWidget {
   final handlePublicBroadcastButton;
 
   const GroupListScreen({
-    Key key,
+    Key? key,
     this.groupListProvider,
     this.state,
     this.authProvider,
@@ -96,22 +96,23 @@ class _GroupListScreenState extends State<GroupListScreen> {
                   TextButton(
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        await widget.groupListProvider.deleteGroup(
+                        await widget.groupListProvider!.deleteGroup(
                           group_id,
-                          widget.authProvider.getUser.auth_token,
+                          widget.authProvider!.getUser!.auth_token,
                         );
                         // (groupListProvider.deleteGroupStatus ==
                         //         DeleteGroupStatus.Loading)
                         //     ? SplashScreen():
 
-                        if (widget.groupListProvider.deleteGroupStatus ==
+                        if (widget.groupListProvider!.deleteGroupStatus ==
                             DeleteGroupStatus.Success) {
                           // groupListProvider.groupList.groups.
 
-                          showSnakbar(widget.groupListProvider.successMsg);
-                        } else if (widget.groupListProvider.deleteGroupStatus ==
+                          showSnakbar(widget.groupListProvider!.successMsg);
+                        } else if (widget
+                                .groupListProvider!.deleteGroupStatus ==
                             DeleteGroupStatus.Failure) {
-                          showSnakbar(widget.groupListProvider.errorMsg);
+                          showSnakbar(widget.groupListProvider!.errorMsg);
                         } else {}
                         // if (groupListProvider.status == 200) {
                         //   print(
@@ -142,8 +143,8 @@ class _GroupListScreenState extends State<GroupListScreen> {
         handlePress: widget.handlePress,
         funct: widget.startCall,
         ischatscreen: false,
-        groupListProvider: widget.groupListProvider,
-        mainProvider: widget.mainProvider,
+        groupListProvider: widget.groupListProvider!,
+        mainProvider: widget.mainProvider!,
         title: "Group List",
         isPublicBroadcast: true,
         lead: true,
@@ -159,9 +160,9 @@ class _GroupListScreenState extends State<GroupListScreen> {
                   child: ListView.separated(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: widget.groupListProvider.groupList.groups.length,
+                itemCount: widget.groupListProvider!.groupList!.groups!.length,
                 itemBuilder: (context, index) {
-                  GroupModel element = widget.state.groups[index];
+                  GroupModel element = widget.state!.groups![index];
                   print("thisssss ${element}");
 
                   //The Container returned that will show the Group Name, notification counter and availability status//
@@ -188,8 +189,8 @@ class _GroupListScreenState extends State<GroupListScreen> {
                         InkWell(
                             onTap: () {
                               print("hfghgfhdf $broadcasttype");
-                              groupName = widget.groupListProvider.groupList
-                                  .groups[index].group_title;
+                              groupName = widget.groupListProvider!.groupList!
+                                  .groups![index].group_title;
                               if (broadcasttype == "camera") {
                                 widget.startCall(
                                     to: element,
@@ -221,14 +222,14 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                     child: Container(
                                       padding: EdgeInsets.only(left: 20),
                                       child: widget
-                                                  .groupListProvider
-                                                  .groupList
-                                                  .groups[index]
-                                                  .participants
+                                                  .groupListProvider!
+                                                  .groupList!
+                                                  .groups![index]
+                                                  .participants!
                                                   .length ==
                                               1
                                           ? Text(
-                                              "${widget.groupListProvider.groupList.groups[index].participants[0].full_name}",
+                                              "${widget.groupListProvider!.groupList!.groups![index].participants![0].full_name}",
                                               //  maxLines: 2,
 
                                               overflow: TextOverflow.ellipsis,
@@ -240,14 +241,14 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                               ),
                                             )
                                           : widget
-                                                      .groupListProvider
-                                                      .groupList
-                                                      .groups[index]
-                                                      .participants
+                                                      .groupListProvider!
+                                                      .groupList!
+                                                      .groups![index]
+                                                      .participants!
                                                       .length ==
                                                   2
                                               ? Text(
-                                                  "${widget.groupListProvider.groupList.groups[index].participants[widget.groupListProvider.groupList.groups[index].participants.indexWhere((element) => element.ref_id != widget.authProvider.getUser.ref_id)].full_name}",
+                                                  "${widget.groupListProvider!.groupList!.groups![index].participants![widget.groupListProvider!.groupList!.groups![index].participants!.indexWhere((element) => element.ref_id != widget.authProvider!.getUser!.ref_id)].full_name}",
                                                   //maxLines: 2,
 
                                                   overflow:
@@ -260,7 +261,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                                     fontWeight: FontWeight.w500,
                                                   ))
                                               : Text(
-                                                  "${widget.groupListProvider.groupList.groups[index].group_title}",
+                                                  "${widget.groupListProvider!.groupList!.groups![index].group_title}",
                                                   //  maxLines: 2,
 
                                                   overflow:
@@ -296,17 +297,17 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                       itemBuilder: (BuildContext context) => [
                                             PopupMenuItem(
                                               enabled: (widget
-                                                              .groupListProvider
-                                                              .groupList
-                                                              .groups[index]
-                                                              .participants
+                                                              .groupListProvider!
+                                                              .groupList!
+                                                              .groups![index]
+                                                              .participants!
                                                               .length ==
                                                           1 ||
                                                       widget
-                                                              .groupListProvider
-                                                              .groupList
-                                                              .groups[index]
-                                                              .participants
+                                                              .groupListProvider!
+                                                              .groupList!
+                                                              .groups![index]
+                                                              .participants!
                                                               .length ==
                                                           2)
                                                   ? false
@@ -394,25 +395,25 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                                 return ListenableProvider<
                                                         GroupListProvider>.value(
                                                     value: widget
-                                                        .groupListProvider,
+                                                        .groupListProvider!,
                                                     child: CreateGroupPopUp(
                                                       editGroupName: true,
                                                       groupid: widget
-                                                          .groupListProvider
-                                                          .groupList
-                                                          .groups[index]
+                                                          .groupListProvider!
+                                                          .groupList!
+                                                          .groups![index]
                                                           .id,
                                                       controllerText: widget
-                                                          .groupListProvider
-                                                          .groupList
-                                                          .groups[index]
+                                                          .groupListProvider!
+                                                          .groupList!
+                                                          .groups![index]
                                                           .group_title,
                                                       groupNameController:
                                                           _groupNameController,
                                                       publishMessage:
                                                           widget.publishMesg,
                                                       authProvider:
-                                                          widget.authProvider,
+                                                          widget.authProvider!,
                                                     ));
                                               });
                                           print("i am after here");
@@ -430,13 +431,12 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                           //       .errorMsg);
                                           // } else {}
                                           //  if(groupListProvider.editGroupNameStatus)
-
                                         } else if (menu == 2) {
                                           _showDialog(
-                                              widget.groupListProvider.groupList
-                                                  .groups[index].id,
-                                              widget.groupListProvider.groupList
-                                                  .groups[index]);
+                                              widget.groupListProvider!
+                                                  .groupList!.groups![index].id,
+                                              widget.groupListProvider!
+                                                  .groupList!.groups![index]);
                                           // groupListProvider.deleteGroup(
                                           //     listProvider.groupList
                                           //         .groups[index].id);
@@ -477,9 +477,9 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                       .hideCurrentSnackBar();
                                   isRegisteredAlready = false;
                                 }
-isAppAudiobuttonSelected = false;
-                                    iscamerabuttonSelected = false;
-                                    ismicAudiobuttonSelected = false;
+                                isAppAudiobuttonSelected = false;
+                                iscamerabuttonSelected = false;
+                                ismicAudiobuttonSelected = false;
                                 signalingClient
                                     .unRegister(widget.registerRes["mcToken"]);
                               },
@@ -526,22 +526,22 @@ isAppAudiobuttonSelected = false;
                                   : Colors.red,
                             ),
                           ),
-errorcode!=""?
-                          Container(height:40,
-                          width: 40,
-                          child:Text('$errorcode')):Container()
+                          errorcode != ""
+                              ? Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Text('$errorcode'))
+                              : Container()
                         ],
                       ),
                       Container(
                           padding: const EdgeInsets.only(bottom: 60),
-                          child: Text(widget.authProvider.getUser.full_name))
+                          child: Text(widget.authProvider!.getUser!.full_name!))
                     ],
                   )),
             ],
           ),
         ),
-     
-     
       ),
       // floatingActionButton: Padding(
       //   padding: EdgeInsets.only(bottom: 40),

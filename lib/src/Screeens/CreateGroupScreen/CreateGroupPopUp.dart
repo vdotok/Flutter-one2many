@@ -14,12 +14,12 @@ import '../../core/providers/contact_provider.dart';
 class CreateGroupPopUp extends StatefulWidget {
   final funct;
   final handlePress;
-  final MainProvider mainprovider;
+  final MainProvider? mainprovider;
   const CreateGroupPopUp(
-      {Key key,
-      @required TextEditingController groupNameController,
+      {Key? key,
+      @required TextEditingController? groupNameController,
       this.contactProvider,
-      List<Contact> selectedContacts,
+      List<Contact>? selectedContacts,
       @required this.publishMessage,
       @required this.authProvider,
       this.controllerText,
@@ -32,15 +32,15 @@ class CreateGroupPopUp extends StatefulWidget {
         _selectedContacts = selectedContacts,
         super(key: key);
 
-  final TextEditingController _groupNameController;
-  final ContactProvider contactProvider;
-  final List<Contact> _selectedContacts;
-  final AuthProvider authProvider;
+  final TextEditingController? _groupNameController;
+  final ContactProvider? contactProvider;
+  final List<Contact>? _selectedContacts;
+  final AuthProvider? authProvider;
   final publishMessage;
-  final String controllerText;
-  final bool editGroupName;
+  final String? controllerText;
+  final bool? editGroupName;
 
-  final int groupid;
+  final int? groupid;
 
   @override
   _CreateGroupPopUpState createState() => _CreateGroupPopUpState();
@@ -50,7 +50,7 @@ class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
   @override
   void initState() {
     if (widget.controllerText != "" || widget.controllerText != null) {
-      widget._groupNameController.text = widget.controllerText;
+      widget._groupNameController!.text = widget.controllerText!;
     }
   }
 
@@ -120,7 +120,7 @@ class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
                             child: IconButton(
                               icon: SvgPicture.asset('assets/close.svg'),
                               onPressed: () {
-                                widget._groupNameController.clear();
+                                widget._groupNameController!.clear();
                                 Navigator.pop(context);
                               },
                             ),
@@ -178,18 +178,19 @@ class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
                             builder: (context, grouplistp, child) {
                               return Center(
                                   child: TextButton(
-                                    style: TextButton.styleFrom(   padding: EdgeInsets.all(8.0),),
-                             
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.all(8.0),
+                                ),
                                 onPressed: grouplistp.creatChatStatusStatus ==
                                         CreateChatStatus.New
                                     ? () async {
-                                        if (widget.editGroupName) {
+                                        if (widget.editGroupName!) {
                                           print("here");
 
                                           await grouplistp.editGroupName(
-                                              widget._groupNameController.text,
+                                              widget._groupNameController!.text,
                                               widget.groupid,
-                                              widget.authProvider.getUser
+                                              widget.authProvider!.getUser!
                                                   .auth_token);
                                           if (grouplistp.editGroupNameStatus ==
                                               EditGroupNameStatus.Success) {
@@ -201,23 +202,23 @@ class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
                                           } else {}
                                           Navigator.of(context).pop();
                                         } else {
-                                          if (widget._groupNameController.text
+                                          if (widget._groupNameController!.text
                                                   .isEmpty ||
                                               widget._groupNameController ==
                                                   null ||
-                                              widget._selectedContacts.length >
+                                              widget._selectedContacts!.length >
                                                   20) {
                                             return null;
                                           } else {
                                             grouplistp.handleCreateChatState();
                                             var res = await widget
-                                                .contactProvider
+                                                .contactProvider!
                                                 .createGroup(
-                                                    widget._groupNameController
+                                                    widget._groupNameController!
                                                         .text,
                                                     widget._selectedContacts,
-                                                    widget.authProvider.getUser
-                                                        .auth_token);
+                                                    widget.authProvider!
+                                                        .getUser!.auth_token);
 
                                             // grouplistp.getGroupList(
                                             //     authProvider.getUser.auth_token);
@@ -240,11 +241,11 @@ class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
 
                                             grouplistp.handleGroupListState(
                                                 ListStatus.Scussess);
-                                            widget.mainprovider
+                                            widget.mainprovider!
                                                 .groupListScreen();
                                             strArr.remove("CreateGroupChat");
                                             selectedContacts.clear();
-                                             grouplistp.handleCreateChatState();
+                                            grouplistp.handleCreateChatState();
                                             Navigator.pop(context);
 
                                             // Navigator.pushNamed(

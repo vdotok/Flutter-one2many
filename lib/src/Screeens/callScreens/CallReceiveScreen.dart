@@ -20,16 +20,16 @@ class CallReceiveScreen extends StatefulWidget {
   final authtoken;
   final groupName;
   final registerRes;
-  final GroupListProvider groupListProvider;
-  final MainProvider mainProvider;
-  final AuthProvider authProvider;
- // final VoidCallback stopRinging;
-  final SignalingClient signalingClient;
-  final ContactList contactList;
+  final GroupListProvider? groupListProvider;
+  final MainProvider? mainProvider;
+  final AuthProvider? authProvider;
+  // final VoidCallback stopRinging;
+  final SignalingClient? signalingClient;
+  final ContactList? contactList;
   final from;
 // final rendererListWithRefID;
   const CallReceiveScreen({
-    Key key,
+    Key? key,
     this.mediaType,
     this.localRenderer,
     this.incomingfrom,
@@ -63,9 +63,9 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
     print("here in success ${widget.contactList} ${groupName}");
     //  }
     if (iscalloneto1) {
-      index = widget.contactList.users
+      index = widget.contactList!.users!
           .indexWhere((element) => element.ref_id == widget.incomingfrom);
-      callername = widget.contactList.users[index].full_name;
+      callername = widget.contactList!.users![index].full_name!;
       print("this is caller name in receive call $callername");
     }
   }
@@ -148,7 +148,9 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                     ? callername
                     :
                     // callername,
-                    groupName==null?"":groupName,
+                    groupName == null
+                        ? ""
+                        : groupName,
                 style: TextStyle(
                     fontFamily: primaryFontFamily,
                     color: darkBlackColor,
@@ -173,11 +175,10 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   'assets/end.svg',
                 ),
                 onTap: () {
-               //   widget.stopRinging();
-                  widget.signalingClient.declineCall(
-                      widget.authProvider.getUser.ref_id,
+                  //   widget.stopRinging();
+                  widget.signalingClient!.declineCall(
+                      widget.authProvider!.getUser!.ref_id,
                       widget.registerRes["mcToken"]);
-                
                   //  if (strArr.last == "CreateGroupChat") {
                   //   widget.mainProvider.createGroupChatScreen();
                   // } else if (strArr.last == "GroupList") {
@@ -186,7 +187,7 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   //   widget.mainProvider.inActiveCall();
                   //   widget.mainProvider.homeScreen();
                   //   strArr.remove("NoChat");
-                  // } 
+                  // }
                 },
               ),
               SizedBox(width: 64),
@@ -195,8 +196,8 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   'assets/Accept.svg',
                 ),
                 onTap: () {
-                 // widget.stopRinging();
-                  widget.signalingClient.createAnswer(widget.incomingfrom);
+                  // widget.stopRinging();
+                  widget.signalingClient!.createAnswer(widget.incomingfrom);
                   // Navigator.pop(context);
                   // widget.mainProvider.callStart();
                   // setState(() {
