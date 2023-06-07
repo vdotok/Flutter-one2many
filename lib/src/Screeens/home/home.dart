@@ -467,6 +467,24 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     signalingClient.onAddparticpant = (paticipantcount, calltype) {
       print(
           "this is participant count ffffff $paticipantcount $calltype $_mainProvider");
+         
+         
+//           participantcount = paticipantcount;
+//   if (Platform.isIOS) {
+// setState(() {
+//     typeOfCall = calltype;
+//           count = 0;
+//           iscallAcceptedbyuser = true;
+//           _callticker?.cancel();
+
+//           // _audioPlayer.stop();
+//           if (!ispublicbroadcast) {
+//             _mainProvider!.callStart();
+//           }
+// });
+        
+          
+//         }
       if (kIsWeb) {
         participantcount = paticipantcount - 1;
       } else {
@@ -621,7 +639,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 // Find the Scaffold in the widget tree and use it to show a SnackBar.
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     };
-    signalingClient.onCallBusyCallback = () {
+    signalingClient.onCallBusyCallback = (bool isM2M) {
       print("call callback on call busy");
       // _mainProvider.initial();
       snackBar = SnackBar(content: Text('User is busy with another call.'));

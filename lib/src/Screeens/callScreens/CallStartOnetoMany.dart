@@ -10,6 +10,7 @@ import 'package:flutter_one2many/src/constants/constant.dart';
 import 'package:flutter_one2many/src/core/providers/main_provider.dart';
 import 'package:flutter_one2many/src/grouplist/GroupListScreen.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
 
 class CallStartOnetoMany extends StatefulWidget {
@@ -168,6 +169,14 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
                                     "this is url for public broadcast $publicbroadcasturl");
                                 Clipboard.setData(new ClipboardData(
                                     text: publicbroadcasturl));
+                                Fluttertoast.showToast(
+                                    msg: "Url copied",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.TOP_RIGHT,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 14.0);
                               },
                               child: Text('Copy URL',
                                   style: TextStyle(color: textTypeColor)),
@@ -363,6 +372,14 @@ screen at the moment..''',
                                     "this is url for public broadcast $publicbroadcasturl");
                                 Clipboard.setData(new ClipboardData(
                                     text: publicbroadcasturl));
+                                        Fluttertoast.showToast(
+                                    msg: "Url copied",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.TOP_RIGHT,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 14.0);
                               },
                               child: Text('Copy URL',
                                   style: TextStyle(color: Colors.white)),
