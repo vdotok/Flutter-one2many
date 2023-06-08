@@ -639,7 +639,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 // Find the Scaffold in the widget tree and use it to show a SnackBar.
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     };
-    signalingClient.onCallBusyCallback = (bool isM2M) {
+    signalingClient.onCallBusyCallback = () {
       print("call callback on call busy");
       // _mainProvider.initial();
       snackBar = SnackBar(content: Text('User is busy with another call.'));

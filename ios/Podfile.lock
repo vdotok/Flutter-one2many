@@ -63,7 +63,7 @@ PODS:
     - Libyuv (= 1703)
     - MMWormhole
     - VdoTokStreaming
-  - VdoTokStreaming (1.1.28):
+  - VdoTokStreaming (1.1.30):
     - SocketRocket
     - SwiftNIO
   - video_player_avfoundation (0.0.1):
@@ -131,7 +131,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   VdoTokStreaming:
-    :commit: aae079040fc669fb9e89dc70174201aa513952b1
+    :commit: 7288fe1136e7401d7af05be975995634d8d80f30
     :git: https://github.com/vdotok/VdoTokStreaming.git
 
 SPEC CHECKSUMS:
@@ -158,7 +158,7 @@ SPEC CHECKSUMS:
   SwiftNIOPosix: b49af4bdbecaadfadd5c93dfe28594d6722b75e4
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   vdotok_stream: 80373297324ed9af4297d5e2f8423a2f6ae9899e
-  VdoTokStreaming: d01901462e4d42c85f72e2a2e45995b6a0521147
+  VdoTokStreaming: 1e26e7a85d5b5b3b0c17a8b92fadf4ac07a13f5b
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
