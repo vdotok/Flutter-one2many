@@ -49,9 +49,10 @@ class CreateGroupPopUp extends StatefulWidget {
 class _CreateGroupPopUpState extends State<CreateGroupPopUp> {
   @override
   void initState() {
-    if (widget.controllerText != "" || widget.controllerText != null) {
+    if(widget.editGroupName==true)
+  {  if (widget.controllerText != "" || widget.controllerText != null) {
       widget._groupNameController!.text = widget.controllerText!;
-    }
+    }}
   }
 
   @override
