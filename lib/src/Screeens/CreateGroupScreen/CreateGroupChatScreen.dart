@@ -137,6 +137,11 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
                   groupListProvider: widget.groupListProvider!,
                   presentCheck: false);
             else {
+              var userIndex= widget.state!.contactList!.users!.indexWhere((element) =>  element.ref_id ==
+                                          authProvider.getUser!.ref_id );
+                                          print("This is the userindex $userIndex");
+                                          if(userIndex!=-1)
+                                           { widget.state!.contactList!.users!.removeAt(userIndex);}
               return GestureDetector(
                 onTap: () {
                   FocusScopeNode currentFous = FocusScope.of(context);
