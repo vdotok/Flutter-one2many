@@ -14,7 +14,7 @@ Future<dynamic> callAPI(datarequest, myurl, authToken) async {
   // URL = await _sharedPref.read("URL");
   // print("this is sssssss ${urll.toString()}");
   //var urll1=urll;
-  final url = tenantUrl + version + myurl;
+  final url = tenantUrl + myurl;
   print("The my url: $myurl");
   print("this is api call $datarequest $url  $authToken");
   try {
@@ -47,7 +47,7 @@ Future<dynamic> getAPI(myurl, authToken) async {
   // SharedPref _sharedPref = SharedPref();
   // URL = await _sharedPref.read("URL");
 
-  final url = tenantUrl + version + myurl;
+  final url = tenantUrl + myurl;
   print('this is url $url');
   //print("auth token is ")
   try {
