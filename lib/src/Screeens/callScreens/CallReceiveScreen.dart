@@ -176,9 +176,9 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                 ),
                 onTap: () {
                   //   widget.stopRinging();
-                  widget.signalingClient!.declineCall(
-                      widget.authProvider!.getUser!.ref_id,
-                      widget.registerRes["mcToken"]);
+                  // widget.signalingClient!.declineCall(
+                  //     widget.authProvider!.getUser!.ref_id,
+                  //     widget.registerRes["mcToken"]);
                   //  if (strArr.last == "CreateGroupChat") {
                   //   widget.mainProvider.createGroupChatScreen();
                   // } else if (strArr.last == "GroupList") {
@@ -197,7 +197,7 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                 ),
                 onTap: () {
                   // widget.stopRinging();
-                  widget.signalingClient!.createAnswer(widget.incomingfrom);
+                  // widget.signalingClient!.createAnswer(widget.incomingfrom);
                   // Navigator.pop(context);
                   // widget.mainProvider.callStart();
                   // setState(() {

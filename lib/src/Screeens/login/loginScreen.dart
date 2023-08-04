@@ -121,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Consumer<AuthProvider>(
                   builder: (context, auth, child) {
                     if (auth.loggedInStatus == Status.Loading)
-                      return LoadingButton();
+                      return Center(child: LoadingButton());
                     else
                       return SignInButtonFile(
                         name: "Sign In",

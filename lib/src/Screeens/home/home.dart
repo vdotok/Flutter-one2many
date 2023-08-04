@@ -226,12 +226,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     print("Hi i am parent class function");
     contactProvider!.getContacts(authProvider!.getUser!.auth_token!);
     groupListProvider!.getGroupList(authProvider!.getUser!.auth_token);
-    signalingClient.connect(
-        authProvider!.deviceId,
-        projectId,
-        authProvider!.completeAddress,
-        authProvider!.getUser!.authorization_token.toString(),
-        authProvider!.getUser!.ref_id.toString());
+    // signalingClient.connect(
+    //     authProvider!.deviceId,
+    //     projectId,
+    //     authProvider!.completeAddress,
+    //     authProvider!.getUser!.authorization_token.toString(),
+    //     authProvider!.getUser!.ref_id.toString());
     // signalingClient.connect(project_id, authProvider.completeAddress);
     signalingClient.onConnect = (res) {
       print("onConnecttttttttttt signalining client $res");
@@ -316,7 +316,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         print("uyututuir");
       }
     };
-
 
     signalingClient.onRegister = (res) {
       print("onRegister  $res");
@@ -419,14 +418,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       if (isMultiSession) {
         iscallAcceptedbyuser = false;
       } else {
-      if (_callticker != null) {
-        _callticker!.cancel();
-        _callticker =
-            Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
-      } else {
-        _callticker =
-            Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
-      }
+        if (_callticker != null) {
+          _callticker!.cancel();
+          _callticker =
+              Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
+        } else {
+          _callticker =
+              Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
+        }
       }
     };
     signalingClient.onParticipantsLeft =
@@ -467,8 +466,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     signalingClient.onAddparticpant = (paticipantcount, calltype) {
       print(
           "this is participant count ffffff $paticipantcount $calltype $_mainProvider");
-         
-         
+
 //           participantcount = paticipantcount;
 //   if (Platform.isIOS) {
 // setState(() {
@@ -482,8 +480,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 //             _mainProvider!.callStart();
 //           }
 // });
-        
-          
+
 //         }
       if (kIsWeb) {
         participantcount = paticipantcount - 1;
@@ -715,6 +712,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     super.deactivate();
     print("gxhdghsgd");
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print("this is changeapplifecyclestate");
@@ -807,7 +805,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   //       } else {
   //         try {
   //           bool status = await signalingClient.checkInternetConnectivity();
-
   //           if (status == false) {
   //             Fluttertoast.showToast(
   //                 msg: "Waiting for Internet.",
@@ -996,19 +993,21 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
       if (_callticker != null) {
         _callticker!.cancel();
-        _callticker = Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
+        _callticker =
+            Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
       } else {
-        _callticker = Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
+        _callticker =
+            Timer.periodic(Duration(seconds: 30), (_) => _callcheck());
       }
     }
   }
 
   _callcheck() {
-    if(iscallAcceptedbyuser==false)
-  { signalingClient.stopCall(registerRes["mcToken"]);}
+    if (iscallAcceptedbyuser == false) {
+      signalingClient.stopCall(registerRes["mcToken"]);
+    }
   }
 
- 
   @override
   dispose() {
     print("hoem dispose");
@@ -1073,12 +1072,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     }
     if (callSocket == false && isInternetConnect) {
       print("here in refreshlist connection");
-      signalingClient.connect(
-          authProvider!.deviceId,
-          projectId,
-          authProvider!.completeAddress,
-          authProvider!.getUser!.authorization_token.toString(),
-          authProvider!.getUser!.ref_id.toString());
+      // signalingClient.connect(
+      //     authProvider!.deviceId,
+      //     projectId,
+      //     authProvider!.completeAddress,
+      //     authProvider!.getUser!.authorization_token.toString(),
+      //     authProvider!.getUser!.ref_id.toString());
     }
   }
 

@@ -33,8 +33,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
- 
-
   @override
   void initState() {
     super.initState();
@@ -45,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     print("gejghrejgr");
-    
+
     super.dispose();
   }
 
@@ -143,19 +141,19 @@ class _TestState extends State<Test> {
     super.initState();
     // initRenderers();
 
-    signalingClient?.onLocalStream = (stream) {
-      print("this is local stream ${stream}");
-      if (_localRenderer.srcObject == null) {
-        setState(() {
-          _localRenderer.srcObject = stream;
-        });
-      } else {
-        setState(() {
-          _screenShareRenderer.srcObject = stream;
-        });
-      }
-    };
-    // signalingClient.getPermissions();
+    // signalingClient?.onLocalStream = (stream) {
+    //   print("this is local stream ${stream}");
+    //   if (_localRenderer.srcObject == null) {
+    //     setState(() {
+    //       _localRenderer.srcObject = stream;
+    //     });
+    //   } else {
+    //     setState(() {
+    //       _screenShareRenderer.srcObject = stream;
+    //     });
+    //     }
+    //   };
+    //   // signalingClient.getPermissions();
   }
 
   Future<void> initRenderers() async {
@@ -195,7 +193,7 @@ class _TestState extends State<Test> {
             ),
             ElevatedButton(
               onPressed: () {
-                signalingClient?.getNumber();
+                // signalingClient?.getNumber();
               },
               child: Text("Create peerConnection"),
             ),
@@ -206,14 +204,14 @@ class _TestState extends State<Test> {
               child: Text("createOffer"),
             ),
             ElevatedButton(
-              onPressed: () {             
-                signalingClient?.getMedia();
+              onPressed: () {
+                // signalingClient?.getMedia();
               },
               child: Text("getUserMedia"),
             ),
             ElevatedButton(
               onPressed: () {
-                signalingClient?.getDisplay();
+                // signalingClient?.getDisplay();
               },
               child: Text("getUserDisplayMedia"),
             ),

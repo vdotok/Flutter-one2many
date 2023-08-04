@@ -47,8 +47,10 @@ dependencies:
   wakelock:
   permission_handler:
   fluttertoast: ^8.1.1
-  vdotok_stream: ^0.0.23
-   #path: ../vdotok_stream
+  vdotok_stream: ^0.0.24
+  #  path: ../vdotok_stream
+  qr_code_scanner: ^1.0.1
+  
   
 
   

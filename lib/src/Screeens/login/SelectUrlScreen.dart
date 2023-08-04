@@ -54,8 +54,8 @@ class _SelecturlScreenState extends State<SelecturlScreen> {
       _genderRadioBtnVal = value;
     });
 
-    tenantUrl = _genderRadioBtnVal!;
-    print("selected gender is $tenantUrl");
+    tenant_url = _genderRadioBtnVal!;
+    print("selected gender is $tenant_url");
   }
 
   @override
