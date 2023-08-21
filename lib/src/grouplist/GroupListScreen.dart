@@ -480,8 +480,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                 isAppAudiobuttonSelected = false;
                                 iscamerabuttonSelected = false;
                                 ismicAudiobuttonSelected = false;
-                                signalingClient
-                                    .unRegister(widget.registerRes["mcToken"]);
+                                signalingClient.unRegister();
                               },
                               child: Text(
                                 "LOG OUT",

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+// import 'dart:js_interop';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class CallStartOnetoMany extends StatefulWidget {
 }
 
 class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
+  bool switchStream = false;
   DateTime? _time;
   Timer? _ticker;
   String _pressDuration = "00:00";
@@ -115,8 +117,8 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "this is index in a onremotestream1 ${rendererListWithRefID.length} $isDialer");
+    // print(
+    //     "this is index in a onrdd ${sessionList} ${sessionList[0].values.toList()[0].remoteRenderer}+++ ${sessionList[1].values.toList().first.remoteRenderer}");
 
     return ispublicbroadcast
         ? WillPopScope(
@@ -128,8 +130,9 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
                           broadcasttype == "appaudioandcamera" ||
                           broadcasttype == "micaudioandcamera"
                       ? RemoteStream(
-                          remoteRenderer: rendererListWithRefID[0]
-                              ["rtcVideoRenderer"],
+                          remoteRenderer: localRenderer,
+                          // rendererListWithRefID[0]
+                          //     ["rtcVideoRenderer"],
                           // remoteRenderer: rendererListWithRefID[0]
                           //     ["rtcVideoRenderer"],
                         )
@@ -222,7 +225,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
                                               child: SvgPicture.asset(
                                                   'assets/switch_camera.svg'),
                                               onTap: () {
-                                                signalingClient.switchCamera();
+                                                // signalingClient.switchCamera();
                                               },
                                             ),
                                           )
@@ -372,7 +375,7 @@ screen at the moment..''',
                                     "this is url for public broadcast $publicbroadcasturl");
                                 Clipboard.setData(new ClipboardData(
                                     text: publicbroadcasturl));
-                                        Fluttertoast.showToast(
+                                Fluttertoast.showToast(
                                     msg: "Url copied",
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.TOP_RIGHT,
@@ -417,14 +420,14 @@ screen at the moment..''',
                                                 enableCamera2 = !enableCamera2;
                                               });
 
-                                              signalingClient.audioVideoState(
-                                                  audioFlag: switchMute ? 1 : 0,
-                                                  videoFlag:
-                                                      enableCamera2 ? 1 : 0,
-                                                  mcToken: widget
-                                                      .registerRes["mcToken"]);
-                                              signalingClient
-                                                  .enableScreen(enableCamera2);
+                                              // signalingClient.audioVideoState(
+                                              //     audioFlag: switchMute ? 1 : 0,
+                                              //     videoFlag:
+                                              //         enableCamera2 ? 1 : 0,
+                                              //     mcToken: widget
+                                              //         .registerRes["mcToken"]);
+                                              // signalingClient
+                                              //     .enableScreen(enableCamera2);
                                             }
                                           : null),
                               SizedBox(
@@ -439,11 +442,11 @@ screen at the moment..''',
                                           setState(() {
                                             enableCamera = !enableCamera;
                                           });
-                                          signalingClient.audioVideoState(
-                                              audioFlag: switchMute ? 1 : 0,
-                                              videoFlag: enableCamera ? 1 : 0,
-                                              mcToken: widget
-                                                  .registerRes["mcToken"]);
+                                          // signalingClient.audioVideoState(
+                                          //     audioFlag: switchMute ? 1 : 0,
+                                          //     videoFlag: enableCamera ? 1 : 0,
+                                          //     mcToken: widget
+                                          //         .registerRes["mcToken"]);
                                           signalingClient
                                               .enableCamera(enableCamera);
                                         }
@@ -467,13 +470,13 @@ screen at the moment..''',
                                         setState(() {
                                           enableCamera = !enableCamera;
                                         });
-                                        signalingClient.audioVideoState(
-                                            audioFlag: switchMute ? 1 : 0,
-                                            videoFlag: enableCamera ? 1 : 0,
-                                            mcToken:
-                                                widget.registerRes["mcToken"]);
-                                        signalingClient
-                                            .enableCamera(enableCamera);
+                                        // signalingClient.audioVideoState(
+                                        //     audioFlag: switchMute ? 1 : 0,
+                                        //     videoFlag: enableCamera ? 1 : 0,
+                                        //     mcToken:
+                                        //         widget.registerRes["mcToken"]);
+                                        // signalingClient
+                                        //     .enableCamera(enableCamera);
                                       }
                                     : null),
                     SizedBox(
@@ -513,14 +516,14 @@ screen at the moment..''',
                                           ? null
                                           : participantcount >= 1
                                               ? () {
-                                                  final bool enabled =
-                                                      signalingClient
-                                                          .muteInternalMic();
-                                                  print(
-                                                      "this is enabled3236 $enabled");
-                                                  setState(() {
-                                                    switchMute2 = enabled;
-                                                  });
+                                                  // final bool enabled =
+                                                  //     signalingClient
+                                                  //         .muteInternalMic();
+                                                  // print(
+                                                  //     "this is enabled3236 $enabled");
+                                                  // setState(() {
+                                                  //   switchMute2 = enabled;
+                                                  // });
                                                 }
                                               : null),
                                   SizedBox(
@@ -534,13 +537,13 @@ screen at the moment..''',
                                               'assets/microphone.svg'),
                                       onTap: participantcount >= 1
                                           ? () {
-                                              final bool enabled =
-                                                  signalingClient.muteMic();
-                                              print(
-                                                  "this is enabled7465 $enabled");
-                                              setState(() {
-                                                switchMute = enabled;
-                                              });
+                                              // final bool enabled =
+                                              //     signalingClient.muteMic();
+                                              // print(
+                                              //     "this is enabled7465 $enabled");
+                                              // setState(() {
+                                              //   switchMute = enabled;
+                                              // });
                                             }
                                           : null)
                                 ],
@@ -552,12 +555,12 @@ screen at the moment..''',
                                     : SvgPicture.asset('assets/microphone.svg'),
                                 onTap: participantcount >= 1
                                     ? () {
-                                        final bool enabled =
-                                            signalingClient.muteMic();
-                                        print("this is enabled-000 $enabled");
-                                        setState(() {
-                                          switchMute = enabled;
-                                        });
+                                        // final bool enabled =
+                                        //     signalingClient.muteMic();
+                                        // print("this is enabled-000 $enabled");
+                                        // setState(() {
+                                        //   switchMute = enabled;
+                                        // });
                                       }
                                     : null)
                         : GestureDetector(
@@ -576,12 +579,12 @@ screen at the moment..''',
                                 ? null
                                 : participantcount >= 1
                                     ? () {
-                                        final bool enabled =
-                                            signalingClient.muteMic();
-                                        print("this is enabled $enabled");
-                                        setState(() {
-                                          switchMute = enabled;
-                                        });
+                                        // final bool enabled =
+                                        //     signalingClient.muteMic();
+                                        // print("this is enabled $enabled");
+                                        // setState(() {
+                                        //   switchMute = enabled;
+                                        // });
                                       }
                                     : null),
                   ],
@@ -589,115 +592,93 @@ screen at the moment..''',
               )
             ])))
         //groupbroadcast starts from here
-
         : groupBroadcast == true
             ? isDialer == false
                 //receiver side
-                ? rendererListWithRefID.length == 0
-                    ? Container()
-                    : rendererListWithRefID.length == 1
-                        ? WillPopScope(
-                            onWillPop: _onWillPop,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    chatRoomColor),
-                              ),
-                            ))
-                        : WillPopScope(
-                            onWillPop: _onWillPop,
-                            child: Container(
-                              child: Stack(children: <Widget>[
-                                // ignore: unrelated_type_equality_checks
-                                meidaType == "video"
-                                    ? remoteVideoFlag
-                                        ? rendererListWithRefID.length == 2
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10) // green as background color
-                                                    ),
-                                                // borderRadius: BorderRadius.circular(10.0),
-                                                child: RTCVideoView(
-                                                    rendererListWithRefID[1]
-                                                        ["rtcVideoRenderer"],
-                                                    // key: forsmallView,
-                                                    mirror: false,
-                                                    objectFit: RTCVideoViewObjectFit
-                                                        .RTCVideoViewObjectFitCover),
-                                              )
-
-                                            // RemoteStream(
-                                            //     remoteRenderer:
-                                            //         rendererListWithRefID[1]
-                                            //             ["rtcVideoRenderer"],
-                                            //   )
-                                            : rendererListWithRefID.length == 4
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10) // green as background color
-                                                        ),
-                                                    // borderRadius: BorderRadius.circular(10.0),
-                                                    child: RTCVideoView(
-                                                        rendererListWithRefID[2]
-                                                            [
-                                                            "rtcVideoRenderer"],
-                                                        // key: forsmallView,
-                                                        mirror: true,
-                                                        objectFit:
-                                                            RTCVideoViewObjectFit
-                                                                .RTCVideoViewObjectFitCover),
-                                                  )
-
-                                                // RemoteStream(
-                                                //     remoteRenderer:
-                                                //         rendererListWithRefID[2]
-                                                //             ["rtcVideoRenderer"],
-                                                //   )
-                                                : Container(
-                                                    decoration: BoxDecoration(
-                                                        gradient:
-                                                            LinearGradient(
-                                                      colors: [
-                                                        backgroundAudioCallDark,
-                                                        backgroundAudioCallLight,
-                                                        backgroundAudioCallLight,
-                                                        backgroundAudioCallLight,
-                                                      ],
-                                                      begin:
-                                                          Alignment.topCenter,
-                                                      end: Alignment(0.0, 0.0),
-                                                    )),
-                                                    child: Center(
-                                                      child: SvgPicture.asset(
-                                                        'assets/userIconCall.svg',
-                                                      ),
-                                                    ),
-                                                  )
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                              colors: [
-                                                backgroundAudioCallDark,
-                                                backgroundAudioCallLight,
-                                                backgroundAudioCallLight,
-                                                backgroundAudioCallLight,
-                                              ],
-                                              begin: Alignment.topCenter,
-                                              end: Alignment(0.0, 0.0),
-                                            )),
-                                            child: Center(
-                                              child: SvgPicture.asset(
-                                                'assets/userIconCall.svg',
+                ? sessionList.length == 0
+                    ? WillPopScope(
+                        onWillPop: _onWillPop,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(chatRoomColor),
+                          ),
+                        ))
+                    : WillPopScope(
+                        onWillPop: _onWillPop,
+                        child: Container(
+                          child: Stack(children: <Widget>[
+                            // ignore: unrelated_type_equality_checks
+                            // meidaType == "video"
+                            //     ? remoteVideoFlag
+                            // ?
+                            sessionList.length == 1
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            10) // green as background color
+                                        ),
+                                    // borderRadius: BorderRadius.circular(10.0),
+                                    child: RemoteStream(
+                                      remoteRenderer: sessionList[0]
+                                          .values
+                                          .toList()[0]
+                                          .remoteRenderer,
+                                      key: forsmallView,
+                                    ),
+                                  )
+                                : sessionList.length == 2
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            switchStream = !switchStream;
+                                          });
+                                          print('ONN STreemmm Changeee');
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(
+                                                  10) // green as background color
                                               ),
-                                            ),
-                                          )
-                                    :
-                                    //Text("bye"),
-                                    Container(
+                                          // borderRadius: BorderRadius.circular(10.0),
+                                          child: Container(
+                                              // height: 400,
+                                              child: switchStream
+                                                  ?
+                                                  // Center(child: Text('dasfas')),
+                                                  RemoteStream(
+                                                      remoteRenderer:
+                                                          sessionList[1]
+                                                              .values
+                                                              .toList()
+                                                              .first
+                                                              .remoteRenderer,
+                                                      // key: forsmallView,
+                                                    )
+                                                  : RemoteStream(
+                                                      remoteRenderer:
+                                                          sessionList[0]
+                                                              .values
+                                                              .toList()
+                                                              .first
+                                                              .remoteRenderer,
+                                                      // key: forsmallView,
+                                                    )),
+                                          // Container(
+                                          //       height: 400,
+                                          //       child:
+                                          //           RemoteStream(
+                                          //         remoteRenderer: sessionList[1]
+                                          //             .values
+                                          //             .toList()[0]
+                                          //             .remoteRenderer,
+                                          //         key: forsmallView,
+                                          //       ),
+
+                                          // ),
+                                        ),
+                                      )
+                                    : Container(
                                         decoration: BoxDecoration(
                                             gradient: LinearGradient(
                                           colors: [
@@ -715,188 +696,238 @@ screen at the moment..''',
                                           ),
                                         ),
                                       ),
-
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(
-                                    10,
-                                    55,
-                                    0,
-                                    0,
-                                  ),
-                                  //height: 79,
-                                  //width: MediaQuery.of(context).size.width,
-
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                            // : Container(
+                            //     decoration: BoxDecoration(
+                            //         gradient: LinearGradient(
+                            //       colors: [
+                            //         backgroundAudioCallDark,
+                            //         backgroundAudioCallLight,
+                            //         backgroundAudioCallLight,
+                            //         backgroundAudioCallLight,
+                            //       ],
+                            //       begin: Alignment.topCenter,
+                            //       end: Alignment(0.0, 0.0),
+                            //     )),
+                            //     child: Center(
+                            //       child: SvgPicture.asset(
+                            //         'assets/userIconCall.svg',
+                            //       ),
+                            //     ),
+                            //   )
+                            //Text("bye"),
+                            // Container(
+                            //   decoration: BoxDecoration(
+                            //       gradient: LinearGradient(
+                            //     colors: [
+                            //       backgroundAudioCallDark,
+                            //       backgroundAudioCallLight,
+                            //       backgroundAudioCallLight,
+                            //       backgroundAudioCallLight,
+                            //     ],
+                            //     begin: Alignment.topCenter,
+                            //     end: Alignment(0.0, 0.0),
+                            //   )),
+                            //   child: Center(
+                            //     child: SvgPicture.asset(
+                            //       'assets/userIconCall.svg',
+                            //     ),
+                            //   ),
+                            // ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                10,
+                                55,
+                                0,
+                                0,
+                              ),
+                              //height: 79,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     children: [
-                                      Row(
-                                        //      mainAxisAlignment: MainAxisAlignment.start,
-                                        // crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          // (session_type == "call")
-                                          //     ?
-                                          Text(
-                                            // (meidaType == "video")
-                                            //     ?
-                                            'You are on call with',
-                                            // :
-                                            //  'You are audio calling with',
+                                      // (session_type == "call")
+                                      //     ?
+                                      Text(
+                                        // (meidaType == "video")
+                                        //     ?
+                                        'You are on call with',
+                                        // :
+                                        //  'You are audio calling with',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            decoration: TextDecoration.none,
+                                            fontFamily: secondaryFontFamily,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                            color: darkBlackColor),
+                                      )
+                                      //  : Container(),
+                                    ],
+                                  ),
+                                  // (session_type == "call")
+                                  //     ?
+                                  Container(
+                                    // padding: EdgeInsets.only(left: 50),
+                                    child: Text(
+                                      'A Group',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          decoration: TextDecoration.none,
+                                          fontFamily: primaryFontFamily,
+                                          fontWeight: FontWeight.w700,
+                                          fontStyle: FontStyle.normal,
+                                          color: darkBlackColor),
+                                    ),
+                                  )
+                                  //    : Container(),
+                                ],
+                              ),
+                            ),
+                            Container(
+                                // color: Colors.red,
+                                child: Align(
+                              alignment: Alignment.topRight,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 120.33, 20, 27),
+                                    child: _pressDuration == null
+                                        ? Container()
+                                        : Text(
+                                            '$_pressDuration',
                                             style: TextStyle(
-                                                fontSize: 14,
                                                 decoration: TextDecoration.none,
+                                                fontSize: 14,
                                                 fontFamily: secondaryFontFamily,
                                                 fontWeight: FontWeight.w400,
                                                 fontStyle: FontStyle.normal,
                                                 color: darkBlackColor),
-                                          )
-                                          //  : Container(),
-                                        ],
-                                      ),
-                                      // (session_type == "call")
-                                      //     ?
-                                      Container(
-                                        // padding: EdgeInsets.only(left: 50),
-                                        child: Text(
-                                          'A Group',
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              decoration: TextDecoration.none,
-                                              fontFamily: primaryFontFamily,
-                                              fontWeight: FontWeight.w700,
-                                              fontStyle: FontStyle.normal,
-                                              color: darkBlackColor),
+                                          ),
+                                  ),
+                                  !kIsWeb
+                                      ? Container(
+                                          padding: EdgeInsets.fromLTRB(
+                                              0.0, 0.33, 20, 27),
+                                          child: GestureDetector(
+                                            child: switchSpeaker
+                                                ? SvgPicture.asset(
+                                                    'assets/VolumnOn.svg')
+                                                : SvgPicture.asset(
+                                                    'assets/VolumeOff.svg'),
+                                            onTap: () {
+                                              print(
+                                                  "onetomany receriver speaker $switchSpeaker");
+                                              setState(() {
+                                                switchSpeaker = !switchSpeaker;
+                                              });
+                                              signalingClient
+                                                  .switchSpeaker(switchSpeaker);
+                                            },
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                ],
+                              ),
+                            )),
+
+                            // /////////////// this is local stream
+
+                            // rendererListWithRefID.length == 4
+                            //     ?
+                            Positioned(
+                              left: 225.0,
+                              bottom: 145.0,
+                              right: 20,
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      switchStream = !switchStream;
+                                    });
+                                    print('onswitch streammm');
+                                  },
+                                  child: Container(
+                                    height: 170,
+                                    width: 130,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                10) // green as background color
+                                            ),
+                                        child: switchStream
+                                            ? RemoteStream(
+                                                remoteRenderer: sessionList[0]
+                                                    .values
+                                                    .toList()[0]
+                                                    .remoteRenderer,
+                                                key: forsmallView,
+                                              )
+                                            : RemoteStream(
+                                                remoteRenderer: sessionList[1]
+                                                    .values
+                                                    .toList()[0]
+                                                    .remoteRenderer,
+                                                key: forsmallView,
+                                              )
+                                        // Text('dfgkjsdkfjg')
+                                        //  enableCamera
+                                        //     ? RTCVideoView(
+                                        //         rendererListWithRefID[3]
+                                        //             ["rtcVideoRenderer"],
+                                        //         // key: forsmallView,
+                                        //         mirror: false,
+                                        //         objectFit: RTCVideoViewObjectFit
+                                        //             .RTCVideoViewObjectFitCover)
+                                        // ? RemoteStream(
+                                        //     remoteRenderer:
+                                        //         rendererListWithRefID[3]
+                                        //             ["rtcVideoRenderer"])
+                                        // : Container(color: Colors.pink),
                                         ),
-                                      )
-                                      //    : Container(),
-                                    ],
                                   ),
                                 ),
-                                Container(
-                                    // color: Colors.red,
-                                    child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.fromLTRB(
-                                            0.0, 120.33, 20, 27),
-                                        child: _pressDuration == null
-                                            ? Container()
-                                            : Text(
-                                                '$_pressDuration',
-                                                style: TextStyle(
-                                                    decoration:
-                                                        TextDecoration.none,
-                                                    fontSize: 14,
-                                                    fontFamily:
-                                                        secondaryFontFamily,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontStyle: FontStyle.normal,
-                                                    color: darkBlackColor),
-                                              ),
-                                      ),
-                                      !kIsWeb
-                                          ? Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0.0, 0.33, 20, 27),
-                                              child: GestureDetector(
-                                                child: switchSpeaker
-                                                    ? SvgPicture.asset(
-                                                        'assets/VolumnOn.svg')
-                                                    : SvgPicture.asset(
-                                                        'assets/VolumeOff.svg'),
-                                                onTap: () {
-                                                  print(
-                                                      "onetomany receriver speaker $switchSpeaker");
-                                                  setState(() {
-                                                    switchSpeaker =
-                                                        !switchSpeaker;
-                                                  });
-                                                  signalingClient.switchSpeaker(
-                                                      switchSpeaker);
-                                                },
-                                              ),
-                                            )
-                                          : SizedBox(),
-                                    ],
+                              ),
+                            ),
+                            // : Container(),
+
+                            Container(
+                              padding: EdgeInsets.only(
+                                bottom: 56,
+                              ),
+                              alignment: Alignment.bottomCenter,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    child: SvgPicture.asset(
+                                      'assets/end.svg',
+                                    ),
+                                    onTap: () {
+                                      remoteVideoFlag = true;
+                                      widget.stopCall();
+                                      isAppAudiobuttonSelected = false;
+                                      iscamerabuttonSelected = false;
+                                      ismicAudiobuttonSelected = false;
+                                      widget.stopCall();
+                                      // inCall = false;
+
+                                      // setState(() {
+                                      //   _isCalling = false;
+                                      // });
+                                    },
                                   ),
-                                )),
-
-                                // /////////////// this is local stream
-
-                                rendererListWithRefID.length == 4
-                                    ? Positioned(
-                                        left: 225.0,
-                                        bottom: 145.0,
-                                        right: 20,
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Container(
-                                            height: 170,
-                                            width: 130,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                            ),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10) // green as background color
-                                                  ),
-                                              child: enableCamera
-                                                  ? RTCVideoView(
-                                                      rendererListWithRefID[3]
-                                                          ["rtcVideoRenderer"],
-                                                      // key: forsmallView,
-                                                      mirror: false,
-                                                      objectFit:
-                                                          RTCVideoViewObjectFit
-                                                              .RTCVideoViewObjectFitCover)
-                                                  // ? RemoteStream(
-                                                  //     remoteRenderer:
-                                                  //         rendererListWithRefID[3]
-                                                  //             ["rtcVideoRenderer"])
-                                                  : Container(
-                                                      color: Colors.pink),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
-
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    bottom: 56,
-                                  ),
-                                  alignment: Alignment.bottomCenter,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
-                                        child: SvgPicture.asset(
-                                          'assets/end.svg',
-                                        ),
-                                        onTap: () {
-                                          remoteVideoFlag = true;
-                                          widget.stopCall();
-                                          isAppAudiobuttonSelected = false;
-                                          iscamerabuttonSelected = false;
-                                          ismicAudiobuttonSelected = false;
-                                          // inCall = false;
-
-                                          // setState(() {
-                                          //   _isCalling = false;
-                                          // });
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ]),
-                            ))
+                                ],
+                              ),
+                            )
+                          ]),
+                        ))
 
                 //dialer side, caller, initiator
                 : WillPopScope(
@@ -906,16 +937,20 @@ screen at the moment..''',
                         meidaType == "video"
                             ? enableCamera
                                 ? isMultiSession
-                                    ? RemoteStream(
-                                        remoteRenderer: rendererListWithRefID[0]
-                                            ["rtcVideoRenderer"],
-                                      )
+                                    ?
+                                    //  RemoteStream(
+                                    //     remoteRenderer: localRenderer,
+                                    //     // rendererListWithRefID[0]
+                                    //     //     ["rtcVideoRenderer"],
+                                    //   )
+                                    Container()
                                     : broadcasttype == "camera"
-                                        ? RemoteStream(
-                                            remoteRenderer:
-                                                rendererListWithRefID[0]
-                                                    ["rtcVideoRenderer"],
-                                          )
+                                        ? Container()
+                                        // RemoteStream(
+                                        //     remoteRenderer: localRenderer,
+                                        //     // rendererListWithRefID[0]
+                                        //     //     ["rtcVideoRenderer"],
+                                        //   )
                                         : Container()
                                 : Container()
                             : Container(
@@ -1019,8 +1054,8 @@ screen at the moment..''',
                                                       'assets/switch_camera.svg',
                                                     ),
                                                     onTap: () {
-                                                      signalingClient
-                                                          .switchCamera();
+                                                      // signalingClient
+                                                      //     .switchCamera();
                                                     },
                                                   ),
                                                 )
@@ -1145,22 +1180,22 @@ screen at the moment..''',
                                                           enableCamera2 =
                                                               !enableCamera2;
                                                         });
-                                                        signalingClient
-                                                            .audioVideoState(
-                                                                audioFlag:
-                                                                    switchMute
-                                                                        ? 1
-                                                                        : 0,
-                                                                videoFlag:
-                                                                    enableCamera2
-                                                                        ? 1
-                                                                        : 0,
-                                                                mcToken: widget
-                                                                        .registerRes[
-                                                                    "mcToken"]);
-                                                        signalingClient
-                                                            .enableScreen(
-                                                                enableCamera2);
+                                                        // signalingClient
+                                                        //     .audioVideoState(
+                                                        //         audioFlag:
+                                                        //             switchMute
+                                                        //                 ? 1
+                                                        //                 : 0,
+                                                        //         videoFlag:
+                                                        //             enableCamera2
+                                                        //                 ? 1
+                                                        //                 : 0,
+                                                        //         mcToken: widget
+                                                        //                 .registerRes[
+                                                        //             "mcToken"]);
+                                                        // signalingClient
+                                                        //     .enableScreen(
+                                                        //         enableCamera2);
                                                       }
                                                     : null),
                                         SizedBox(
@@ -1178,19 +1213,19 @@ screen at the moment..''',
                                                       enableCamera =
                                                           !enableCamera;
                                                     });
-                                                    signalingClient
-                                                        .audioVideoState(
-                                                            audioFlag:
-                                                                switchMute
-                                                                    ? 1
-                                                                    : 0,
-                                                            videoFlag:
-                                                                enableCamera
-                                                                    ? 1
-                                                                    : 0,
-                                                            mcToken: widget
-                                                                    .registerRes[
-                                                                "mcToken"]);
+                                                    // signalingClient
+                                                    //     .audioVideoState(
+                                                    //         audioFlag:
+                                                    //             switchMute
+                                                    //                 ? 1
+                                                    //                 : 0,
+                                                    //         videoFlag:
+                                                    //             enableCamera
+                                                    //                 ? 1
+                                                    //                 : 0,
+                                                    //         mcToken: widget
+                                                    //                 .registerRes[
+                                                    //             "mcToken"]);
                                                     signalingClient
                                                         .enableCamera(
                                                             enableCamera);
@@ -1219,20 +1254,20 @@ screen at the moment..''',
                                                     enableCamera =
                                                         !enableCamera;
                                                   });
-                                                  signalingClient
-                                                      .audioVideoState(
-                                                          audioFlag: switchMute
-                                                              ? 1
-                                                              : 0,
-                                                          videoFlag:
-                                                              enableCamera
-                                                                  ? 1
-                                                                  : 0,
-                                                          mcToken: widget
-                                                                  .registerRes[
-                                                              "mcToken"]);
-                                                  signalingClient.enableCamera(
-                                                      enableCamera);
+                                                  // signalingClient
+                                                  //     .audioVideoState(
+                                                  //         audioFlag: switchMute
+                                                  //             ? 1
+                                                  //             : 0,
+                                                  //         videoFlag:
+                                                  //             enableCamera
+                                                  //                 ? 1
+                                                  //                 : 0,
+                                                  //         mcToken: widget
+                                                  //                 .registerRes[
+                                                  //             "mcToken"]);
+                                                  // signalingClient.enableCamera(
+                                                  //     enableCamera);
                                                 }
                                               : null),
                               SizedBox(
@@ -1276,15 +1311,15 @@ screen at the moment..''',
                                                     ? null
                                                     : participantcount >= 1
                                                         ? () {
-                                                            final bool enabled =
-                                                                signalingClient
-                                                                    .muteInternalMic();
-                                                            print(
-                                                                "this is enabled3236 $enabled");
-                                                            setState(() {
-                                                              switchMute2 =
-                                                                  enabled;
-                                                            });
+                                                            // final bool enabled =
+                                                            //     signalingClient
+                                                            //         .muteInternalMic();
+                                                            // print(
+                                                            //     "this is enabled3236 $enabled");
+                                                            // setState(() {
+                                                            //   switchMute2 =
+                                                            //       enabled;
+                                                            // });
                                                           }
                                                         : null),
                                             SizedBox(
@@ -1298,14 +1333,14 @@ screen at the moment..''',
                                                         'assets/microphone.svg'),
                                                 onTap: participantcount >= 1
                                                     ? () {
-                                                        final bool enabled =
-                                                            signalingClient
-                                                                .muteMic();
-                                                        print(
-                                                            "this is enabled7465 $enabled");
-                                                        setState(() {
-                                                          switchMute = enabled;
-                                                        });
+                                                        // final bool enabled =
+                                                        //     signalingClient
+                                                        //         .muteMic();
+                                                        // print(
+                                                        //     "this is enabled7465 $enabled");
+                                                        // setState(() {
+                                                        //   switchMute = enabled;
+                                                        // });
                                                       }
                                                     : null)
                                           ],
@@ -1318,13 +1353,13 @@ screen at the moment..''',
                                                   'assets/microphone.svg'),
                                           onTap: participantcount >= 1
                                               ? () {
-                                                  final bool enabled =
-                                                      signalingClient.muteMic();
-                                                  print(
-                                                      "this is enabled-000 $enabled");
-                                                  setState(() {
-                                                    switchMute = enabled;
-                                                  });
+                                                  // final bool enabled =
+                                                  //     signalingClient.muteMic();
+                                                  // print(
+                                                  //     "this is enabled-000 $enabled");
+                                                  // setState(() {
+                                                  //   switchMute = enabled;
+                                                  // });
                                                 }
                                               : null)
                                   : GestureDetector(
@@ -1346,13 +1381,13 @@ screen at the moment..''',
                                           ? null
                                           : participantcount >= 1
                                               ? () {
-                                                  final bool enabled =
-                                                      signalingClient.muteMic();
-                                                  print(
-                                                      "this is enabled $enabled");
-                                                  setState(() {
-                                                    switchMute = enabled;
-                                                  });
+                                                  // final bool enabled =
+                                                  //     signalingClient.muteMic();
+                                                  // print(
+                                                  //     "this is enabled $enabled");
+                                                  // setState(() {
+                                                  //   switchMute = enabled;
+                                                  // });
                                                 }
                                               : null),
                             ],

@@ -208,7 +208,7 @@ class _CallDialScreenState extends State<CallDialScreen> {
                   'assets/end.svg',
                 ),
                 onTap: () {
-                  signalingClient.stopCall(widget.registerRes["mcToken"]);
+                  signalingClient.reject();
                   // if (strArr.last == "CreateGroupChat") {
                   //   widget.mainProvider.createGroupChatScreen();
                   // } else if (strArr.last == "GroupList") {

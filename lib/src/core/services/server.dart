@@ -43,11 +43,9 @@ import '../config/config.dart';
 //     return response;
 //   }
 // }
-
 // Future<dynamic> getAPI(myurl, authToken) async {
 //   // SharedPref _sharedPref = SharedPref();
 //   // URL = await _sharedPref.read("URL");
-
 //   final url = tenant_url + myurl;
 //   print('this is url $url');
 //   //print("auth token is ")

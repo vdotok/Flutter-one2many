@@ -44,12 +44,6 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                     'assets/close.svg',
                   ),
                   onTap: () {
-                    // setState(() {
-                    //   isAppAudiobuttonSelected = false;
-                    //   iscamerabuttonSelected = false;
-                    //   ismicAudiobuttonSelected = false;
-                    // });
-
                     Navigator.pop(context);
                   },
                 ),
@@ -68,8 +62,9 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     onPressed: () {
-                      groupBroadcast = widget.to == null ? false : true;
-                      ispublicbroadcast = widget.to == null ? true : false;
+                      // groupBroadcast = widget.to == null ? false : true;
+                      // ispublicbroadcast = widget.to == null ? true : false;
+                      BroadCastType = widget.to == null ? 1 : 0;
                       Navigator.pop(context);
                       GroupModel? model;
                       if (broadcasttype == "camera") {
@@ -99,7 +94,6 @@ class _StartBroadcastPopUpState extends State<StartBroadcastPopUp> {
                                 callType: CAllType.one2many,
                                 sessionType: SessionType.screen);
                       }
-
                       // showDialog(
                       //             context: context,
                       //             builder: (BuildContext context) {

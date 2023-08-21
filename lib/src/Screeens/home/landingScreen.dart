@@ -41,6 +41,7 @@ class _LandingScreenState extends State<LandingScreen> {
   void _handleGenderChange(int? value) {
     setState(() {
       broadcast = value;
+      BroadCastType = value;
     });
 
     print("selected gender is $value");
@@ -91,14 +92,14 @@ class _LandingScreenState extends State<LandingScreen> {
                     Row(
                       children: [
                         Radio<int>(
-                          value: 0,
+                          value: 1,
                           groupValue: broadcast,
                           onChanged: _handleGenderChange,
                         ),
                         Text("Public BroadCast"),
                         SizedBox(width: 30),
                         Radio<int>(
-                          value: 1,
+                          value: 0,
                           groupValue: broadcast,
                           onChanged: _handleGenderChange,
                         ),
@@ -218,7 +219,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 if (!isAppAudiobuttonSelected &&
                                     !ismicAudiobuttonSelected &&
                                     iscamerabuttonSelected &&
-                                    broadcast == 0) {
+                                    broadcast == 1) {
                                   // broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": true, "micAudio": true ,};
                                   print(
                                       "i am here in public camera broadcast ");
@@ -236,7 +237,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 else if (!isAppAudiobuttonSelected &&
                                     !ismicAudiobuttonSelected &&
                                     iscamerabuttonSelected &&
-                                    broadcast == 1) {
+                                    broadcast == 0) {
                                   isMultiSession = false;
                                   broadcasttype = "camera";
                                   // widget.grouplistprovider
@@ -247,7 +248,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 else if (isAppAudiobuttonSelected &&
                                     !ismicAudiobuttonSelected &&
                                     !iscamerabuttonSelected &&
-                                    broadcast == 0) {
+                                    broadcast == 1) {
                                   broadcasttype = "appaudio";
                                   isMultiSession = false;
                                   // widget.grouplistprovider
@@ -269,7 +270,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 else if (isAppAudiobuttonSelected &&
                                     !ismicAudiobuttonSelected &&
                                     !iscamerabuttonSelected &&
-                                    broadcast == 1) {
+                                    broadcast == 0) {
                                   isMultiSession = false;
                                   broadcasttype = "appaudio";
                                   widget.grouplistprovider!
@@ -283,7 +284,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 else if (!isAppAudiobuttonSelected &&
                                     ismicAudiobuttonSelected &&
                                     !iscamerabuttonSelected &&
-                                    broadcast == 0) {
+                                    broadcast == 1) {
                                   broadcasttype = "micaudio";
                                   isMultiSession = false;
                                   //  broadcastObject  = {"publicBroadcast": true, "sessionTypeCamera": false, "micAudio": false,};
@@ -304,7 +305,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 else if (!isAppAudiobuttonSelected &&
                                     ismicAudiobuttonSelected &&
                                     !iscamerabuttonSelected &&
-                                    broadcast == 1) {
+                                    broadcast == 0) {
                                   isMultiSession = false;
                                   broadcasttype = "micaudio";
                                   widget.grouplistprovider!
@@ -316,7 +317,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 } else if (isAppAudiobuttonSelected &&
                                     !ismicAudiobuttonSelected &&
                                     iscamerabuttonSelected &&
-                                    broadcast == 1) {
+                                    broadcast == 0) {
                                   broadcasttype = "appaudioandcamera";
                                   isMultiSession = true;
                                   print("i am here in appaudio and camera");
@@ -329,7 +330,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 } else if (isAppAudiobuttonSelected &&
                                     !ismicAudiobuttonSelected &&
                                     iscamerabuttonSelected &&
-                                    broadcast == 0) {
+                                    broadcast == 1) {
                                   isMultiSession = true;
                                   broadcasttype = "appaudioandcamera";
                                   showDialog(
@@ -345,7 +346,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 } else if (!isAppAudiobuttonSelected &&
                                     ismicAudiobuttonSelected &&
                                     iscamerabuttonSelected &&
-                                    broadcast == 1) {
+                                    broadcast == 0) {
                                   isMultiSession = true;
                                   broadcasttype = "micaudioandcamera";
                                   widget.grouplistprovider!
@@ -357,7 +358,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 } else if (!isAppAudiobuttonSelected &&
                                     ismicAudiobuttonSelected &&
                                     iscamerabuttonSelected &&
-                                    broadcast == 0) {
+                                    broadcast == 1) {
                                   isMultiSession = true;
                                   broadcasttype = "micaudioandcamera";
                                   showDialog(
@@ -381,7 +382,6 @@ class _LandingScreenState extends State<LandingScreen> {
                               },
                         child: Text('Continue',
                             style: TextStyle(color: Colors.white)),
-
                         // shape: RoundedRectangleBorder(side: BorderSide(
                         //  // color: screensharecolor,
                         //   width: 3,
@@ -409,8 +409,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                         isAppAudiobuttonSelected = false;
                                         iscamerabuttonSelected = false;
                                         ismicAudiobuttonSelected = false;
-                                        signalingClient.unRegister(
-                                            widget.registerRes["mcToken"]);
+                                        signalingClient.unRegister();
                                       },
                                       child: Text(
                                         "LOG OUT",

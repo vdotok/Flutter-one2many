@@ -9,3 +9,10 @@ class CAllType {
   static const String many2many = "many_to_many";
   static const String conference = "conference";
 }
+
+// enum BroadCastWith {
+//   CameraWithMicAudio,
+//   ScreenWithMicAudio,
+//   ScreenWithAppAudio,
+//   AppAudioAndMicAudio,
+// }

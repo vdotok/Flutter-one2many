@@ -187,7 +187,7 @@ class NoChatScreen extends StatelessWidget {
                             isAppAudiobuttonSelected = false;
                             iscamerabuttonSelected = false;
                             ismicAudiobuttonSelected = false;
-                            signalingClient.unRegister(registerRes["mcToken"]);
+                            signalingClient.unRegister();
                           },
                           child: Text(
                             "LOG OUT",

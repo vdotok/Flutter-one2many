@@ -175,19 +175,20 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   'assets/end.svg',
                 ),
                 onTap: () {
+                  widget.signalingClient!.reject();
                   //   widget.stopRinging();
                   // widget.signalingClient!.declineCall(
                   //     widget.authProvider!.getUser!.ref_id,
                   //     widget.registerRes["mcToken"]);
-                  //  if (strArr.last == "CreateGroupChat") {
-                  //   widget.mainProvider.createGroupChatScreen();
-                  // } else if (strArr.last == "GroupList") {
-                  //   widget.mainProvider.homeScreen();
-                  // }  else if (strArr.last == "NoChat") {
-                  //   widget.mainProvider.inActiveCall();
-                  //   widget.mainProvider.homeScreen();
-                  //   strArr.remove("NoChat");
-                  // }
+                  if (strArr.last == "CreateGroupChat") {
+                    widget.mainProvider!.createGroupChatScreen();
+                  } else if (strArr.last == "GroupList") {
+                    widget.mainProvider!.homeScreen();
+                  } else if (strArr.last == "NoChat") {
+                    widget.mainProvider!.inActiveCall();
+                    widget.mainProvider!.homeScreen();
+                    strArr.remove("NoChat");
+                  }
                 },
               ),
               SizedBox(width: 64),
@@ -199,11 +200,12 @@ class _CallReceiveScreenState extends State<CallReceiveScreen> {
                   // widget.stopRinging();
                   // widget.signalingClient!.createAnswer(widget.incomingfrom);
                   // Navigator.pop(context);
-                  // widget.mainProvider.callStart();
-                  // setState(() {
-                  //   _isCalling = true;
-                  //   incomingfrom = null;
-                  // });
+                  widget.signalingClient!.accept();
+                  // widget.mainProvider!.callStart();
+                  setState(() {
+                    // _isCalling = true;
+                    incomingfrom = null;
+                  });
                   // FlutterRingtonePlayer.stop();
                   // Vibration.cancel();
                 },
