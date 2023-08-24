@@ -33,8 +33,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
- 
-
   @override
   void initState() {
     super.initState();
@@ -45,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     print("gejghrejgr");
-    
+
     super.dispose();
   }
 
@@ -206,7 +204,7 @@ class _TestState extends State<Test> {
               child: Text("createOffer"),
             ),
             ElevatedButton(
-              onPressed: () {             
+              onPressed: () {
                 signalingClient?.getMedia();
               },
               child: Text("getUserMedia"),

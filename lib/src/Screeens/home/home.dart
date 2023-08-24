@@ -17,7 +17,7 @@ import 'package:flutter_one2many/src/shared_preference/shared_preference.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
-import 'package:wakelock/wakelock.dart';
+// import 'package:wakelock/wakelock.dart';
 import '../../../main.dart';
 
 import '../callScreens/CallDialScreen.dart';
@@ -397,7 +397,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         session_type = res["sessionType"];
         typeOfCall = res["callType"];
         inCall = true;
-        Wakelock.toggle(enable: true);
+        // Wakelock.toggle(enable: true);
         pressDuration = "";
         iscalloneto1 = typeOfCall == "one_to_one" ? true : false;
         onRemoteStream = false;
@@ -594,7 +594,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       }
 
       setState(() {
-        Wakelock.toggle(enable: false);
+        // Wakelock.toggle(enable: false);
         ispublicbroadcast = false;
         isDialer = false;
         isMultiSession = false;
@@ -926,7 +926,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     // print(
     //     "call callback on call Received incomming2  ${to.group_title} $callType $mtype $isDialer $switchSpeaker");
     setState(() {
-      Wakelock.toggle(enable: true);
+      // Wakelock.toggle(enable: true);
       typeOfCall = callType!;
       isDialer = true;
       inCall = true;

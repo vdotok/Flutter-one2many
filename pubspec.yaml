@@ -44,10 +44,10 @@ dependencies:
   intl: ^0.17.0
   chewie: ^1.3.1
   move_to_background: ^1.0.2
-  wakelock:
+  # wakelock: ^0.6.1
   permission_handler:
   fluttertoast: ^8.1.1
-  vdotok_stream: ^0.0.22
+  vdotok_stream: ^0.0.25
    #path: ../vdotok_stream
   
 
