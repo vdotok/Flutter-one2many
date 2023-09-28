@@ -17,7 +17,7 @@ import 'package:flutter_one2many/src/shared_preference/shared_preference.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:vdotok_stream/vdotok_stream.dart';
-import 'package:wakelock/wakelock.dart';
+// import 'package:wakelock/wakelock.dart';
 import '../../../main.dart';
 
 import '../callScreens/CallDialScreen.dart';
@@ -77,7 +77,13 @@ GlobalKey forsmallView = new GlobalKey();
 String session_type = "";
 // bool isLocalStream=false;
 //bool isPushed = false;
-
+Map<String, bool> localAudioVideoStates = {
+  "UnMuteState": false,
+  "SpeakerState": false,
+  "CameraState": false,
+  "ScreenShareState": false,
+  "isBackCamera": false
+};
 List<Map<String, dynamic>> rendererListWithRefID = [];
 int count = 0;
 bool isRinging = false;
@@ -251,6 +257,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         authProvider!.getUser.authorization_token.toString(),
         authProvider!.StungIP,
         int.parse(authProvider!.StungPort));
+    signalingClient.setAppGroupIdentifier("group.com.vdotokAB");
+
     signalingClient.onConnect = (res) {
       print("onConnecttttttttttt signalining client $res");
       if (res == "connected") {
@@ -367,8 +375,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     //   });
     // };
     //  =-------------------------------------OneToManyUpdated-----------------
-    signalingClient?.onLocalAudioVideoStates = (res) {
-      print("on onLocalAudioVideoStates $res");
+    // signalingClient?.onLocalAudioVideoStates = (res) {
+    //   print("on onLocalAudioVideoStates $res");
+    // };
+    signalingClient.onLocalAudioVideoStates =
+        (Map<String, bool> newLocalAudioVideoStates) {
+      print('audiovideostate----- ${localAudioVideoStates}');
+      setState(() {
+        localAudioVideoStates = newLocalAudioVideoStates;
+        print('Ismutee------ truee ${localAudioVideoStates}');
+      });
     };
     signalingClient.onLocalStream = (stream) {
       print('onlocalstreaammmm--');
@@ -390,6 +406,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       });
       print('this is sessionListtt----- $sessionList');
       _mainProvider!.callStart();
+    };
+    signalingClient?.onParticipantsCount = (count) {
+      print('this is count ${count}');
+      setState(() {
+        participantcount = count;
+      });
     };
     signalingClient.onCallStateChange =
         (Map<String, Session>? SessionMap, CallState state) async {
@@ -414,6 +436,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           {
             setState(() {
               incommingSession = true;
+              // isDialer = false;
             });
             // setState(() {
             //   _session = session;
@@ -430,9 +453,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               //   await element.remoteRenderer.dispose();
               // });
               setState(() {
-                if (localRenderer?.srcObject != null) {
-                  localRenderer?.srcObject = null;
-                }
                 sessionList.clear();
                 localRenderer = null;
                 _localScreenRenderer = null;
@@ -444,6 +464,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               });
             }
             _mainProvider!.initial();
+            setState(() {
+              isDialer = false;
+              participantcount = 0;
+              isAppAudiobuttonSelected = false;
+              ismicAudiobuttonSelected = false;
+              iscamerabuttonSelected = false;
+            });
           }
           break;
         case CallState.ParticipantLeft:
@@ -468,7 +495,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         case CallState.CallStateInvite:
           print('this is call state inviteeee');
           // _callProvider!.callDial();
-          _mainProvider!.callDial();
+          // _mainProvider!.callDial();
           break;
         case CallState.CallStateConnected:
           {
@@ -478,7 +505,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             //     "this is current time......... $_time......this is calll start time");
             // _ticker = Timer.periodic(Duration(seconds: 1), (_) => _getTimer());
             // print("ticker is $_ticker");
-
             // _callProvider!.callStart();
             // setState(() {
             //   _remoteRenderer = session!.remoteRenderer;
@@ -505,6 +531,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       print('this is onIncomingcalll-------$data');
       setState(() {
         incommingSession = true;
+        isDialer = false;
       });
 
       print("call callback on call Received incomming ${data} ");
@@ -516,7 +543,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         session_type = data["sessionType"];
         typeOfCall = data["callType"];
         inCall = true;
-        Wakelock.toggle(enable: true);
+        // Wakelock.toggle(enable: true);
         pressDuration = "";
         iscalloneto1 = typeOfCall == "one_to_one" ? true : false;
         onRemoteStream = false;
@@ -1083,12 +1110,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     String? callType,
     String? sessionType,
   }) async {
-    print("GroupModelComingorNo ${to}");
+    // print("GroupModelComingorNo ${to}");
     //mmtype=mtype;
     // print(
     //     "call callback on call Received incomming2  ${to.group_title} $callType $mtype $isDialer $switchSpeaker");
     setState(() {
-      Wakelock.toggle(enable: true);
+      // Wakelock.toggle(enable: true);
       typeOfCall = callType!;
       isDialer = true;
       inCall = true;
@@ -1151,9 +1178,25 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         setState(() {
           broadcasttypee22 = BroadCastWith.AppAudioAndMicAudio;
         });
-      } else if (broadcasttype == "micaudioandcamera") {
+      } else if (broadcasttype == "micaudio") {
         print('------broadcastType is MICAUDIOANDCAMERA');
         // broadcasttypee22 =  BroadCastWith.;
+        setState(() {
+          broadcasttypee22 = BroadCastWith.ScreenWithMicAudio;
+        });
+      } else if (broadcasttype == 'appaudio') {
+        print('------broadcastType is APPAudio');
+        setState(() {
+          broadcasttypee22 = BroadCastWith.ScreenWithAppAudio;
+        });
+      } else if (broadcasttype == 'micaudioandcamera') {
+        // micaudioandcamera
+        setState(() {
+          broadcasttypee22 = BroadCastWith.ScreenAndCameraWithMicAudio;
+          // TODO:
+        });
+      } else {
+        print('');
       }
       ;
 
@@ -1334,7 +1377,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 mainProvider: _mainProvider,
                 stopCall: stopCall,
                 registerRes: registerRes,
-                remoteRenderer: _remoteRenderer,
+                // remoteRenderer: _remoteRenderer,
               );
               // }
             } else if (mainProvider.homeStatus == HomeStatus.CallDial) {

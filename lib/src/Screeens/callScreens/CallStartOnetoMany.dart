@@ -19,15 +19,15 @@ class CallStartOnetoMany extends StatefulWidget {
   final localRenderer;
   final registerRes;
   final stopCall;
-  final remoteRenderer;
-  const CallStartOnetoMany(
-      {Key? key,
-      this.mainProvider,
-      this.localRenderer,
-      this.registerRes,
-      this.stopCall,
-      this.remoteRenderer})
-      : super(key: key);
+  // final remoteRenderer;
+  const CallStartOnetoMany({
+    Key? key,
+    this.mainProvider,
+    this.localRenderer,
+    this.registerRes,
+    this.stopCall,
+    // this.remoteRenderer
+  }) : super(key: key);
 
   @override
   _CallStartOnetoManyState createState() => _CallStartOnetoManyState();
@@ -43,7 +43,7 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
     // TODO: implement initState
     super.initState();
 
-    print("this is group name in call start screnn ${callTo}");
+    // print("this is group name in call start screnn ${callTo}");
     print("this is time in Call Accept Screen $time");
     if (time == null) {
       _time = DateTime.now();
@@ -117,8 +117,8 @@ class _CallStartOnetoManyState extends State<CallStartOnetoMany> {
 
   @override
   Widget build(BuildContext context) {
-    // print(
-    //     "this is index in a onrdd ${sessionList} ${sessionList[0].values.toList()[0].remoteRenderer}+++ ${sessionList[1].values.toList().first.remoteRenderer}");
+    print(
+        "this is index in a onrdd ${sessionList.first.values.first.remoteRenderer} ${sessionList.length}");
 
     return ispublicbroadcast
         ? WillPopScope(
@@ -619,12 +619,12 @@ screen at the moment..''',
                                             10) // green as background color
                                         ),
                                     // borderRadius: BorderRadius.circular(10.0),
-                                    child: RemoteStream(
-                                      remoteRenderer: sessionList[0]
-                                          .values
-                                          .toList()[0]
-                                          .remoteRenderer,
-                                      key: forsmallView,
+                                    child:
+                                        // Text('Centerdfgsdfgsdfgsdfgsdf'),
+                                        RemoteStream(
+                                      remoteRenderer: sessionList
+                                          .first.values.first.remoteRenderer,
+                                      // key: forsmallView,
                                     ),
                                   )
                                 : sessionList.length == 2
@@ -857,40 +857,42 @@ screen at the moment..''',
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                10) // green as background color
-                                            ),
-                                        child: switchStream
-                                            ? RemoteStream(
-                                                remoteRenderer: sessionList[0]
-                                                    .values
-                                                    .toList()[0]
-                                                    .remoteRenderer,
-                                                key: forsmallView,
-                                              )
-                                            : RemoteStream(
-                                                remoteRenderer: sessionList[1]
-                                                    .values
-                                                    .toList()[0]
-                                                    .remoteRenderer,
-                                                key: forsmallView,
-                                              )
-                                        // Text('dfgkjsdkfjg')
-                                        //  enableCamera
-                                        //     ? RTCVideoView(
-                                        //         rendererListWithRefID[3]
-                                        //             ["rtcVideoRenderer"],
-                                        //         // key: forsmallView,
-                                        //         mirror: false,
-                                        //         objectFit: RTCVideoViewObjectFit
-                                        //             .RTCVideoViewObjectFitCover)
-                                        // ? RemoteStream(
-                                        //     remoteRenderer:
-                                        //         rendererListWithRefID[3]
-                                        //             ["rtcVideoRenderer"])
-                                        // : Container(color: Colors.pink),
-                                        ),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              10) // green as background color
+                                          ),
+                                      child: switchStream
+                                          ? RemoteStream(
+                                              remoteRenderer: sessionList[0]
+                                                  .values
+                                                  .toList()[0]
+                                                  .remoteRenderer,
+                                              // key: forsmallView,
+                                            )
+                                          : sessionList.length == 2
+                                              ? RemoteStream(
+                                                  remoteRenderer: sessionList[1]
+                                                      .values
+                                                      .toList()[0]
+                                                      .remoteRenderer,
+                                                  // key: forsmallView,
+                                                )
+                                              : Container(),
+                                      // Text('dfgkjsdkfjg')
+                                      //  enableCamera
+                                      //     ? RTCVideoView(
+                                      //         rendererListWithRefID[3]
+                                      //             ["rtcVideoRenderer"],
+                                      //         // key: forsmallView,
+                                      //         mirror: false,
+                                      //         objectFit: RTCVideoViewObjectFit
+                                      //             .RTCVideoViewObjectFitCover)
+                                      // ? RemoteStream(
+                                      //     remoteRenderer:
+                                      //         rendererListWithRefID[3]
+                                      //             ["rtcVideoRenderer"])
+                                      // : Container(color: Colors.pink),
+                                    ),
                                   ),
                                 ),
                               ),

@@ -211,6 +211,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                 meidaType = CallMediaType.video;
                               });
                               print("three dot icon pressed");
+                              widget.mainProvider!.callDial();
                               print("this is call to in call dial $callTo");
                             },
                             child: Row(

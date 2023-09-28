@@ -209,15 +209,15 @@ class _CallDialScreenState extends State<CallDialScreen> {
                 ),
                 onTap: () {
                   signalingClient.reject();
-                  // if (strArr.last == "CreateGroupChat") {
-                  //   widget.mainProvider.createGroupChatScreen();
-                  // } else if (strArr.last == "GroupList") {
-                  //   widget.mainProvider.homeScreen();
-                  // } else if (strArr.last == "NoChat") {
-                  //   widget.mainProvider.inActiveCall();
-                  //   widget.mainProvider.homeScreen();
-                  //   strArr.remove("NoChat");
-                  // }
+                  if (strArr.last == "CreateGroupChat") {
+                    widget.mainProvider!.createGroupChatScreen();
+                  } else if (strArr.last == "GroupList") {
+                    widget.mainProvider!.homeScreen();
+                  } else if (strArr.last == "NoChat") {
+                    widget.mainProvider!.inActiveCall();
+                    widget.mainProvider!.homeScreen();
+                    strArr.remove("NoChat");
+                  }
                   isAppAudiobuttonSelected = false;
                   iscamerabuttonSelected = false;
                   ismicAudiobuttonSelected = false;

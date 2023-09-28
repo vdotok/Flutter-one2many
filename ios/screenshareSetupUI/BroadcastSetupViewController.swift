@@ -1,8 +1,8 @@
 //
 //  BroadcastSetupViewController.swift
-//  ScreenShareSetupUI
+//  screenshareSetupUI
 //
-//  Created by Maryum on 03/06/2022.
+//  Created by Norgic on 9/27/23.
 //
 
 import ReplayKit

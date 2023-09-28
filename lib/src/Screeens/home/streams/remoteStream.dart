@@ -12,6 +12,7 @@ class RemoteStream extends StatefulWidget {
 class _RemoteStreamState extends State<RemoteStream> {
   @override
   Widget build(BuildContext context) {
+    print('inRemoteStream--- ${widget.remoteRenderer!}');
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10) // green as background color

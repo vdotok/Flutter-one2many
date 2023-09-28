@@ -7,40 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F5C67C12AC462D300D240E4 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F44DAD284A47DD00B485D8 /* ReplayKit.framework */; };
+		0F5C67CB2AC462D300D240E4 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F44DAD284A47DD00B485D8 /* ReplayKit.framework */; };
+		0F5C67CC2AC462D300D240E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F44DB9284A47DD00B485D8 /* UIKit.framework */; };
+		0F5C67CF2AC462D300D240E4 /* BroadcastSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5C67CE2AC462D300D240E4 /* BroadcastSetupViewController.swift */; };
+		0F5C67D32AC462D400D240E4 /* screenshareSetupUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0F5C67CA2AC462D300D240E4 /* screenshareSetupUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0F5C67D62AC462D400D240E4 /* screenshare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0F5C67C02AC462D300D240E4 /* screenshare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0F5C67E52AC4635700D240E4 /* BroadcastData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5C67E12AC4635600D240E4 /* BroadcastData.swift */; };
+		0F5C67E62AC4635700D240E4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5C67E22AC4635700D240E4 /* Constants.swift */; };
+		0F5C67E72AC4635700D240E4 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5C67E32AC4635700D240E4 /* Enums.swift */; };
+		0F5C67E82AC4635700D240E4 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5C67E42AC4635700D240E4 /* SampleHandler.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		22F44DAE284A47DD00B485D8 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F44DAD284A47DD00B485D8 /* ReplayKit.framework */; };
-		22F44DB1284A47DD00B485D8 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F44DB0284A47DD00B485D8 /* SampleHandler.swift */; };
-		22F44DB8284A47DD00B485D8 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F44DAD284A47DD00B485D8 /* ReplayKit.framework */; };
-		22F44DBA284A47DD00B485D8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F44DB9284A47DD00B485D8 /* UIKit.framework */; };
-		22F44DBD284A47DD00B485D8 /* BroadcastSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F44DBC284A47DD00B485D8 /* BroadcastSetupViewController.swift */; };
-		22F44DC1284A47DE00B485D8 /* ScreenShareSetupUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 22F44DB7284A47DD00B485D8 /* ScreenShareSetupUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		22F44DC4284A47DE00B485D8 /* ScreenShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 22F44DAB284A47DD00B485D8 /* ScreenShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		22F44DD6284A4B7800B485D8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F44DD1284A4B6300B485D8 /* Constants.swift */; };
-		22F44DD7284A4B7800B485D8 /* BroadcastData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F44DD2284A4B6300B485D8 /* BroadcastData.swift */; };
-		22F44DD8284A4B7800B485D8 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F44DD0284A4B6300B485D8 /* Enums.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		5D2C7DFD34A2D7226A65B541 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DADDBD2DF00C62FECCE16DB /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		BDD193F18FC814BDAC3F99C5 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C7EEA897D040AFCDF2ED182 /* Pods_Runner.framework */; };
-		CDD7B27A07F3669610B26967 /* Pods_ScreenShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7988ED6AC1C0843EE80125A8 /* Pods_ScreenShare.framework */; };
+		FD3B306A43B0F636DEA59986 /* Pods_screenshare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30BE90F7143574595D26AEC7 /* Pods_screenshare.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		22F44DBF284A47DE00B485D8 /* PBXContainerItemProxy */ = {
+		0F5C67D12AC462D300D240E4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 22F44DB6284A47DD00B485D8;
-			remoteInfo = ScreenShareSetupUI;
+			remoteGlobalIDString = 0F5C67C92AC462D300D240E4;
+			remoteInfo = screenshareSetupUI;
 		};
-		22F44DC2284A47DE00B485D8 /* PBXContainerItemProxy */ = {
+		0F5C67D42AC462D400D240E4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 22F44DAA284A47DD00B485D8;
-			remoteInfo = ScreenShare;
+			remoteGlobalIDString = 0F5C67BF2AC462D300D240E4;
+			remoteInfo = screenshare;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -51,8 +51,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				22F44DC4284A47DE00B485D8 /* ScreenShare.appex in Embed App Extensions */,
-				22F44DC1284A47DE00B485D8 /* ScreenShareSetupUI.appex in Embed App Extensions */,
+				0F5C67D62AC462D400D240E4 /* screenshare.appex in Embed App Extensions */,
+				0F5C67D32AC462D400D240E4 /* screenshareSetupUI.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,31 +70,29 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		04F164C69086516FE75CA70C /* Pods-ScreenShare.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.profile.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.profile.xcconfig"; sourceTree = "<group>"; };
-		0ED88500061F27A97D51DFBC /* Pods-ScreenShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.debug.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.debug.xcconfig"; sourceTree = "<group>"; };
-		0FF1D20E0870D90AA45387DE /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		0F5C67C02AC462D300D240E4 /* screenshare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = screenshare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F5C67C52AC462D300D240E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F5C67CA2AC462D300D240E4 /* screenshareSetupUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = screenshareSetupUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F5C67CE2AC462D300D240E4 /* BroadcastSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastSetupViewController.swift; sourceTree = "<group>"; };
+		0F5C67D02AC462D300D240E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F5C67DF2AC4630200D240E4 /* screenshare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = screenshare.entitlements; sourceTree = "<group>"; };
+		0F5C67E02AC4631C00D240E4 /* screenshareSetupUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = screenshareSetupUI.entitlements; sourceTree = "<group>"; };
+		0F5C67E12AC4635600D240E4 /* BroadcastData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BroadcastData.swift; sourceTree = "<group>"; };
+		0F5C67E22AC4635700D240E4 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		0F5C67E32AC4635700D240E4 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		0F5C67E42AC4635700D240E4 /* SampleHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SampleHandler.swift; path = ../../../vdotok_stream/example/ios/screenshare/SampleHandler.swift; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		22F44DA6284A47BC00B485D8 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
-		22F44DAB284A47DD00B485D8 /* ScreenShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScreenShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F44DAD284A47DD00B485D8 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
-		22F44DB0284A47DD00B485D8 /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
-		22F44DB2284A47DD00B485D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		22F44DB7284A47DD00B485D8 /* ScreenShareSetupUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScreenShareSetupUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F44DB9284A47DD00B485D8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		22F44DBC284A47DD00B485D8 /* BroadcastSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastSetupViewController.swift; sourceTree = "<group>"; };
-		22F44DBE284A47DD00B485D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		22F44DCE284A47E700B485D8 /* ScreenShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenShare.entitlements; sourceTree = "<group>"; };
-		22F44DCF284A480900B485D8 /* ScreenShareSetupUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenShareSetupUI.entitlements; sourceTree = "<group>"; };
-		22F44DD0284A4B6300B485D8 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
-		22F44DD1284A4B6300B485D8 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		22F44DD2284A4B6300B485D8 /* BroadcastData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BroadcastData.swift; sourceTree = "<group>"; };
+		30BE90F7143574595D26AEC7 /* Pods_screenshare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_screenshare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		45EC9072B653EDACACAA99D0 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
-		5C7EEA897D040AFCDF2ED182 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D936641D94CB608ADF9B7EE /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		3E26826CBB3845DD76CA0266 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		4DADDBD2DF00C62FECCE16DB /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7988ED6AC1C0843EE80125A8 /* Pods_ScreenShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -103,26 +101,28 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C3757A3555AD5C816855E509 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
-		D4E0A7C9152EC190163F1A35 /* Pods-ScreenShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.release.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.release.xcconfig"; sourceTree = "<group>"; };
+		B70BD2B0DC7849B1F5E9A1FE /* Pods-screenshare.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-screenshare.profile.xcconfig"; path = "Target Support Files/Pods-screenshare/Pods-screenshare.profile.xcconfig"; sourceTree = "<group>"; };
+		C2329A88DFDF98FF96C4E875 /* Pods-screenshare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-screenshare.release.xcconfig"; path = "Target Support Files/Pods-screenshare/Pods-screenshare.release.xcconfig"; sourceTree = "<group>"; };
+		DF65850BC37F665C62F8B92E /* Pods-screenshare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-screenshare.debug.xcconfig"; path = "Target Support Files/Pods-screenshare/Pods-screenshare.debug.xcconfig"; sourceTree = "<group>"; };
+		F1222380E5E3FB42F9761A2B /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		22F44DA8284A47DD00B485D8 /* Frameworks */ = {
+		0F5C67BD2AC462D300D240E4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22F44DAE284A47DD00B485D8 /* ReplayKit.framework in Frameworks */,
-				CDD7B27A07F3669610B26967 /* Pods_ScreenShare.framework in Frameworks */,
+				0F5C67C12AC462D300D240E4 /* ReplayKit.framework in Frameworks */,
+				FD3B306A43B0F636DEA59986 /* Pods_screenshare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		22F44DB4284A47DD00B485D8 /* Frameworks */ = {
+		0F5C67C72AC462D300D240E4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22F44DB8284A47DD00B485D8 /* ReplayKit.framework in Frameworks */,
-				22F44DBA284A47DD00B485D8 /* UIKit.framework in Frameworks */,
+				0F5C67CB2AC462D300D240E4 /* ReplayKit.framework in Frameworks */,
+				0F5C67CC2AC462D300D240E4 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,56 +130,56 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BDD193F18FC814BDAC3F99C5 /* Pods_Runner.framework in Frameworks */,
+				5D2C7DFD34A2D7226A65B541 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F5C67C22AC462D300D240E4 /* screenshare */ = {
+			isa = PBXGroup;
+			children = (
+				0F5C67E12AC4635600D240E4 /* BroadcastData.swift */,
+				0F5C67E22AC4635700D240E4 /* Constants.swift */,
+				0F5C67E32AC4635700D240E4 /* Enums.swift */,
+				0F5C67E42AC4635700D240E4 /* SampleHandler.swift */,
+				0F5C67DF2AC4630200D240E4 /* screenshare.entitlements */,
+				0F5C67C52AC462D300D240E4 /* Info.plist */,
+			);
+			path = screenshare;
+			sourceTree = "<group>";
+		};
+		0F5C67CD2AC462D300D240E4 /* screenshareSetupUI */ = {
+			isa = PBXGroup;
+			children = (
+				0F5C67E02AC4631C00D240E4 /* screenshareSetupUI.entitlements */,
+				0F5C67CE2AC462D300D240E4 /* BroadcastSetupViewController.swift */,
+				0F5C67D02AC462D300D240E4 /* Info.plist */,
+			);
+			path = screenshareSetupUI;
+			sourceTree = "<group>";
+		};
 		22F44DAC284A47DD00B485D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				22F44DAD284A47DD00B485D8 /* ReplayKit.framework */,
 				22F44DB9284A47DD00B485D8 /* UIKit.framework */,
-				5C7EEA897D040AFCDF2ED182 /* Pods_Runner.framework */,
-				7988ED6AC1C0843EE80125A8 /* Pods_ScreenShare.framework */,
+				4DADDBD2DF00C62FECCE16DB /* Pods_Runner.framework */,
+				30BE90F7143574595D26AEC7 /* Pods_screenshare.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		22F44DAF284A47DD00B485D8 /* ScreenShare */ = {
-			isa = PBXGroup;
-			children = (
-				22F44DD2284A4B6300B485D8 /* BroadcastData.swift */,
-				22F44DD1284A4B6300B485D8 /* Constants.swift */,
-				22F44DD0284A4B6300B485D8 /* Enums.swift */,
-				22F44DCE284A47E700B485D8 /* ScreenShare.entitlements */,
-				22F44DB0284A47DD00B485D8 /* SampleHandler.swift */,
-				22F44DB2284A47DD00B485D8 /* Info.plist */,
-			);
-			path = ScreenShare;
-			sourceTree = "<group>";
-		};
-		22F44DBB284A47DD00B485D8 /* ScreenShareSetupUI */ = {
-			isa = PBXGroup;
-			children = (
-				22F44DCF284A480900B485D8 /* ScreenShareSetupUI.entitlements */,
-				22F44DBC284A47DD00B485D8 /* BroadcastSetupViewController.swift */,
-				22F44DBE284A47DD00B485D8 /* Info.plist */,
-			);
-			path = ScreenShareSetupUI;
 			sourceTree = "<group>";
 		};
 		7D980624B5A37BF0479CD471 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				45EC9072B653EDACACAA99D0 /* Pods-Runner.debug.xcconfig */,
-				C3757A3555AD5C816855E509 /* Pods-Runner.release.xcconfig */,
-				0FF1D20E0870D90AA45387DE /* Pods-Runner.profile.xcconfig */,
-				0ED88500061F27A97D51DFBC /* Pods-ScreenShare.debug.xcconfig */,
-				D4E0A7C9152EC190163F1A35 /* Pods-ScreenShare.release.xcconfig */,
-				04F164C69086516FE75CA70C /* Pods-ScreenShare.profile.xcconfig */,
+				3D936641D94CB608ADF9B7EE /* Pods-Runner.debug.xcconfig */,
+				F1222380E5E3FB42F9761A2B /* Pods-Runner.release.xcconfig */,
+				3E26826CBB3845DD76CA0266 /* Pods-Runner.profile.xcconfig */,
+				DF65850BC37F665C62F8B92E /* Pods-screenshare.debug.xcconfig */,
+				C2329A88DFDF98FF96C4E875 /* Pods-screenshare.release.xcconfig */,
+				B70BD2B0DC7849B1F5E9A1FE /* Pods-screenshare.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -200,8 +200,8 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				22F44DAF284A47DD00B485D8 /* ScreenShare */,
-				22F44DBB284A47DD00B485D8 /* ScreenShareSetupUI */,
+				0F5C67C22AC462D300D240E4 /* screenshare */,
+				0F5C67CD2AC462D300D240E4 /* screenshareSetupUI */,
 				22F44DAC284A47DD00B485D8 /* Frameworks */,
 				97C146EF1CF9000F007C117D /* Products */,
 				7D980624B5A37BF0479CD471 /* Pods */,
@@ -212,8 +212,8 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
-				22F44DAB284A47DD00B485D8 /* ScreenShare.appex */,
-				22F44DB7284A47DD00B485D8 /* ScreenShareSetupUI.appex */,
+				0F5C67C02AC462D300D240E4 /* screenshare.appex */,
+				0F5C67CA2AC462D300D240E4 /* screenshareSetupUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -237,46 +237,46 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		22F44DAA284A47DD00B485D8 /* ScreenShare */ = {
+		0F5C67BF2AC462D300D240E4 /* screenshare */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 22F44DC9284A47DE00B485D8 /* Build configuration list for PBXNativeTarget "ScreenShare" */;
+			buildConfigurationList = 0F5C67DB2AC462D400D240E4 /* Build configuration list for PBXNativeTarget "screenshare" */;
 			buildPhases = (
-				F46D1ECABE3B11764E236041 /* [CP] Check Pods Manifest.lock */,
-				22F44DA7284A47DD00B485D8 /* Sources */,
-				22F44DA8284A47DD00B485D8 /* Frameworks */,
-				22F44DA9284A47DD00B485D8 /* Resources */,
+				8F2D7F6FC33BF3C36FFB7CC9 /* [CP] Check Pods Manifest.lock */,
+				0F5C67BC2AC462D300D240E4 /* Sources */,
+				0F5C67BD2AC462D300D240E4 /* Frameworks */,
+				0F5C67BE2AC462D300D240E4 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = ScreenShare;
-			productName = ScreenShare;
-			productReference = 22F44DAB284A47DD00B485D8 /* ScreenShare.appex */;
+			name = screenshare;
+			productName = screenshare;
+			productReference = 0F5C67C02AC462D300D240E4 /* screenshare.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		22F44DB6284A47DD00B485D8 /* ScreenShareSetupUI */ = {
+		0F5C67C92AC462D300D240E4 /* screenshareSetupUI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 22F44DC5284A47DE00B485D8 /* Build configuration list for PBXNativeTarget "ScreenShareSetupUI" */;
+			buildConfigurationList = 0F5C67D72AC462D400D240E4 /* Build configuration list for PBXNativeTarget "screenshareSetupUI" */;
 			buildPhases = (
-				22F44DB3284A47DD00B485D8 /* Sources */,
-				22F44DB4284A47DD00B485D8 /* Frameworks */,
-				22F44DB5284A47DD00B485D8 /* Resources */,
+				0F5C67C62AC462D300D240E4 /* Sources */,
+				0F5C67C72AC462D300D240E4 /* Frameworks */,
+				0F5C67C82AC462D300D240E4 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = ScreenShareSetupUI;
-			productName = ScreenShareSetupUI;
-			productReference = 22F44DB7284A47DD00B485D8 /* ScreenShareSetupUI.appex */;
+			name = screenshareSetupUI;
+			productName = screenshareSetupUI;
+			productReference = 0F5C67CA2AC462D300D240E4 /* screenshareSetupUI.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		97C146ED1CF9000F007C117D /* Runner */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
-				C73AE60A0A59A0F8AAD1C885 /* [CP] Check Pods Manifest.lock */,
+				3306F088D95ABA70C310A6DD /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
@@ -284,13 +284,13 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				22F44DCD284A47DE00B485D8 /* Embed App Extensions */,
-				3AB9DB2ED27A7DF1D2BDB767 /* [CP] Embed Pods Frameworks */,
+				8C92206D9D0B4EE0F6089097 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				22F44DC0284A47DE00B485D8 /* PBXTargetDependency */,
-				22F44DC3284A47DE00B485D8 /* PBXTargetDependency */,
+				0F5C67D22AC462D300D240E4 /* PBXTargetDependency */,
+				0F5C67D52AC462D400D240E4 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -303,15 +303,15 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1330;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
-					22F44DAA284A47DD00B485D8 = {
-						CreatedOnToolsVersion = 13.3;
+					0F5C67BF2AC462D300D240E4 = {
+						CreatedOnToolsVersion = 14.3.1;
 					};
-					22F44DB6284A47DD00B485D8 = {
-						CreatedOnToolsVersion = 13.3;
+					0F5C67C92AC462D300D240E4 = {
+						CreatedOnToolsVersion = 14.3.1;
 					};
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -333,21 +333,21 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
-				22F44DAA284A47DD00B485D8 /* ScreenShare */,
-				22F44DB6284A47DD00B485D8 /* ScreenShareSetupUI */,
+				0F5C67BF2AC462D300D240E4 /* screenshare */,
+				0F5C67C92AC462D300D240E4 /* screenshareSetupUI */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		22F44DA9284A47DD00B485D8 /* Resources */ = {
+		0F5C67BE2AC462D300D240E4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		22F44DB5284A47DD00B485D8 /* Resources */ = {
+		0F5C67C82AC462D300D240E4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -368,55 +368,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3AB9DB2ED27A7DF1D2BDB767 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
-			);
-			name = "Thin Binary";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
-		};
-		9740EEB61CF901F6004384FC /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
-		};
-		C73AE60A0A59A0F8AAD1C885 /* [CP] Check Pods Manifest.lock */ = {
+		3306F088D95ABA70C310A6DD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -438,7 +390,40 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F46D1ECABE3B11764E236041 /* [CP] Check Pods Manifest.lock */ = {
+		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
+			);
+			name = "Thin Binary";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+		};
+		8C92206D9D0B4EE0F6089097 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F2D7F6FC33BF3C36FFB7CC9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -453,32 +438,47 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ScreenShare-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-screenshare-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		9740EEB61CF901F6004384FC /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		22F44DA7284A47DD00B485D8 /* Sources */ = {
+		0F5C67BC2AC462D300D240E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22F44DB1284A47DD00B485D8 /* SampleHandler.swift in Sources */,
-				22F44DD6284A4B7800B485D8 /* Constants.swift in Sources */,
-				22F44DD8284A4B7800B485D8 /* Enums.swift in Sources */,
-				22F44DD7284A4B7800B485D8 /* BroadcastData.swift in Sources */,
+				0F5C67E82AC4635700D240E4 /* SampleHandler.swift in Sources */,
+				0F5C67E52AC4635700D240E4 /* BroadcastData.swift in Sources */,
+				0F5C67E72AC4635700D240E4 /* Enums.swift in Sources */,
+				0F5C67E62AC4635700D240E4 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		22F44DB3284A47DD00B485D8 /* Sources */ = {
+		0F5C67C62AC462D300D240E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22F44DBD284A47DD00B485D8 /* BroadcastSetupViewController.swift in Sources */,
+				0F5C67CF2AC462D300D240E4 /* BroadcastSetupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,15 +494,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		22F44DC0284A47DE00B485D8 /* PBXTargetDependency */ = {
+		0F5C67D22AC462D300D240E4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 22F44DB6284A47DD00B485D8 /* ScreenShareSetupUI */;
-			targetProxy = 22F44DBF284A47DE00B485D8 /* PBXContainerItemProxy */;
+			target = 0F5C67C92AC462D300D240E4 /* screenshareSetupUI */;
+			targetProxy = 0F5C67D12AC462D300D240E4 /* PBXContainerItemProxy */;
 		};
-		22F44DC3284A47DE00B485D8 /* PBXTargetDependency */ = {
+		0F5C67D52AC462D400D240E4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 22F44DAA284A47DD00B485D8 /* ScreenShare */;
-			targetProxy = 22F44DC2284A47DE00B485D8 /* PBXContainerItemProxy */;
+			target = 0F5C67BF2AC462D300D240E4 /* screenshare */;
+			targetProxy = 0F5C67D42AC462D400D240E4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -526,35 +526,34 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		22F44DC6284A47DE00B485D8 /* Debug */ = {
+		0F5C67D82AC462D400D240E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ScreenShareSetupUI/ScreenShareSetupUI.entitlements;
+				CODE_SIGN_ENTITLEMENTS = screenshareSetupUI/screenshareSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ScreenShareSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ScreenShareSetupUI;
+				INFOPLIST_FILE = screenshareSetupUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = screenshareSetupUI;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany.ScreenShareSetupUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany.screenshareSetupUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -565,34 +564,33 @@
 			};
 			name = Debug;
 		};
-		22F44DC7284A47DE00B485D8 /* Release */ = {
+		0F5C67D92AC462D400D240E4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ScreenShareSetupUI/ScreenShareSetupUI.entitlements;
+				CODE_SIGN_ENTITLEMENTS = screenshareSetupUI/screenshareSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ScreenShareSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ScreenShareSetupUI;
+				INFOPLIST_FILE = screenshareSetupUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = screenshareSetupUI;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany.ScreenShareSetupUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany.screenshareSetupUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -601,34 +599,33 @@
 			};
 			name = Release;
 		};
-		22F44DC8284A47DE00B485D8 /* Profile */ = {
+		0F5C67DA2AC462D400D240E4 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ScreenShareSetupUI/ScreenShareSetupUI.entitlements;
+				CODE_SIGN_ENTITLEMENTS = screenshareSetupUI/screenshareSetupUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ScreenShareSetupUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ScreenShareSetupUI;
+				INFOPLIST_FILE = screenshareSetupUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = screenshareSetupUI;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany.ScreenShareSetupUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany.screenshareSetupUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -637,36 +634,35 @@
 			};
 			name = Profile;
 		};
-		22F44DCA284A47DE00B485D8 /* Debug */ = {
+		0F5C67DC2AC462D400D240E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ED88500061F27A97D51DFBC /* Pods-ScreenShare.debug.xcconfig */;
+			baseConfigurationReference = DF65850BC37F665C62F8B92E /* Pods-screenshare.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ScreenShare/ScreenShare.entitlements;
+				CODE_SIGN_ENTITLEMENTS = screenshare/screenshare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ScreenShare/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ScreenShare;
+				INFOPLIST_FILE = screenshare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = screenshare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany.ScreenShare";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany.screenshare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -677,35 +673,34 @@
 			};
 			name = Debug;
 		};
-		22F44DCB284A47DE00B485D8 /* Release */ = {
+		0F5C67DD2AC462D400D240E4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4E0A7C9152EC190163F1A35 /* Pods-ScreenShare.release.xcconfig */;
+			baseConfigurationReference = C2329A88DFDF98FF96C4E875 /* Pods-screenshare.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ScreenShare/ScreenShare.entitlements;
+				CODE_SIGN_ENTITLEMENTS = screenshare/screenshare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ScreenShare/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ScreenShare;
+				INFOPLIST_FILE = screenshare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = screenshare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany.ScreenShare";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany.screenshare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -714,35 +709,34 @@
 			};
 			name = Release;
 		};
-		22F44DCC284A47DE00B485D8 /* Profile */ = {
+		0F5C67DE2AC462D400D240E4 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 04F164C69086516FE75CA70C /* Pods-ScreenShare.profile.xcconfig */;
+			baseConfigurationReference = B70BD2B0DC7849B1F5E9A1FE /* Pods-screenshare.profile.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ScreenShare/ScreenShare.entitlements;
+				CODE_SIGN_ENTITLEMENTS = screenshare/screenshare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ScreenShare/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ScreenShare;
+				INFOPLIST_FILE = screenshare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = screenshare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany.ScreenShare";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany.screenshare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -811,7 +805,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 32;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = flt_one2many;
@@ -821,7 +815,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -948,7 +942,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 32;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = flt_one2many;
@@ -958,7 +952,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -977,7 +971,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 32;
-				DEVELOPMENT_TEAM = 2XMPHHJW2J;
+				DEVELOPMENT_TEAM = 58S2HSAU7C;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = flt_one2many;
@@ -987,7 +981,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotok.flutter-onetomany";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vdotokAB.flutter-onetomany";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -999,22 +993,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		22F44DC5284A47DE00B485D8 /* Build configuration list for PBXNativeTarget "ScreenShareSetupUI" */ = {
+		0F5C67D72AC462D400D240E4 /* Build configuration list for PBXNativeTarget "screenshareSetupUI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				22F44DC6284A47DE00B485D8 /* Debug */,
-				22F44DC7284A47DE00B485D8 /* Release */,
-				22F44DC8284A47DE00B485D8 /* Profile */,
+				0F5C67D82AC462D400D240E4 /* Debug */,
+				0F5C67D92AC462D400D240E4 /* Release */,
+				0F5C67DA2AC462D400D240E4 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		22F44DC9284A47DE00B485D8 /* Build configuration list for PBXNativeTarget "ScreenShare" */ = {
+		0F5C67DB2AC462D400D240E4 /* Build configuration list for PBXNativeTarget "screenshare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				22F44DCA284A47DE00B485D8 /* Debug */,
-				22F44DCB284A47DE00B485D8 /* Release */,
-				22F44DCC284A47DE00B485D8 /* Profile */,
+				0F5C67DC2AC462D400D240E4 /* Debug */,
+				0F5C67DD2AC462D400D240E4 /* Release */,
+				0F5C67DE2AC462D400D240E4 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

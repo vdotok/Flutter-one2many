@@ -10,11 +10,11 @@ struct AppsGroup {
 
 
 
-    static let  APP_GROUP = "group.com.vdotok"
+    static let  APP_GROUP = "group.com.vdotokAB"
 
 
 
-    static let SCREEN_SHARE_PREFERED_EXTENSION = "com.norgic.vdotok.ScreenShare"
+    static let SCREEN_SHARE_PREFERED_EXTENSION = "com.norgic.vdotok.screenshare"
 
 
 
